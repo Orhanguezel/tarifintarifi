@@ -1,0 +1,44 @@
+{
+    "common": { "lastUpdated": "Son güncelleme: {date}" },
+    "about": {
+      "title": "Hakkımızda",
+      "intro": "tarifintarifi.com, pratik ve güvenilir tarifleri çok dilli olarak sunan bir yemek platformudur.",
+      "mission": { "title": "Misyonumuz", "text": "Her seviyeden kullanıcı için anlaşılır tarifler ve akıllı arama deneyimi sağlamak." },
+      "team": { "title": "Ekip", "text": "Yemek meraklıları ve geliştiricilerden oluşan küçük ama tutkulu bir ekibiz." },
+      "lastUpdated": "Son güncelleme: {date}"
+    },
+    "contact": {
+      "title": "İletişim",
+      "desc": "Sorularınız ve iş birlikleri için bize yazın.",
+      "email": "E-posta",
+      "address": "Adres",
+      "addressText": "İstanbul, Türkiye"
+    },
+    "privacy": {
+      "title": "Gizlilik Politikası",
+      "intro": "Gizliliğinize önem veriyoruz. Bu metin hangi verileri topladığımızı ve nasıl kullandığımızı açıklar.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Topladığımız Veriler",
+          "items": {
+            "usage": "Kullanım verileri (sayfa görüntüleme, arama terimleri).",
+            "cookies": "Çerezler ve benzeri teknolojiler.",
+            "optional": "Gönüllü paylaşılan bilgiler (iletişim formları vb.)."
+          }
+        },
+        "howWeUse": { "title": "Verileri Nasıl Kullanıyoruz", "text": "Hizmeti geliştirmek, güvenliği sağlamak ve kişiselleştirme için." },
+        "rights": { "title": "Haklarınız", "text": "Veri erişimi, düzeltme ve silme haklarınızı kullanabilirsiniz." }
+      },
+      "lastUpdated": "Son güncelleme: {date}"
+    },
+    "terms": {
+      "title": "Kullanım Şartları",
+      "intro": "Sitemizi kullanarak aşağıdaki şartları kabul etmiş olursunuz.",
+      "sections": {
+        "use": { "title": "Hizmetin Kullanımı", "text": "Hizmeti yasaya uygun, kötüye kullanmadan kullanmayı kabul edersiniz." },
+        "content": { "title": "İçerik ve Telif", "text": "İçerikler bilgilendirme amaçlıdır; telif haklarına saygı gösterilir." },
+        "limitation": { "title": "Sorumluluk Sınırı", "text": "Hizmet 'olduğu gibi' sunulur; dolaylı zararlardan sorumlu değiliz." }
+      },
+      "lastUpdated": "Son güncelleme: {date}"
+    }
+  }

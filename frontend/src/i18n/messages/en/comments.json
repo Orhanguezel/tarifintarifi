@@ -1,0 +1,17 @@
+{
+  "title": "Comments",
+  "add": "Add a comment",
+  "name": "Name",
+  "nameShort": "Your name",
+  "email": "Email",
+  "emailShort": "Your email",
+  "text": "Your comment",
+  "placeholder": "Share your experience with this recipe...",
+  "submit": "Send",
+  "submitLong": "Submit comment",
+  "sending": "Sending…",
+  "sentOk": "Sent",
+  "sentErr": "Something went wrong",
+  "guest": "Guest",
+  "emptyPrompt": "Be the first to comment!"
+}

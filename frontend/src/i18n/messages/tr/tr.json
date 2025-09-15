@@ -1,0 +1,407 @@
+{
+  "nav": { "home": "Ana Sayfa" },
+
+  "recipes": {
+    "latest": "Taze Eklenen Tarifler"
+  },
+
+  "comments": {
+    "title": "Yorumlar",
+    "add": "Yorum ekle",
+    "name": "Ad",
+    "email": "E-posta",
+    "text": "Yorumunuz",
+    "submit": "Gönder",
+    "sending": "Gönderiliyor…",
+    "guest": "Misafir",
+    "emptyPrompt": "İlk yorumu sen yaz!"
+  },
+
+  "difficulty": {
+    "easy": "Kolay",
+    "medium": "Orta",
+    "hard": "Zor"
+  },
+
+  "common": {
+    "actions": {
+      "view": "İncele →"
+    },
+    "unit": {
+      "minutesShort": "dk",
+      "kcal": "kcal",
+      "servings": "kişilik"
+    }
+  },
+
+  "notFound": {
+    "title": "Page not found",
+    "desc": "The page you’re looking for doesn’t exist.",
+    "actions": {
+      "home": "Go home",
+      "browse": "Browse recipes"
+    },
+    "note": "If you entered a URL, check the spelling and try again."
+  },
+
+  "home": {
+    "search": {
+      "placeholder": "Kahvaltı",
+      "button": "Ara"
+    },
+    "results": { "title": "Sonuçlar" },
+    "hint": {
+      "label": "İPUCU",
+      "text": "Üstteki 🔍 butonla malzeme (örn: mısır, patlıcan) veya mutfak (örn: İtalyan) yazarak Groq destekli size özel tarif oluşturabilirsiniz."
+    },
+    "quick": {
+      "title": "Hızlı Kategoriler"
+    },
+    "clear": "Temizle",
+    "popular": {
+      "title": "Popüler Tarifler"
+    },
+    "all": {
+      "title": "Tüm Tarifler"
+    },
+    "loading": "Yükleniyor…",
+    "empty": "Kayıt bulunamadı.",
+    "pagination": {
+      "aria": "Sayfalama",
+      "prev": "Önceki",
+      "next": "Sonraki"
+    },
+    "errors": {
+      "fetch": "Liste yüklenemedi."
+    }
+  },
+
+  "category": {
+    "count": "{count} tarif",
+    "empty": "Bu kategoride henüz tarif bulunamadı.",
+    "pagination": {
+      "aria": "Sayfalama"
+    }
+  },
+
+  "categoryPage": {
+    "categoryPage": {
+    "seoDesc": "{category} kategorisindeki tarifleri keşfedin."
+  },
+    "notFound": {
+      "title": "Kategori bulunamadı",
+      "desc": "Geçersiz kategori: {slug}"
+    },
+    "error": {
+      "title": "Bir sorun oluştu",
+      "desc": "Tarifler yüklenemedi."
+    }
+  },
+   "tagPage": {
+    "seoDesc": "{tag} etiketiyle işaretlenmiş tarifler.",
+    "error": { "title": "Bir şeyler ters gitti", "desc": "Şu anda etiketli tarifleri yükleyemedik." },
+    "count": "{count} tarif",
+    "empty": "Bu etikette tarif bulunamadı.",
+    "pagination": { "aria": "Sayfalama" }
+  },
+
+  "navbar": {
+    "brand": {
+      "subtitle": "En Geniş Yemek Tarifi Sitesi"
+    },
+    "aria": {
+      "mainMenu": "Ana menü",
+      "categories": "Kategoriler"
+    },
+    "actions": {
+      "ai": "🧠 Yapay Zeka ile Tarif Oluştur",
+      "submit": "🍽️ Yemek Tarifi Gönder",
+      "aiShort": "Yapay Zeka ile Tarif",
+      "submitShort": "Tarif Gönder"
+    },
+    "search": {
+      "placeholder": "Tarif, malzeme veya mutfak ara…",
+      "button": "Ara",
+      "aria": "Arama"
+    },
+    "tip": {
+      "label": "İpucu:",
+      "text": "Malzeme (örn: mısır) veya mutfak (örn: İtalyan) yazarak hızlıca arayın."
+    }
+  },
+
+  "footer": {
+    "brand": {
+      "name": "tarifintarifi.com",
+      "tagline": "En lezzetli ve pratik yemek tarifleri için doğru adres."
+    },
+    "sections": {
+      "categories": "Kategoriler",
+      "help": "Yardım"
+    },
+    "links": {
+      "about": "Hakkımızda",
+      "contact": "İletişim",
+      "privacy": "Gizlilik Politikası",
+      "terms": "Kullanım Şartları"
+    },
+    "copyright": "© {year} {brand} • Tüm Hakları Saklıdır"
+  },
+
+  "recipeDetail": {
+    "print": "Yazdır",
+    "meta": {
+      "minutes": "{value} dk",
+      "servings": "{value} kişilik",
+      "kcal": "{value} kcal/porsiyon"
+    },
+    "stats": {
+      "prep": "Hazırlık",
+      "cook": "Pişirme",
+      "category": "Kategori",
+      "cuisine": "Mutfak"
+    },
+    "sections": {
+      "ingredients": "Malzemeler",
+      "steps": "Yapılış",
+      "tags": "Etiketler",
+      "nutrition": "Besin Değerleri (1 porsiyon)",
+      "allergenDiet": "Alerjen & Diyet Bilgisi",
+      "allergens": "Alerjenler",
+      "diet": "Diyet",
+      "note": "Not: Malzemeleri değiştirerek glutensiz/vegan alternatif üretmek mümkündür.",
+      "tips": "Püf Noktaları",
+      "related": "Benzer Tarifler"
+    },
+
+    "allergens": {
+      "glutenContains": "Gluten içerir",
+      "dairyContains": "Süt ürünü içerir",
+      "eggContains": "Yumurta içerir",
+      "nutsContains": "Kuruyemiş içerir",
+      "peanutContains": "Yer fıstığı içerir",
+      "soyContains": "Soya içerir",
+      "sesameContains": "Susam içerir",
+      "fishContains": "Balık içerir",
+      "shellfishContains": "Kabuklu deniz ürünü içerir"
+    },
+
+    "diet": {
+      "vegetarianOk": "Vejetaryen uygun",
+      "vegetarianUnknown": "Vejetaryen durumu",
+      "veganOk": "Vegan uygun",
+      "veganNo": "Vegan değildir",
+      "glutenFreeOk": "Glütensiz",
+      "glutenFreeUnknown": "Glüten durumu",
+      "lactoseFreeOk": "Laktozsuz",
+      "lactoseFreeUnknown": "Laktoz durumu"
+    },
+
+    "reactions": {
+      "like": "Beğen",
+      "love": "Aşk",
+      "yum": "Leziz",
+      "wow": "Vay!",
+      "rateAria": "Puan ver",
+      "starTitle": "{n} yıldız",
+      "average": "Ortalama"
+    },
+    "table": {
+      "calories": "Kalori",
+      "protein": "Protein",
+      "carbs": "Karbonhidrat",
+      "fat": "Yağ",
+      "fiber": "Lif",
+      "sodium": "Sodyum"
+    }
+  },
+
+  "categories": {
+    "soup": "Çorba",
+    "breakfast": "Kahvaltı",
+    "lunch": "Öğle",
+    "dinner": "Akşam",
+    "dessert": "Tatlı",
+    "detox": "Detoks",
+    "snack": "Atıştırmalık",
+    "drink": "İçecek"
+  },
+
+  "aiGen": {
+    "head": { "title": "🤖 Yapay Zeka ile Tarif Oluştur" },
+
+    "advanced": { "title": "Gelişmiş seçenekler" },
+
+    "fields": {
+      "lang": "Çıkış dili",
+      "cuisine": {
+        "label": "Mutfak",
+        "placeholder": "turkish, italian…",
+        "help": "Tek bir mutfak yazman yeterli."
+      },
+      "category": "Kategori",
+      "categoryOptional": "(Seçimli)",
+      "servings": "Servis (kişi)",
+      "maxMinutes": "Maks. Süre (dk)"
+    },
+
+    "checks": {
+      "aria": "Beslenme etiketleri",
+      "vegetarian": "Vejetaryen",
+      "vegan": "Vegan",
+      "glutenFree": "Glütensiz",
+      "lactoseFree": "Laktozsuz"
+    },
+
+    "include": {
+      "label": "İçerilecek malzemeler",
+      "placeholder": "malzeme yazıp Enter",
+      "help": "Enter veya virgülle ekleyebilirsin. Örn: domates, biber",
+      "labelSimple": "İçerilecek malzemeler (virgülle)",
+      "placeholderSimple": "domates, biber, zeytinyağı",
+      "helpSimple": "Virgül veya satır sonu ile ayır."
+    },
+
+    "exclude": {
+      "label": "Hariç malzemeler",
+      "placeholder": "hariç tutulacak…",
+      "help": "Örn: acı, yer fıstığı",
+      "labelSimple": "Hariç malzemeler (virgülle)",
+      "placeholderSimple": "acı, yer fıstığı",
+      "helpSimple": "Virgül veya satır sonu ile ayır."
+    },
+
+    "prompt": {
+      "label": "Ek not / prompt",
+      "placeholder": "Örn: \"Türk mutfağı, 4 kişilik, 25 dk, fırınsız; adımlar kısa; gram/adet ölçü ver.\""
+    },
+
+    "chips": {
+      "notSpicy": "acı olmasın",
+      "fewIngredients": "az malzemeli",
+      "noOven": "fırınsız",
+      "pot": "tencerede",
+      "pan": "tavada",
+      "quick15": "15 dakikada hazır"
+    },
+
+    "buttons": {
+      "fillExample": "⚙ Örnek doldur",
+      "generate": {
+        "loading": "Oluşturuluyor…",
+        "default": "Oluştur"
+      }
+    },
+
+    "error": { "generic": "Üretim sırasında hata oluştu." },
+
+    "success": {
+      "created": "Tarif üretildi: {title}",
+      "viewLink": "tarifi gör"
+    }
+  },
+
+  "submitRecipe": {
+    "head": {
+      "title": "🍽️ Yemek Tarifi Gönder",
+      "subtitle": "Kendi tarifini paylaş — malzemeleri ve adımları satır satır yazman yeterli."
+    },
+    "fields": {
+      "title": {
+        "label": "Başlık *",
+        "placeholder": "Örn: Zahmetsiz Fırınsız Sebzeli Bulgur",
+        "help": "En az 3 karakter olmalı."
+      },
+      "category": { "label": "Kategori", "optional": "(Seçimli)" },
+      "servings": { "label": "Servis (kişi)", "placeholder": "4" },
+      "totalMinutes": { "label": "Toplam Süre (dk)", "placeholder": "30" },
+      "calories": { "label": "Kalori (kcal)", "placeholder": "350" },
+      "description": { "label": "Açıklama", "placeholder": "Tarif hakkında kısa bir açıklama…" },
+      "ingredients": {
+        "label": "Malzemeler * (her satır 1 madde)",
+        "placeholder": "Örn:\n2 adet domates\n1 adet yeşil biber\n1 yemek kaşığı zeytinyağı",
+        "help": "Ölçü birimleriyle yaz (gram/adet/kaşık vb.)."
+      },
+      "steps": {
+        "label": "Adımlar * (her satır 1 adım)",
+        "placeholder": "Örn:\nSoğanı küp doğrayın ve kavurun.\nDomatesi ekleyin, 5 dk pişirin.\nSıcak servis edin.",
+        "help": "Kısa ve net cümlelerle ilerle. Son adım servis önerisi olabilir."
+      },
+      "cuisines": {
+        "label": "Mutfaklar",
+        "placeholder": "turkish, italian… (Enter/virgül ile ekle)",
+        "help": "Tek tek ekleyin. Örn: turkish"
+      },
+      "tags": { "label": "Etiketler", "placeholder": "vegan, çabuk, fırınsız…" }
+    },
+    "images": {
+      "title": "Görseller (Seçimli)",
+      "add": "+ Görsel Ekle",
+      "url": "URL *",
+      "thumbnail": "Thumbnail *",
+      "altLabel": "Alt (yalnızca {locale})",
+      "altPlaceholder": "Görsel açıklaması",
+      "remove": "Sil"
+    },
+    "buttons": {
+      "fillExample": "⚙ Örnek doldur",
+      "submit": { "loading": "Gönderiliyor…", "default": "Gönder" }
+    },
+    "notes": {
+      "error": "Gönderim sırasında hata oluştu.",
+      "success": "Tarif kaydedildi: {title}",
+      "viewRecipe": "tarifi gör"
+    }
+  },
+
+  "legal": {
+    "common": { "lastUpdated": "Son güncelleme: {date}" },
+    "about": {
+      "title": "Hakkımızda",
+      "intro": "tarifintarifi.com, pratik ve güvenilir tarifleri çok dilli olarak sunan bir yemek platformudur.",
+      "mission": { "title": "Misyonumuz", "text": "Her seviyeden kullanıcı için anlaşılır tarifler ve akıllı arama deneyimi sağlamak." },
+      "team": { "title": "Ekip", "text": "Yemek meraklıları ve geliştiricilerden oluşan küçük ama tutkulu bir ekibiz." },
+      "lastUpdated": "Son güncelleme: {date}"
+    },
+    "contact": {
+      "title": "İletişim",
+      "desc": "Sorularınız ve iş birlikleri için bize yazın.",
+      "email": "E-posta",
+      "address": "Adres",
+      "addressText": "İstanbul, Türkiye"
+    },
+    "privacy": {
+      "title": "Gizlilik Politikası",
+      "intro": "Gizliliğinize önem veriyoruz. Bu metin hangi verileri topladığımızı ve nasıl kullandığımızı açıklar.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Topladığımız Veriler",
+          "items": {
+            "usage": "Kullanım verileri (sayfa görüntüleme, arama terimleri).",
+            "cookies": "Çerezler ve benzeri teknolojiler.",
+            "optional": "Gönüllü paylaşılan bilgiler (iletişim formları vb.)."
+          }
+        },
+        "howWeUse": { "title": "Verileri Nasıl Kullanıyoruz", "text": "Hizmeti geliştirmek, güvenliği sağlamak ve kişiselleştirme için." },
+        "rights": { "title": "Haklarınız", "text": "Veri erişimi, düzeltme ve silme haklarınızı kullanabilirsiniz." }
+      },
+      "lastUpdated": "Son güncelleme: {date}"
+    },
+    "terms": {
+      "title": "Kullanım Şartları",
+      "intro": "Sitemizi kullanarak aşağıdaki şartları kabul etmiş olursunuz.",
+      "sections": {
+        "use": { "title": "Hizmetin Kullanımı", "text": "Hizmeti yasaya uygun, kötüye kullanmadan kullanmayı kabul edersiniz." },
+        "content": { "title": "İçerik ve Telif", "text": "İçerikler bilgilendirme amaçlıdır; telif haklarına saygı gösterilir." },
+        "limitation": { "title": "Sorumluluk Sınırı", "text": "Hizmet 'olduğu gibi' sunulur; dolaylı zararlardan sorumlu değiliz." }
+      },
+      "lastUpdated": "Son güncelleme: {date}"
+    }
+  },
+
+  "seo": {
+    "homeTitle": "TarifinTarifi – Pratik ve güvenilir tarifler",
+    "homeDesc": "Birden çok dilde pratik, güvenilir yemek tarifleri. Kategoriye göz atın veya malzemeyle arayın.",
+    "ogAlt": "{site} - Kapak görseli"
+  }
+}

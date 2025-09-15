@@ -1,0 +1,75 @@
+{
+  "submitRecipe": {
+    "head": {
+      "title": "Rezept einreichen",
+      "subtitle": "Teile dein Rezept und inspiriere Tausende."
+    },
+    "fields": {
+      "title": {
+        "label": "Rezepttitel",
+        "placeholder": "Z. B. Bulgur mit Tomate & Paprika (ohne Ofen)",
+        "help": "Mindestens 3 Zeichen."
+      },
+      "servings": {
+        "label": "Portionen",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "Gesamtzeit (Min.)",
+        "placeholder": "25"
+      },
+      "calories": {
+        "label": "Kalorien (kcal)",
+        "placeholder": "380"
+      },
+      "description": {
+        "label": "Beschreibung",
+        "placeholder": "Kurzbeschreibung des Rezepts."
+      },
+      "ingredients": {
+        "label": "Zutaten (je Zeile eine)",
+        "placeholder": "Schreibe jede Zutat in eine neue Zeile.",
+        "help": "Z. B. 1 Tasse Bulgur"
+      },
+      "steps": {
+        "label": "Schritte (je Zeile einer)",
+        "placeholder": "Schreibe jeden Schritt in eine neue Zeile.",
+        "help": "8–12 Schritte empfohlen."
+      },
+      "cuisines": {
+        "label": "Küche",
+        "placeholder": "z. B. Türkisch, Italienisch",
+        "help": "Mit Komma/Eingabe hinzufügen (als Chips)."
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "z. B. ohne Ofen, wenige Zutaten"
+      }
+    },
+    "buttons": {
+      "fillExample": "Mit Beispiel ausfüllen",
+      "submit": {
+        "loading": "Wird gesendet…",
+        "default": "Rezept einreichen"
+      }
+    },
+    "notes": {
+      "error": "Etwas ist schiefgelaufen. Bitte nochmal versuchen.",
+      "success": "Gespeichert: {title}",
+      "viewRecipe": "Rezept ansehen"
+    },
+    "tips": {
+      "title": "Tipps (zeilenweise)",
+      "placeholder": "Z. B.: Joghurt leicht erwärmen, damit er nicht gerinnt.\nMinzöl ganz zum Schluss hinzufügen."
+    },
+    "nutrition": {
+      "title": "Nährwerte (pro Portion)",
+      "calories": "Kalorien (kcal)",
+      "protein": "Eiweiß (g)",
+      "carbs": "Kohlenhydrate (g)",
+      "fat": "Fett (g)",
+      "fiber": "Ballaststoffe (g)",
+      "sodium": "Natrium (mg)"
+    }
+  }
+}

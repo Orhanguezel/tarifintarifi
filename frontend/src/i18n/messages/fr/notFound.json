@@ -1,0 +1,9 @@
+{
+    "title": "Page introuvable",
+    "desc": "La page que vous recherchez a peut-être été déplacée, supprimée ou n’a jamais existé.",
+    "actions": {
+      "home": "Accueil",
+      "browse": "Parcourir les recettes"
+    },
+    "note": "Vous serez redirigé(e) vers l’accueil sous peu."
+  }

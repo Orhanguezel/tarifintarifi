@@ -1,0 +1,75 @@
+{
+  "submitRecipe": {
+    "head": {
+      "title": "Envoyer une recette",
+      "subtitle": "Partagez votre recette et inspirez des milliers de personnes."
+    },
+    "fields": {
+      "title": {
+        "label": "Titre de la recette",
+        "placeholder": "Ex. : Boulgour tomate-poivron sans four",
+        "help": "Au moins 3 caractères."
+      },
+      "servings": {
+        "label": "Portions",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "Temps total (min)",
+        "placeholder": "25"
+      },
+      "calories": {
+        "label": "Calories (kcal)",
+        "placeholder": "380"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Rédigez une courte description de la recette."
+      },
+      "ingredients": {
+        "label": "Ingrédients (un par ligne)",
+        "placeholder": "Indiquez chaque ingrédient sur une nouvelle ligne.",
+        "help": "Ex. : 1 tasse de boulgour"
+      },
+      "steps": {
+        "label": "Étapes (une par ligne)",
+        "placeholder": "Indiquez chaque étape sur une nouvelle ligne.",
+        "help": "8–12 étapes recommandées."
+      },
+      "cuisines": {
+        "label": "Cuisine",
+        "placeholder": "ex. : turque, italienne",
+        "help": "Ajoutez avec virgule/Entrée pour créer des étiquettes."
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "ex. : sans four, peu d’ingrédients"
+      }
+    },
+    "buttons": {
+      "fillExample": "Remplir avec un exemple",
+      "submit": {
+        "loading": "Envoi…",
+        "default": "Envoyer la recette"
+      }
+    },
+    "notes": {
+      "error": "Une erreur s’est produite. Réessayez.",
+      "success": "Enregistré : {title}",
+      "viewRecipe": "Voir la recette"
+    },
+    "tips": {
+      "title": "Astuces (une par ligne)",
+      "placeholder": "Ex. : Tiédir le yaourt pour éviter qu’il ne caille.\nAjouter l’huile de menthe à la toute fin."
+    },
+    "nutrition": {
+      "title": "Valeurs nutritionnelles (par portion)",
+      "calories": "Calories (kcal)",
+      "protein": "Protéines (g)",
+      "carbs": "Glucides (g)",
+      "fat": "Lipides (g)",
+      "fiber": "Fibres (g)",
+      "sodium": "Sodium (mg)"
+    }
+  }
+}

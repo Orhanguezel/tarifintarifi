@@ -1,0 +1,6 @@
+{
+  "errors": { "invalid_id": "ID non valido", "missing_field": "Campo obbligatorio mancante: {0}", "not_found": "Non trovato" },
+  "recipes": { "created": "Ricetta creata", "updated": "Ricetta aggiornata", "deleted": "Ricetta eliminata" },
+  "reactions": { "toggled": "Reazione modificata", "invalid_kind": "Tipo di reazione non valido" },
+  "ai": { "generated": "Ricetta IA generata" }
+}

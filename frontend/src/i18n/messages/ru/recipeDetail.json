@@ -1,0 +1,60 @@
+{
+  "recipeDetail": {
+    "print": "Печать",
+    "meta": {
+      "minutes": "{value} мин",
+      "servings": "{value} порций",
+      "kcal": "{value} ккал/порция"
+    },
+    "sections": {
+      "ingredients": "Ингредиенты",
+      "steps": "Шаги",
+      "tags": "Теги",
+      "nutrition": "Пищевая ценность (на порцию)",
+      "allergenDiet": "Информация об аллергенах и диете",
+      "allergens": "Аллергены",
+      "diet": "Диета",
+      "note": "Примечание: заменяя ингредиенты, можно приготовить безглютеновые/веганские варианты.",
+      "tips": "Советы",
+      "related": "Похожие рецепты"
+    },
+    "table": {
+      "calories": "Калории",
+      "protein": "Белки",
+      "carbs": "Углеводы",
+      "fat": "Жиры",
+      "fiber": "Клетчатка",
+      "sodium": "Натрий"
+    },
+    "allergens": {
+      "glutenContains": "Содержит глютен",
+      "dairyContains": "Содержит молочные продукты",
+      "eggContains": "Содержит яйца",
+      "nutsContains": "Содержит орехи",
+      "peanutContains": "Содержит арахис",
+      "soyContains": "Содержит сою",
+      "sesameContains": "Содержит кунжут",
+      "fishContains": "Содержит рыбу",
+      "shellfishContains": "Содержит моллюсков/ракообразных"
+    },
+    "diet": {
+      "vegetarianOk": "Вегетарианский",
+      "vegetarianNo": "Не вегетарианский",
+      "veganOk": "Веганский",
+      "veganNo": "Не веганский",
+      "glutenFreeOk": "Без глютена",
+      "glutenFreeNo": "Содержит глютен",
+      "lactoseFreeOk": "Без лактозы",
+      "lactoseFreeNo": "Содержит лактозу"
+    },
+    "reactions": {
+      "like": "Нравится",
+      "love": "Обожаю",
+      "yum": "Вкусно!",
+      "wow": "Вау",
+      "rateAria": "Оценить этот рецепт",
+      "starTitle": "Поставить {n}★",
+      "average": "Средняя оценка"
+    }
+  }
+}

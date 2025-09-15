@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "dynamic": {
+      "breakfast": "فطور",
+      "soup": "شوربة",
+      "salad": "سلطة",
+      "appetizer": "مقبلات",
+      "snack": "وجبة خفيفة",
+      "sandwich-wrap": "ساندويتش وراب",
+      "main-course": "الطبق الرئيسي",
+      "side-dish": "طبق جانبي",
+      "pasta": "معكرونة",
+      "rice-pilaf": "أرز وبيلاف",
+      "legumes": "بقوليات",
+      "stew": "يخنة",
+      "grill-bbq": "مشويات وباربكيو",
+      "roast-bake": "تحمير وخَبز",
+      "seafood": "مأكولات بحرية",
+      "meat": "أطباق لحم",
+      "chicken": "أطباق دجاج",
+      "pastry": "معجنات",
+      "bread": "خبز",
+      "pizza": "بيتزا",
+      "dessert": "حلوى",
+      "cake": "كيك",
+      "cookies": "كوكيز",
+      "pudding": "بودينغ",
+      "sauce-dip": "صلصة وديب",
+      "drink": "مشروب",
+      "hot-drink": "مشروب ساخن",
+      "cold-drink": "مشروب بارد",
+      "tea": "شاي",
+      "coffee": "قهوة",
+      "smoothie": "سموذي",
+      "juice": "عصير"
+    }
+  }
+}

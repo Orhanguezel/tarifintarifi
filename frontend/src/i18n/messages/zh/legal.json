@@ -1,0 +1,44 @@
+{
+    "common": { "lastUpdated": "最后更新：{date}" },
+    "about": {
+      "title": "关于我们",
+      "intro": "tarifintarifi.com 是一个多语言美食平台，提供实用且可靠的菜谱。",
+      "mission": { "title": "我们的使命", "text": "通过智能搜索与精选，让各个水平的用户都能轻松看懂菜谱。" },
+      "team": { "title": "团队", "text": "一支由美食爱好者与开发者组成的小而热爱的团队。" },
+      "lastUpdated": "最后更新：{date}"
+    },
+    "contact": {
+      "title": "联系",
+      "desc": "如有问题或合作意向，欢迎与我们联系。",
+      "email": "邮箱",
+      "address": "地址",
+      "addressText": "伊斯坦布尔，土耳其"
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "intro": "我们重视您的隐私。本页面说明我们收集哪些信息以及如何使用。",
+      "sections": {
+        "dataWeCollect": {
+          "title": "我们收集的数据",
+          "items": {
+            "usage": "使用数据（页面浏览、搜索词）。",
+            "cookies": "Cookies 及类似技术。",
+            "optional": "您自愿提交的信息（联系表单等）。"
+          }
+        },
+        "howWeUse": { "title": "我们如何使用数据", "text": "用于改进服务、保障安全以及个性化内容。" },
+        "rights": { "title": "您的权利", "text": "您可以请求访问、更正和删除您的数据。" }
+      },
+      "lastUpdated": "最后更新：{date}"
+    },
+    "terms": {
+      "title": "使用条款",
+      "intro": "使用本网站即表示您同意以下条款。",
+      "sections": {
+        "use": { "title": "服务使用", "text": "合法、合理地使用服务，禁止滥用。" },
+        "content": { "title": "内容与版权", "text": "内容仅供参考；我们尊重版权。" },
+        "limitation": { "title": "责任限制", "text": "本服务按“原样”提供；对于间接损失我们不承担责任。" }
+      },
+      "lastUpdated": "最后更新：{date}"
+    }
+  }

@@ -1,0 +1,60 @@
+{
+  "recipeDetail": {
+    "print": "Print",
+    "meta": {
+      "minutes": "{value} min",
+      "servings": "{value} servings",
+      "kcal": "{value} kcal/serving"
+    },
+    "sections": {
+      "ingredients": "Ingredients",
+      "steps": "Steps",
+      "tags": "Tags",
+      "nutrition": "Nutrition (per serving)",
+      "allergenDiet": "Allergen & Diet Info",
+      "allergens": "Allergens",
+      "diet": "Diet",
+      "note": "Note: You can substitute ingredients to create gluten-free/vegan alternatives.",
+      "tips": "Tips",
+      "related": "Related Recipes"
+    },
+    "table": {
+      "calories": "Calories",
+      "protein": "Protein",
+      "carbs": "Carbs",
+      "fat": "Fat",
+      "fiber": "Fiber",
+      "sodium": "Sodium"
+    },
+    "allergens": {
+      "glutenContains": "Contains gluten",
+      "dairyContains": "Contains dairy",
+      "eggContains": "Contains egg",
+      "nutsContains": "Contains tree nuts",
+      "peanutContains": "Contains peanuts",
+      "soyContains": "Contains soy",
+      "sesameContains": "Contains sesame",
+      "fishContains": "Contains fish",
+      "shellfishContains": "Contains shellfish"
+    },
+    "diet": {
+      "vegetarianOk": "Vegetarian",
+      "vegetarianNo": "Not vegetarian",
+      "veganOk": "Vegan",
+      "veganNo": "Not vegan",
+      "glutenFreeOk": "Gluten-free",
+      "glutenFreeNo": "Contains gluten",
+      "lactoseFreeOk": "Lactose-free",
+      "lactoseFreeNo": "Contains lactose"
+    },
+    "reactions": {
+      "like": "Like",
+      "love": "Love it",
+      "yum": "Yummy",
+      "wow": "Wow",
+      "rateAria": "Rate this recipe",
+      "starTitle": "Give {n}★",
+      "average": "Average rating"
+    }
+  }
+}

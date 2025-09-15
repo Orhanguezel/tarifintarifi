@@ -1,0 +1,16 @@
+{
+    "brand": { "subtitle": "简单、可靠的菜谱" },
+    "aria": { "mainMenu": "主菜单", "categories": "分类" },
+    "actions": {
+      "ai": "AI 菜谱",
+      "submit": "提交菜谱",
+      "aiShort": "AI",
+      "submitShort": "提交"
+    },
+    "search": {
+      "placeholder": "搜索菜谱...",
+      "aria": "站内搜索",
+      "button": "搜索"
+    },
+    "tip": { "label": "提示：", "text": "使用分类快捷方式可更快浏览。" }
+  }

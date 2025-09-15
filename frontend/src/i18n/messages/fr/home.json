@@ -1,0 +1,11 @@
+{
+    "search": { "placeholder": "Rechercher des recettes…", "button": "Rechercher" },
+    "hint": { "label": "Astuce :", "text": "Choisissez une catégorie ou utilisez la barre de recherche." },
+    "results": { "title": "Résultats" },
+    "loading": "Chargement…",
+    "empty": "Aucun résultat.",
+    "pagination": { "aria": "Pagination", "prev": "Précédent", "next": "Suivant" },
+    "popular": { "title": "Recettes populaires" },
+    "all": { "title": "Toutes les recettes" },
+    "quick": { "title": "Catégories rapides" }, "clear": "Effacer"
+  }

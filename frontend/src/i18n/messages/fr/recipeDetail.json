@@ -1,0 +1,60 @@
+{
+  "recipeDetail": {
+    "print": "Imprimer",
+    "meta": {
+      "minutes": "{value} min",
+      "servings": "{value} portions",
+      "kcal": "{value} kcal/portion"
+    },
+    "sections": {
+      "ingredients": "Ingrédients",
+      "steps": "Étapes",
+      "tags": "Étiquettes",
+      "nutrition": "Valeurs nutritionnelles (par portion)",
+      "allergenDiet": "Infos allergènes & régimes",
+      "allergens": "Allergènes",
+      "diet": "Régime",
+      "note": "Remarque : vous pouvez remplacer des ingrédients pour créer des alternatives sans gluten/véganes.",
+      "tips": "Astuces",
+      "related": "Recettes similaires"
+    },
+    "table": {
+      "calories": "Calories",
+      "protein": "Protéines",
+      "carbs": "Glucides",
+      "fat": "Lipides",
+      "fiber": "Fibres",
+      "sodium": "Sodium"
+    },
+    "allergens": {
+      "glutenContains": "Contient du gluten",
+      "dairyContains": "Contient des produits laitiers",
+      "eggContains": "Contient des œufs",
+      "nutsContains": "Contient des fruits à coque",
+      "peanutContains": "Contient des arachides",
+      "soyContains": "Contient du soja",
+      "sesameContains": "Contient du sésame",
+      "fishContains": "Contient du poisson",
+      "shellfishContains": "Contient des crustacés"
+    },
+    "diet": {
+      "vegetarianOk": "Végétarien",
+      "vegetarianNo": "Non végétarien",
+      "veganOk": "Végan",
+      "veganNo": "Non végan",
+      "glutenFreeOk": "Sans gluten",
+      "glutenFreeNo": "Contient du gluten",
+      "lactoseFreeOk": "Sans lactose",
+      "lactoseFreeNo": "Contient du lactose"
+    },
+    "reactions": {
+      "like": "J’aime",
+      "love": "J’adore",
+      "yum": "Miam",
+      "wow": "Waouh",
+      "rateAria": "Noter cette recette",
+      "starTitle": "Donner {n}★",
+      "average": "Note moyenne"
+    }
+  }
+}

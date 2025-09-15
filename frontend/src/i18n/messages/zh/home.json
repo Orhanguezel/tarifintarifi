@@ -1,0 +1,11 @@
+{
+    "search": { "placeholder": "搜索菜谱…", "button": "搜索" },
+    "hint": { "label": "提示：", "text": "选择一个分类或使用搜索框。" },
+    "results": { "title": "搜索结果" },
+    "loading": "加载中…",
+    "empty": "未找到结果。",
+    "pagination": { "aria": "分页", "prev": "上一页", "next": "下一页" },
+    "popular": { "title": "热门菜谱" },
+    "all": { "title": "全部菜谱" },
+    "quick": { "title": "快速分类" }, "clear": "清除"
+  }

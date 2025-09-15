@@ -1,0 +1,16 @@
+{
+    "brand": { "subtitle": "Receitas fáceis e confiáveis" },
+    "aria": { "mainMenu": "Menu principal", "categories": "Categorias" },
+    "actions": {
+      "ai": "Receita com IA",
+      "submit": "Enviar receita",
+      "aiShort": "IA",
+      "submitShort": "Enviar"
+    },
+    "search": {
+      "placeholder": "Buscar receitas...",
+      "aria": "Busca no site",
+      "button": "Buscar"
+    },
+    "tip": { "label": "Dica:", "text": "Use os atalhos de categoria para navegar mais rápido." }
+  }

@@ -1,0 +1,9 @@
+{
+    "title": "Página não encontrada",
+    "desc": "A página que você procura pode ter sido movida, excluída ou nunca existiu.",
+    "actions": {
+      "home": "Início",
+      "browse": "Explorar receitas"
+    },
+    "note": "Você será redirecionado(a) para a página inicial em instantes."
+  }

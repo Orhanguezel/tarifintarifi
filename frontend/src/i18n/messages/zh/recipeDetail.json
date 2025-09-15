@@ -1,0 +1,60 @@
+{
+  "recipeDetail": {
+    "print": "打印",
+    "meta": {
+      "minutes": "{value} 分钟",
+      "servings": "{value} 份",
+      "kcal": "{value} 千卡/份"
+    },
+    "sections": {
+      "ingredients": "配料",
+      "steps": "步骤",
+      "tags": "标签",
+      "nutrition": "营养信息（每份）",
+      "allergenDiet": "过敏原与饮食信息",
+      "allergens": "过敏原",
+      "diet": "饮食",
+      "note": "注：可通过替换食材制作无麸质/纯素替代品。",
+      "tips": "小贴士",
+      "related": "相关菜谱"
+    },
+    "table": {
+      "calories": "卡路里",
+      "protein": "蛋白质",
+      "carbs": "碳水化合物",
+      "fat": "脂肪",
+      "fiber": "膳食纤维",
+      "sodium": "钠"
+    },
+    "allergens": {
+      "glutenContains": "含麸质",
+      "dairyContains": "含乳制品",
+      "eggContains": "含鸡蛋",
+      "nutsContains": "含坚果",
+      "peanutContains": "含花生",
+      "soyContains": "含大豆",
+      "sesameContains": "含芝麻",
+      "fishContains": "含鱼",
+      "shellfishContains": "含甲壳/贝类"
+    },
+    "diet": {
+      "vegetarianOk": "素食",
+      "vegetarianNo": "非素食",
+      "veganOk": "纯素",
+      "veganNo": "非纯素",
+      "glutenFreeOk": "无麸质",
+      "glutenFreeNo": "含麸质",
+      "lactoseFreeOk": "无乳糖",
+      "lactoseFreeNo": "含乳糖"
+    },
+    "reactions": {
+      "like": "点赞",
+      "love": "超爱",
+      "yum": "好吃！",
+      "wow": "哇",
+      "rateAria": "为此菜谱评分",
+      "starTitle": "给出{n}★",
+      "average": "平均评分"
+    }
+  }
+}

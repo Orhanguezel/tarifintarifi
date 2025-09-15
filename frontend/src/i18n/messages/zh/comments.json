@@ -1,0 +1,17 @@
+{
+  "title": "评论",
+  "add": "添加评论",
+  "name": "姓名",
+  "nameShort": "你的名字",
+  "email": "电子邮箱",
+  "emailShort": "你的邮箱",
+  "text": "你的评论",
+  "placeholder": "分享你对这道菜谱的体验…",
+  "submit": "发送",
+  "submitLong": "提交评论",
+  "sending": "正在发送…",
+  "sentOk": "已发送",
+  "sentErr": "出错了",
+  "guest": "游客",
+  "emptyPrompt": "成为第一个评论的人！"
+}

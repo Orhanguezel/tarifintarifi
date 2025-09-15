@@ -1,0 +1,9 @@
+{
+    "title": "Pagina non trovata",
+    "desc": "La pagina che cerchi potrebbe essere stata spostata, eliminata o non è mai esistita.",
+    "actions": {
+      "home": "Home",
+      "browse": "Sfoglia ricette"
+    },
+    "note": "Verrai reindirizzato/a alla home a breve."
+  }

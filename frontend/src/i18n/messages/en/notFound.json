@@ -1,0 +1,9 @@
+{
+    "title": "Page not found",
+    "desc": "The page you’re looking for may have been moved, deleted, or never existed.",
+    "actions": {
+      "home": "Home",
+      "browse": "Browse recipes"
+    },
+    "note": "You’ll be redirected to the homepage shortly."
+  }

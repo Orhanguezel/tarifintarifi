@@ -1,0 +1,7 @@
+{
+    "brand": { "name": "tarifintarifi.com", "tagline": "आसान और भरोसेमंद रेसिपी" },
+    "sections": { "categories": "श्रेणियाँ", "help": "सहायता" },
+    "links": { "about": "हमारे बारे में", "contact": "संपर्क", "privacy": "गोपनीयता नीति", "terms": "उपयोग की शर्तें" },
+    "copyright": "© {year} {brand}. सर्वाधिकार सुरक्षित.",
+    "design": { "label": "GuezelWebDesign द्वारा डिज़ाइन", "aria": "GuezelWebDesign द्वारा डिज़ाइन (नई टैब में खुलेगा)" }
+  }

@@ -1,0 +1,17 @@
+{
+  "title": "Commenti",
+  "add": "Aggiungi un commento",
+  "name": "Nome",
+  "nameShort": "Il tuo nome",
+  "email": "E-mail",
+  "emailShort": "La tua e-mail",
+  "text": "Il tuo commento",
+  "placeholder": "Racconta la tua esperienza con questa ricetta…",
+  "submit": "Invia",
+  "submitLong": "Invia commento",
+  "sending": "Invio…",
+  "sentOk": "Inviato",
+  "sentErr": "Si è verificato un errore",
+  "guest": "Ospite",
+  "emptyPrompt": "Scrivi tu il primo commento!"
+}
