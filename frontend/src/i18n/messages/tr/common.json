@@ -1,0 +1,5 @@
+{
+  "unit": { "minutesShort": "dk", "kcal": "kcal", "servings": "kişilik" },
+    "actions": { "view": "Görüntüle" },
+    "notFound": "Bulunamadı"
+}

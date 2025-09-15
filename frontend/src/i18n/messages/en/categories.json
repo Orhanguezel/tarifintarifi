@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "dynamic": {
+      "breakfast": "Breakfast",
+      "soup": "Soup",
+      "salad": "Salad",
+      "appetizer": "Appetizer",
+      "snack": "Snack",
+      "sandwich-wrap": "Sandwich & Wrap",
+      "main-course": "Main Course",
+      "side-dish": "Side Dish",
+      "pasta": "Pasta",
+      "rice-pilaf": "Rice & Pilaf",
+      "legumes": "Legumes",
+      "stew": "Stew",
+      "grill-bbq": "Grill & BBQ",
+      "roast-bake": "Roast & Bake",
+      "seafood": "Seafood",
+      "meat": "Meat Dishes",
+      "chicken": "Chicken Dishes",
+      "pastry": "Pastry",
+      "bread": "Bread",
+      "pizza": "Pizza",
+      "dessert": "Dessert",
+      "cake": "Cake",
+      "cookies": "Cookies",
+      "pudding": "Pudding",
+      "sauce-dip": "Sauce & Dip",
+      "drink": "Drink",
+      "hot-drink": "Hot Drink",
+      "cold-drink": "Cold Drink",
+      "tea": "Tea",
+      "coffee": "Coffee",
+      "smoothie": "Smoothie",
+      "juice": "Juice"
+    }
+  }
+}

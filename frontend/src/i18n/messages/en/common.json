@@ -1,0 +1,5 @@
+{
+  "unit": { "minutesShort": "min", "kcal": "kcal", "servings": "servings" },
+    "actions": { "view": "View" },
+  "notFound": "Not found"
+}

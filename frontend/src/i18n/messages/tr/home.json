@@ -1,0 +1,11 @@
+{
+    "search": { "placeholder": "Tarif ara…", "button": "Ara" },
+    "hint": { "label": "İpucu:", "text": "Kategori seçebilir veya arama çubuğunu kullanabilirsiniz." },
+    "results": { "title": "Arama Sonuçları" },
+    "loading": "Yükleniyor…",
+    "empty": "Sonuç bulunamadı.",
+    "pagination": { "aria": "Sayfalama", "prev": "Önceki", "next": "Sonraki" },
+    "popular": { "title": "Popüler Tarifler" },
+    "all": { "title": "Tüm Tarifler" },
+    "quick": { "title": "Hızlı Kategoriler" }, "clear": "Temizle"
+  }

@@ -1,0 +1,75 @@
+{
+  "submitRecipe": {
+    "head": {
+      "title": "Enviar receita",
+      "subtitle": "Compartilhe sua receita e inspire milhares de pessoas."
+    },
+    "fields": {
+      "title": {
+        "label": "Título da receita",
+        "placeholder": "Ex.: Bulgur com tomate e pimentão (sem forno)",
+        "help": "No mínimo 3 caracteres."
+      },
+      "servings": {
+        "label": "Porções",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "Tempo total (min)",
+        "placeholder": "25"
+      },
+      "calories": {
+        "label": "Calorias (kcal)",
+        "placeholder": "380"
+      },
+      "description": {
+        "label": "Descrição",
+        "placeholder": "Escreva uma breve descrição da receita."
+      },
+      "ingredients": {
+        "label": "Ingredientes (um por linha)",
+        "placeholder": "Escreva cada ingrediente em uma nova linha.",
+        "help": "Ex.: 1 xícara de bulgur"
+      },
+      "steps": {
+        "label": "Passos (um por linha)",
+        "placeholder": "Escreva cada passo em uma nova linha.",
+        "help": "8–12 passos recomendados."
+      },
+      "cuisines": {
+        "label": "Culinária",
+        "placeholder": "ex.: turca, italiana",
+        "help": "Adicione com vírgula/Enter para criar chips."
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "ex.: sem forno, poucos ingredientes"
+      }
+    },
+    "buttons": {
+      "fillExample": "Preencher com exemplo",
+      "submit": {
+        "loading": "Enviando…",
+        "default": "Enviar receita"
+      }
+    },
+    "notes": {
+      "error": "Algo deu errado. Tente novamente.",
+      "success": "Salvo: {title}",
+      "viewRecipe": "Ver receita"
+    },
+    "tips": {
+      "title": "Dicas (uma por linha)",
+      "placeholder": "Ex.: Aqueça o iogurte levemente para não talhar.\nAdicione o óleo de hortelã só no final."
+    },
+    "nutrition": {
+      "title": "Informações nutricionais (por porção)",
+      "calories": "Calorias (kcal)",
+      "protein": "Proteína (g)",
+      "carbs": "Carboidratos (g)",
+      "fat": "Gordura (g)",
+      "fiber": "Fibras (g)",
+      "sodium": "Sódio (mg)"
+    }
+  }
+}

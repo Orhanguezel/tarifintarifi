@@ -1,0 +1,7 @@
+{
+    "brand": { "name": "tarifintarifi.com", "tagline": "Простые и надёжные рецепты" },
+    "sections": { "categories": "Категории", "help": "Помощь" },
+    "links": { "about": "О нас", "contact": "Контакты", "privacy": "Конфиденциальность", "terms": "Условия использования" },
+    "copyright": "© {year} {brand}. Все права защищены.",
+    "design": { "label": "Дизайн — GuezelWebDesign", "aria": "Дизайн от GuezelWebDesign (открывается в новой вкладке)" }
+  }

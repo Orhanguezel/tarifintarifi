@@ -1,0 +1,75 @@
+{
+  "submitRecipe": {
+    "head": {
+      "title": "Invia ricetta",
+      "subtitle": "Condividi la tua ricetta e ispira migliaia di persone."
+    },
+    "fields": {
+      "title": {
+        "label": "Titolo della ricetta",
+        "placeholder": "Es.: Bulgur con pomodoro e peperone (senza forno)",
+        "help": "Almeno 3 caratteri."
+      },
+      "servings": {
+        "label": "Porzioni",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "Tempo totale (min)",
+        "placeholder": "25"
+      },
+      "calories": {
+        "label": "Calorie (kcal)",
+        "placeholder": "380"
+      },
+      "description": {
+        "label": "Descrizione",
+        "placeholder": "Scrivi una breve descrizione della ricetta."
+      },
+      "ingredients": {
+        "label": "Ingredienti (uno per riga)",
+        "placeholder": "Scrivi ogni ingrediente su una nuova riga.",
+        "help": "Es.: 1 tazza di bulgur"
+      },
+      "steps": {
+        "label": "Passaggi (uno per riga)",
+        "placeholder": "Scrivi ogni passaggio su una nuova riga.",
+        "help": "Consigliati 8–12 passaggi."
+      },
+      "cuisines": {
+        "label": "Cucina",
+        "placeholder": "es.: turca, italiana",
+        "help": "Aggiungi con virgola/Invio per creare chip."
+      },
+      "tags": {
+        "label": "Tag",
+        "placeholder": "es.: senza forno, pochi ingredienti"
+      }
+    },
+    "buttons": {
+      "fillExample": "Compila con esempio",
+      "submit": {
+        "loading": "Invio in corso…",
+        "default": "Invia ricetta"
+      }
+    },
+    "notes": {
+      "error": "Si è verificato un errore. Riprova.",
+      "success": "Salvata: {title}",
+      "viewRecipe": "Vai alla ricetta"
+    },
+    "tips": {
+      "title": "Consigli (uno per riga)",
+      "placeholder": "Es.: Intiepidire lo yogurt per evitare che impazzisca.\nAggiungere l’olio di menta solo alla fine."
+    },
+    "nutrition": {
+      "title": "Valori nutrizionali (per porzione)",
+      "calories": "Calorie (kcal)",
+      "protein": "Proteine (g)",
+      "carbs": "Carboidrati (g)",
+      "fat": "Grassi (g)",
+      "fiber": "Fibre (g)",
+      "sodium": "Sodio (mg)"
+    }
+  }
+}

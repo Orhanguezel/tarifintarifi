@@ -1,0 +1,7 @@
+{
+    "brand": { "name": "tarifintarifi.com", "tagline": "Kolay, güvenilir tarifler" },
+    "sections": { "categories": "Kategoriler", "help": "Yardım" },
+    "links": { "about": "Hakkımızda", "contact": "İletişim", "privacy": "Gizlilik", "terms": "Kullanım Şartları" },
+    "copyright": "© {year} {brand}. Tüm hakları saklıdır.",
+    "design": { "label": "GuezelWebDesign tarafından tasarlandı", "aria": "GuezelWebDesign tarafından tasarlandı (yeni pencerede açılır)" }
+  }

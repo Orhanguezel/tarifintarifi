@@ -1,0 +1,51 @@
+{
+  "recipeDetail": {
+    "print": "Imprimir",
+    "meta": {
+      "minutes": "{value} min",
+      "servings": "{value} porções",
+      "kcal": "{value} kcal/porção"
+    },
+    "sections": {
+      "ingredients": "Ingredientes",
+      "steps": "Etapas",
+      "tags": "Tags",
+      "nutrition": "Informação nutricional (por porção)",
+      "allergenDiet": "Informações de alérgenos e dieta",
+      "allergens": "Alergênicos",
+      "diet": "Dieta",
+      "note": "Observação: é possível criar alternativas sem glúten/veganas substituindo ingredientes.",
+      "tips": "Dicas",
+      "related": "Receitas relacionadas"
+    },
+    "table": {
+      "calories": "Calorias",
+      "protein": "Proteína",
+      "carbs": "Carboidratos",
+      "fat": "Gorduras",
+      "fiber": "Fibras",
+      "sodium": "Sódio"
+    },
+    "allergens": {
+      "glutenContains": "Contém glúten",
+      "dairyContains": "Contém laticínios",
+      "eggContains": "Contém ovo",
+      "nutsContains": "Contém nozes",
+      "peanutContains": "Contém amendoim",
+      "soyContains": "Contém soja",
+      "sesameContains": "Contém gergelim",
+      "fishContains": "Contém peixe",
+      "shellfishContains": "Contém mariscos"
+    },
+    "diet": {
+      "vegetarianOk": "Vegetariano",
+      "vegetarianNo": "Não vegetariano",
+      "veganOk": "Vegano",
+      "veganNo": "Não vegano",
+      "glutenFreeOk": "Sem glúten",
+      "glutenFreeNo": "Contém glúten",
+      "lactoseFreeOk": "Sem lactose",
+      "lactoseFreeNo": "Contém lactose"
+    }
+  }
+}

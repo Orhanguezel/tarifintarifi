@@ -1,0 +1,57 @@
+{
+  "aiGen": {
+    "head": { "title": "AI 生成菜谱" },
+    "prompt": {
+      "label": "提示词",
+      "placeholder": "请简洁清楚地描述：\"4 人份，土耳其菜；不用烤箱；25 分钟；不要鸡肉；详细 8–12 步。\""
+    },
+    "samples": {
+      "s1": "4 人晚餐，土耳其菜；无肉但高蛋白；不用烤箱；30 分钟内；详细 8–12 步。",
+      "s2": "无麸质小吃；不用烤箱；省钱；20 分钟；包含鹰嘴豆；步骤清晰。",
+      "s3": "早餐；素食；煎锅烹饪；少食材；15 分钟；可加奶酪；8–12 步。"
+    },
+    "chips": {
+      "detail812": "详细 8–12 步",
+      "quick15": "15 分钟完成",
+      "noOven": "不用烤箱",
+      "onePot": "一锅成菜",
+      "fewIngredients": "少食材",
+      "notSpicy": "不辣",
+      "budget": "省钱",
+      "glutenFree": "无麸质"
+    },
+    "advanced": { "title": "高级选项" },
+    "fields": {
+      "cuisine": {
+        "label": "菜系",
+        "placeholder": "例如：Turkish, Italian",
+        "help": "可选；可留空。"
+      },
+      "servings": { "label": "份量", "placeholder": "4" },
+      "maxMinutes": { "label": "最长时间（分钟）", "placeholder": "25" }
+    },
+    "checks": {
+      "aria": "饮食限制",
+      "vegetarian": "素食",
+      "vegan": "纯素",
+      "glutenFree": "无麸质",
+      "lactoseFree": "无乳糖"
+    },
+    "include": {
+      "labelSimple": "必须包含",
+      "placeholderSimple": "例如：鹰嘴豆、酸奶",
+      "helpSimple": "用逗号/回车添加。"
+    },
+    "exclude": {
+      "labelSimple": "必须排除",
+      "placeholderSimple": "例如：鸡肉、蘑菇",
+      "helpSimple": "用逗号/回车添加。"
+    },
+    "buttons": {
+      "fillExample": "填入示例",
+      "generate": { "loading": "正在生成…", "default": "生成菜谱" }
+    },
+    "error": { "generic": "出了点问题，请重试。" },
+    "success": { "created": "已生成：{title}", "viewLink": "查看菜谱" }
+  }
+}

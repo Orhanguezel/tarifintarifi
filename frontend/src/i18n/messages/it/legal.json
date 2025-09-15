@@ -1,0 +1,44 @@
+{
+    "common": { "lastUpdated": "Ultimo aggiornamento: {date}" },
+    "about": {
+      "title": "Chi siamo",
+      "intro": "tarifintarifi.com è una piattaforma di cucina che offre ricette pratiche e affidabili in più lingue.",
+      "mission": { "title": "La nostra missione", "text": "Rendere le ricette chiare per tutti i livelli grazie a ricerca intelligente e curazione." },
+      "team": { "title": "Team", "text": "Un piccolo team appassionato di amanti del cibo e sviluppatori." },
+      "lastUpdated": "Ultimo aggiornamento: {date}"
+    },
+    "contact": {
+      "title": "Contatti",
+      "desc": "Per domande e partnership, scrivici.",
+      "email": "E-mail",
+      "address": "Indirizzo",
+      "addressText": "Istanbul, Turchia"
+    },
+    "privacy": {
+      "title": "Informativa sulla privacy",
+      "intro": "Teniamo alla tua privacy. Questa pagina spiega cosa raccogliamo e come utilizziamo i dati.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Dati che raccogliamo",
+          "items": {
+            "usage": "Dati di utilizzo (visualizzazioni di pagina, termini di ricerca).",
+            "cookies": "Cookie e tecnologie simili.",
+            "optional": "Informazioni fornite volontariamente (moduli di contatto, ecc.)."
+          }
+        },
+        "howWeUse": { "title": "Come utilizziamo i dati", "text": "Per migliorare il servizio, garantire la sicurezza e personalizzare i contenuti." },
+        "rights": { "title": "I tuoi diritti", "text": "Puoi richiedere accesso, rettifica e cancellazione dei tuoi dati." }
+      },
+      "lastUpdated": "Ultimo aggiornamento: {date}"
+    },
+    "terms": {
+      "title": "Termini d’uso",
+      "intro": "Utilizzando il sito, accetti i seguenti termini.",
+      "sections": {
+        "use": { "title": "Uso del servizio", "text": "Usa il servizio in modo lecito e senza abusi." },
+        "content": { "title": "Contenuti e copyright", "text": "I contenuti sono informativi; i diritti d’autore sono rispettati." },
+        "limitation": { "title": "Limitazione di responsabilità", "text": "Il servizio è fornito “così com’è”; non siamo responsabili per danni indiretti." }
+      },
+      "lastUpdated": "Ultimo aggiornamento: {date}"
+    }
+  }

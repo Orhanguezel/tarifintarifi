@@ -1,0 +1,44 @@
+{
+    "common": { "lastUpdated": "Última atualização: {date}" },
+    "about": {
+      "title": "Sobre nós",
+      "intro": "tarifintarifi.com é uma plataforma de culinária que oferece receitas práticas e confiáveis em vários idiomas.",
+      "mission": { "title": "Nossa missão", "text": "Tornar as receitas claras para todos os níveis com busca inteligente e curadoria." },
+      "team": { "title": "Equipe", "text": "Uma pequena equipe apaixonada de amantes da gastronomia e desenvolvedores." },
+      "lastUpdated": "Última atualização: {date}"
+    },
+    "contact": {
+      "title": "Contato",
+      "desc": "Para dúvidas e parcerias, entre em contato.",
+      "email": "E-mail",
+      "address": "Endereço",
+      "addressText": "Istambul, Turquia"
+    },
+    "privacy": {
+      "title": "Política de Privacidade",
+      "intro": "Valorizamos sua privacidade. Esta página explica o que coletamos e como usamos os dados.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Dados que coletamos",
+          "items": {
+            "usage": "Dados de uso (visualizações de páginas, termos de pesquisa).",
+            "cookies": "Cookies e tecnologias semelhantes.",
+            "optional": "Informações fornecidas voluntariamente (formulários de contato etc.)."
+          }
+        },
+        "howWeUse": { "title": "Como usamos os dados", "text": "Para melhorar o serviço, garantir a segurança e personalizar o conteúdo." },
+        "rights": { "title": "Seus direitos", "text": "Você pode solicitar acesso, correção e exclusão de seus dados." }
+      },
+      "lastUpdated": "Última atualização: {date}"
+    },
+    "terms": {
+      "title": "Termos de Uso",
+      "intro": "Ao usar nosso site, você concorda com os termos abaixo.",
+      "sections": {
+        "use": { "title": "Uso do serviço", "text": "Use o serviço legalmente e sem abusos." },
+        "content": { "title": "Conteúdo e direitos autorais", "text": "O conteúdo é informativo; os direitos autorais são respeitados." },
+        "limitation": { "title": "Limitação de responsabilidade", "text": "O serviço é fornecido “no estado em que se encontra”; não nos responsabilizamos por danos indiretos." }
+      },
+      "lastUpdated": "Última atualização: {date}"
+    }
+  }

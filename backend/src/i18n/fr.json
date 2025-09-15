@@ -1,0 +1,6 @@
+{
+  "errors": { "invalid_id": "ID invalide", "missing_field": "Champ requis manquant : {0}", "not_found": "Introuvable" },
+  "recipes": { "created": "Recette créée", "updated": "Recette mise à jour", "deleted": "Recette supprimée" },
+  "reactions": { "toggled": "Réaction modifiée", "invalid_kind": "Type de réaction invalide" },
+  "ai": { "generated": "Recette IA générée" }
+}

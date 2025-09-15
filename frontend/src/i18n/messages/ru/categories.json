@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "dynamic": {
+      "breakfast": "Завтрак",
+      "soup": "Суп",
+      "salad": "Салат",
+      "appetizer": "Закуска",
+      "snack": "Перекус",
+      "sandwich-wrap": "Сэндвич & Ролл",
+      "main-course": "Основное блюдо",
+      "side-dish": "Гарнир",
+      "pasta": "Паста",
+      "rice-pilaf": "Рис & Плова",
+      "legumes": "Бобовые",
+      "stew": "Рагу",
+      "grill-bbq": "Гриль & Барбекю",
+      "roast-bake": "Запекание",
+      "seafood": "Морепродукты",
+      "meat": "Мясные блюда",
+      "chicken": "Блюда из курицы",
+      "pastry": "Выпечка",
+      "bread": "Хлеб",
+      "pizza": "Пицца",
+      "dessert": "Десерт",
+      "cake": "Торт",
+      "cookies": "Печенье",
+      "pudding": "Пудинг",
+      "sauce-dip": "Соус & Дип",
+      "drink": "Напиток",
+      "hot-drink": "Горячий напиток",
+      "cold-drink": "Холодный напиток",
+      "tea": "Чай",
+      "coffee": "Кофе",
+      "smoothie": "Смузи",
+      "juice": "Сок"
+    }
+  }
+}

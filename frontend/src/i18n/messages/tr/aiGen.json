@@ -1,0 +1,57 @@
+{
+  "aiGen": {
+    "head": { "title": "AI ile Tarif Oluştur" },
+    "prompt": {
+      "label": "İstek (prompt)",
+      "placeholder": "Ne istediğini kısa ama net yaz: \"4 kişilik, Türk mutfağı; fırınsız; 25 dk; tavuk yok; detaylı 8–12 adım.\""
+    },
+    "samples": {
+      "s1": "Akşam yemeği için 4 kişilik, Türk mutfağından; et içermeyen ama proteinli; fırın yok; 30 dakikanın altında; detaylı 8–12 adım.",
+      "s2": "Glütensiz atıştırmalık; fırınsız; ekonomik; 20 dk; içinde nohut olsun; adımları net yaz.",
+      "s3": "Kahvaltı için; vejetaryen; tavada; az malzemeyle; 15 dk; peynirli seçenek; 8–12 adım lütfen."
+    },
+    "chips": {
+      "detail812": "detaylı 8–12 adım",
+      "quick15": "15 dakikada hazır",
+      "noOven": "fırınsız",
+      "onePot": "tek tencerede",
+      "fewIngredients": "az malzemeli",
+      "notSpicy": "acı değil",
+      "budget": "ekonomik",
+      "glutenFree": "glütensiz"
+    },
+    "advanced": { "title": "Gelişmiş Seçenekler" },
+    "fields": {
+      "cuisine": {
+        "label": "Mutfak",
+        "placeholder": "örn: Turkish, Italian",
+        "help": "İsteğe bağlı; boş bırakabilirsiniz."
+      },
+      "servings": { "label": "Porsiyon", "placeholder": "4" },
+      "maxMinutes": { "label": "En fazla süre (dk)", "placeholder": "25" }
+    },
+    "checks": {
+      "aria": "Diyet kısıtları",
+      "vegetarian": "Vejetaryen",
+      "vegan": "Vegan",
+      "glutenFree": "Glütensiz",
+      "lactoseFree": "Laktozsuz"
+    },
+    "include": {
+      "labelSimple": "Olmasını istediklerin",
+      "placeholderSimple": "örn: nohut, yoğurt",
+      "helpSimple": "Virgül/Enter ile ekleyin."
+    },
+    "exclude": {
+      "labelSimple": "Olmamasını istediklerin",
+      "placeholderSimple": "örn: tavuk, mantar",
+      "helpSimple": "Virgül/Enter ile ekleyin."
+    },
+    "buttons": {
+      "fillExample": "Örnekle Doldur",
+      "generate": { "loading": "Oluşturuluyor…", "default": "Tarif Oluştur" }
+    },
+    "error": { "generic": "Bir şeyler ters gitti. Tekrar deneyin." },
+    "success": { "created": "Oluşturuldu: {title}", "viewLink": "Tarife git" }
+  }
+}

@@ -1,0 +1,16 @@
+{
+    "brand": { "subtitle": "Einfache, verlässliche Rezepte" },
+    "aria": { "mainMenu": "Hauptmenü", "categories": "Kategorien" },
+    "actions": {
+      "ai": "KI-Rezept",
+      "submit": "Rezept einreichen",
+      "aiShort": "KI",
+      "submitShort": "Senden"
+    },
+    "search": {
+      "placeholder": "Rezepte suchen...",
+      "aria": "Seitensuche",
+      "button": "Suchen"
+    },
+    "tip": { "label": "Tipp:", "text": "Nutze Kategorie-Shortcuts, um schneller zu stöbern." }
+  }

@@ -1,0 +1,57 @@
+{
+  "aiGen": {
+    "head": { "title": "Gerar receita com IA" },
+    "prompt": {
+      "label": "Prompt",
+      "placeholder": "Descreva de forma breve e clara: \"Para 4 pessoas, culinária turca; sem forno; 25 min; sem frango; 8–12 passos detalhados.\""
+    },
+    "samples": {
+      "s1": "Jantar para 4, culinária turca; sem carne, mas proteico; sem forno; menos de 30 min; 8–12 passos detalhados.",
+      "s2": "Lanche sem glúten; sem forno; econômico; 20 min; inclua grão-de-bico; passos claros.",
+      "s3": "Para o café da manhã; vegetariano; feito na frigideira; poucos ingredientes; 15 min; opção com queijo; 8–12 passos."
+    },
+    "chips": {
+      "detail812": "8–12 passos detalhados",
+      "quick15": "pronto em 15 min",
+      "noOven": "sem forno",
+      "onePot": "uma panela",
+      "fewIngredients": "poucos ingredientes",
+      "notSpicy": "não picante",
+      "budget": "econômico",
+      "glutenFree": "sem glúten"
+    },
+    "advanced": { "title": "Opções avançadas" },
+    "fields": {
+      "cuisine": {
+        "label": "Culinária",
+        "placeholder": "ex.: Turkish, Italian",
+        "help": "Opcional; pode ficar em branco."
+      },
+      "servings": { "label": "Porções", "placeholder": "4" },
+      "maxMinutes": { "label": "Tempo máx. (min)", "placeholder": "25" }
+    },
+    "checks": {
+      "aria": "Restrições alimentares",
+      "vegetarian": "Vegetariano",
+      "vegan": "Vegano",
+      "glutenFree": "Sem glúten",
+      "lactoseFree": "Sem lactose"
+    },
+    "include": {
+      "labelSimple": "Incluir",
+      "placeholderSimple": "ex.: grão-de-bico, iogurte",
+      "helpSimple": "Adicione com vírgula/Enter."
+    },
+    "exclude": {
+      "labelSimple": "Excluir",
+      "placeholderSimple": "ex.: frango, cogumelos",
+      "helpSimple": "Adicione com vírgula/Enter."
+    },
+    "buttons": {
+      "fillExample": "Preencher com exemplo",
+      "generate": { "loading": "Gerando…", "default": "Gerar receita" }
+    },
+    "error": { "generic": "Algo deu errado. Tente novamente." },
+    "success": { "created": "Criado: {title}", "viewLink": "Ver receita" }
+  }
+}

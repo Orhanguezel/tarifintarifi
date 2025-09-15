@@ -1,0 +1,61 @@
+{
+  "recipeDetail": {
+    "print": "Yazdır",
+    "meta": {
+      "minutes": "{value} dk",
+      "servings": "{value} kişilik",
+      "kcal": "{value} kcal/porsiyon"
+    },
+    "sections": {
+      "ingredients": "Malzemeler",
+      "steps": "Yapılış",
+      "tags": "Etiketler",
+      "nutrition": "Besin Değerleri (1 porsiyon)",
+      "allergenDiet": "Alerjen & Diyet Bilgisi",
+      "allergens": "Alerjenler",
+      "diet": "Diyet",
+      "note": "Not: Malzemeleri değiştirerek glutensiz/vegan alternatif üretmek mümkündür.",
+      "tips": "Püf Noktaları",
+      "related": "Benzer Tarifler"
+    },
+    "table": {
+      "calories": "Kalori",
+      "protein": "Protein",
+      "carbs": "Karbonhidrat",
+      "fat": "Yağ",
+      "fiber": "Lif",
+      "sodium": "Sodyum"
+    },
+    "allergens": {
+      "glutenContains": "Gluten içerir",
+      "dairyContains": "Süt ürünü içerir",
+      "eggContains": "Yumurta içerir",
+      "nutsContains": "Kuruyemiş içerir",
+      "peanutContains": "Yer fıstığı içerir",
+      "soyContains": "Soya içerir",
+      "sesameContains": "Susam içerir",
+      "fishContains": "Balık içerir",
+      "shellfishContains": "Kabuklu deniz ürünü içerir"
+    },
+    "diet": {
+      "vegetarianOk": "Vejetaryen",
+      "vegetarianNo": "Vejetaryen değildir",
+      "veganOk": "Vegan",
+      "veganNo": "Vegan değildir",
+      "glutenFreeOk": "Glütensiz",
+      "glutenFreeNo": "Gluten içerir",
+      "lactoseFreeOk": "Laktozsuz",
+      "lactoseFreeNo": "Laktoz içerir"
+    },
+    "reactions": {
+      "like": "Beğen",
+      "love": "Bayıldım",
+      "yum": "Nefis",
+      "wow": "Vay canına",
+      "rateAria": "Bu tarife puan ver",
+      "starTitle": "{n}★ ver",
+      "average": "Ortalama puan"
+    }
+  }
+}
+

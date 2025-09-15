@@ -1,0 +1,6 @@
+{
+  "errors": { "invalid_id": "अमान्य आईडी", "missing_field": "आवश्यक फ़ील्ड गायब: {0}", "not_found": "नहीं मिला" },
+  "recipes": { "created": "रेसिपी बनाई गई", "updated": "रेसिपी अपडेट की गई", "deleted": "रेसिपी हटाई गई" },
+  "reactions": { "toggled": "प्रतिक्रिया बदली गई", "invalid_kind": "अमान्य प्रतिक्रिया प्रकार" },
+  "ai": { "generated": "एआई रेसिपी जनरेट हुई" }
+}

@@ -1,0 +1,19 @@
+{
+    "brand": { "subtitle": "Kolay, güvenilir tarifler" },
+    "aria": { "mainMenu": "Ana menü", "categories": "Kategoriler" },
+    "actions": {
+      "ai": "Yapay Zekâ Tarifi",
+      "submit": "Tarif Gönder",
+      "aiShort": "AI",
+      "submitShort": "Gönder"
+    },
+    "search": {
+      "placeholder": "Tarif ara...",
+      "aria": "Site içi arama",
+      "button": "Ara"
+    },
+    "tip": {
+      "label": "İpucu:",
+      "text": "Daha hızlı gezmek için kategori kısayollarını kullan."
+    }
+  }

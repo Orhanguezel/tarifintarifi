@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "dynamic": {
+      "breakfast": "नाश्ता",
+      "soup": "सूप",
+      "salad": "सलाद",
+      "appetizer": "स्टार्टर",
+      "snack": "स्नैक",
+      "sandwich-wrap": "सैंडविच व रैप",
+      "main-course": "मुख्य पकवान",
+      "side-dish": "साइड डिश",
+      "pasta": "पास्ता",
+      "rice-pilaf": "चावल व पुलाव",
+      "legumes": "दालें/फलियाँ",
+      "stew": "स्ट्यू",
+      "grill-bbq": "ग्रिल/बारबेक्यू",
+      "roast-bake": "रोस्ट/बेक",
+      "seafood": "समुद्री भोजन",
+      "meat": "मांसाहारी पकवान",
+      "chicken": "चिकन पकवान",
+      "pastry": "पेस्ट्री",
+      "bread": "ब्रेड",
+      "pizza": "पिज़्ज़ा",
+      "dessert": "मिठाई",
+      "cake": "केक",
+      "cookies": "कुकीज़",
+      "pudding": "पुडिंग",
+      "sauce-dip": "सॉस व डिप",
+      "drink": "पेय",
+      "hot-drink": "गरम पेय",
+      "cold-drink": "ठंडा पेय",
+      "tea": "चाय",
+      "coffee": "कॉफी",
+      "smoothie": "स्मूदी",
+      "juice": "जूस"
+    }
+  }
+}

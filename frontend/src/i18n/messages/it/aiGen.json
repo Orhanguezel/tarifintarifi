@@ -1,0 +1,57 @@
+{
+  "aiGen": {
+    "head": { "title": "Genera ricetta con AI" },
+    "prompt": {
+      "label": "Prompt",
+      "placeholder": "Scrivi in modo breve e chiaro: \"Per 4 persone, cucina turca; senza forno; 25 min; senza pollo; 8–12 passaggi dettagliati.\""
+    },
+    "samples": {
+      "s1": "Cena per 4, cucina turca; senza carne ma proteica; senza forno; meno di 30 min; 8–12 passaggi dettagliati.",
+      "s2": "Snack senza glutine; senza forno; economico; 20 min; includi ceci; passaggi chiari.",
+      "s3": "Per colazione; vegetariano; in padella; pochi ingredienti; 15 min; opzione con formaggio; 8–12 passaggi."
+    },
+    "chips": {
+      "detail812": "8–12 passaggi dettagliati",
+      "quick15": "pronto in 15 min",
+      "noOven": "senza forno",
+      "onePot": "one-pot",
+      "fewIngredients": "pochi ingredienti",
+      "notSpicy": "non piccante",
+      "budget": "economico",
+      "glutenFree": "senza glutine"
+    },
+    "advanced": { "title": "Opzioni avanzate" },
+    "fields": {
+      "cuisine": {
+        "label": "Cucina",
+        "placeholder": "es.: turca, italiana",
+        "help": "Opzionale; puoi lasciare vuoto."
+      },
+      "servings": { "label": "Porzioni", "placeholder": "4" },
+      "maxMinutes": { "label": "Tempo max (min)", "placeholder": "25" }
+    },
+    "checks": {
+      "aria": "Vincoli alimentari",
+      "vegetarian": "Vegetariano",
+      "vegan": "Vegano",
+      "glutenFree": "Senza glutine",
+      "lactoseFree": "Senza lattosio"
+    },
+    "include": {
+      "labelSimple": "Da includere",
+      "placeholderSimple": "es.: ceci, yogurt",
+      "helpSimple": "Aggiungi con virgola/Invio."
+    },
+    "exclude": {
+      "labelSimple": "Da escludere",
+      "placeholderSimple": "es.: pollo, funghi",
+      "helpSimple": "Aggiungi con virgola/Invio."
+    },
+    "buttons": {
+      "fillExample": "Compila con esempio",
+      "generate": { "loading": "Generazione in corso…", "default": "Genera ricetta" }
+    },
+    "error": { "generic": "Si è verificato un errore. Riprova." },
+    "success": { "created": "Creato: {title}", "viewLink": "Vai alla ricetta" }
+  }
+}

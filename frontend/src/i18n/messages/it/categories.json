@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "dynamic": {
+      "breakfast": "Colazione",
+      "soup": "Zuppa",
+      "salad": "Insalata",
+      "appetizer": "Antipasto",
+      "snack": "Snack",
+      "sandwich-wrap": "Panino & Wrap",
+      "main-course": "Piatto principale",
+      "side-dish": "Contorno",
+      "pasta": "Pasta",
+      "rice-pilaf": "Riso & Pilaf",
+      "legumes": "Legumi",
+      "stew": "Spezzatino",
+      "grill-bbq": "Griglia & BBQ",
+      "roast-bake": "Arrosto & Forno",
+      "seafood": "Frutti di mare",
+      "meat": "Piatti di carne",
+      "chicken": "Piatti di pollo",
+      "pastry": "Pasticceria",
+      "bread": "Pane",
+      "pizza": "Pizza",
+      "dessert": "Dessert",
+      "cake": "Torta",
+      "cookies": "Biscotti",
+      "pudding": "Budino",
+      "sauce-dip": "Salsa & Dip",
+      "drink": "Bevanda",
+      "hot-drink": "Bevanda calda",
+      "cold-drink": "Bevanda fredda",
+      "tea": "Tè",
+      "coffee": "Caffè",
+      "smoothie": "Frullato",
+      "juice": "Succo"
+    }
+  }
+}

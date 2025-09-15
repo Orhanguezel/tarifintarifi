@@ -1,0 +1,7 @@
+{
+    "brand": { "name": "tarifintarifi.com", "tagline": "Einfache, verlässliche Rezepte" },
+    "sections": { "categories": "Kategorien", "help": "Hilfe" },
+    "links": { "about": "Über uns", "contact": "Kontakt", "privacy": "Datenschutz", "terms": "Nutzungsbedingungen" },
+    "copyright": "© {year} {brand}. Alle Rechte vorbehalten.",
+    "design": { "label": "Design von GuezelWebDesign", "aria": "Entworfen von GuezelWebDesign (in neuem Tab öffnen)" }
+  }

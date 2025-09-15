@@ -1,0 +1,60 @@
+{
+  "recipeDetail": {
+    "print": "Drucken",
+    "meta": {
+      "minutes": "{value} Min.",
+      "servings": "{value} Portionen",
+      "kcal": "{value} kcal/Portion"
+    },
+    "sections": {
+      "ingredients": "Zutaten",
+      "steps": "Schritte",
+      "tags": "Stichwörter",
+      "nutrition": "Nährwerte (pro Portion)",
+      "allergenDiet": "Allergen- & Ernährungsinfo",
+      "allergens": "Allergene",
+      "diet": "Ernährung",
+      "note": "Hinweis: Durch Ersetzen von Zutaten sind glutenfreie/vegane Alternativen möglich.",
+      "tips": "Tipps",
+      "related": "Ähnliche Rezepte"
+    },
+    "table": {
+      "calories": "Kalorien",
+      "protein": "Eiweiß",
+      "carbs": "Kohlenhydrate",
+      "fat": "Fett",
+      "fiber": "Ballaststoffe",
+      "sodium": "Natrium"
+    },
+    "allergens": {
+      "glutenContains": "Enthält Gluten",
+      "dairyContains": "Enthält Milchprodukte",
+      "eggContains": "Enthält Ei",
+      "nutsContains": "Enthält Schalenfrüchte",
+      "peanutContains": "Enthält Erdnüsse",
+      "soyContains": "Enthält Soja",
+      "sesameContains": "Enthält Sesam",
+      "fishContains": "Enthält Fisch",
+      "shellfishContains": "Enthält Schalentiere"
+    },
+    "diet": {
+      "vegetarianOk": "Vegetarisch",
+      "vegetarianNo": "Nicht vegetarisch",
+      "veganOk": "Vegan",
+      "veganNo": "Nicht vegan",
+      "glutenFreeOk": "Glutenfrei",
+      "glutenFreeNo": "Enthält Gluten",
+      "lactoseFreeOk": "Laktosefrei",
+      "lactoseFreeNo": "Enthält Laktose"
+    },
+     "reactions": {
+      "like": "Mi piace",
+      "love": "Lo adoro",
+      "yum": "Che buono!",
+      "wow": "Wow",
+      "rateAria": "Valuta questa ricetta",
+      "starTitle": "Assegna {n}★",
+      "average": "Valutazione media"
+    }
+  }
+}

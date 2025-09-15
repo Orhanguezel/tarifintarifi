@@ -1,0 +1,4 @@
+ {
+    "seoDesc": "Explore receitas na categoria {category}.",
+    "error": { "title": "Não foi possível carregar a página da categoria", "desc": "Não foi possível obter conteúdo para esta categoria agora." }
+  }

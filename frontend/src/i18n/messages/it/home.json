@@ -1,0 +1,11 @@
+{
+    "search": { "placeholder": "Cerca ricette…", "button": "Cerca" },
+    "hint": { "label": "Suggerimento:", "text": "Scegli una categoria o usa la ricerca." },
+    "results": { "title": "Risultati" },
+    "loading": "Caricamento…",
+    "empty": "Nessun risultato trovato.",
+    "pagination": { "aria": "Paginazione", "prev": "Precedente", "next": "Successivo" },
+    "popular": { "title": "Ricette popolari" },
+    "all": { "title": "Tutte le ricette" },
+    "quick": { "title": "Categorie rapide" }, "clear": "Pulisci"
+  }

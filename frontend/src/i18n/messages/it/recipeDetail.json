@@ -1,0 +1,60 @@
+{
+  "recipeDetail": {
+    "print": "Stampa",
+    "meta": {
+      "minutes": "{value} min",
+      "servings": "{value} porzioni",
+      "kcal": "{value} kcal/porzione"
+    },
+    "sections": {
+      "ingredients": "Ingredienti",
+      "steps": "Passaggi",
+      "tags": "Tag",
+      "nutrition": "Valori nutrizionali (per porzione)",
+      "allergenDiet": "Info allergeni e dieta",
+      "allergens": "Allergeni",
+      "diet": "Dieta",
+      "note": "Nota: sostituendo gli ingredienti puoi ottenere alternative senza glutine/vegane.",
+      "tips": "Consigli",
+      "related": "Ricette correlate"
+    },
+    "table": {
+      "calories": "Calorie",
+      "protein": "Proteine",
+      "carbs": "Carboidrati",
+      "fat": "Grassi",
+      "fiber": "Fibre",
+      "sodium": "Sodio"
+    },
+    "allergens": {
+      "glutenContains": "Contiene glutine",
+      "dairyContains": "Contiene latticini",
+      "eggContains": "Contiene uova",
+      "nutsContains": "Contiene frutta a guscio",
+      "peanutContains": "Contiene arachidi",
+      "soyContains": "Contiene soia",
+      "sesameContains": "Contiene sesamo",
+      "fishContains": "Contiene pesce",
+      "shellfishContains": "Contiene crostacei"
+    },
+    "diet": {
+      "vegetarianOk": "Vegetariano",
+      "vegetarianNo": "Non vegetariano",
+      "veganOk": "Vegano",
+      "veganNo": "Non vegano",
+      "glutenFreeOk": "Senza glutine",
+      "glutenFreeNo": "Contiene glutine",
+      "lactoseFreeOk": "Senza lattosio",
+      "lactoseFreeNo": "Contiene lattosio"
+    },
+    "reactions": {
+      "like": "Curtir",
+      "love": "Amei",
+      "yum": "Delícia!",
+      "wow": "Uau",
+      "rateAria": "Avalie esta receita",
+      "starTitle": "Dê {n}★",
+      "average": "Média de avaliação"
+    }
+  }
+}

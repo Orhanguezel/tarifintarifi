@@ -1,0 +1,6 @@
+{
+  "errors": { "invalid_id": "معرّف غير صالح", "missing_field": "حقل مطلوب مفقود: {0}", "not_found": "غير موجود" },
+  "recipes": { "created": "تم إنشاء الوصفة", "updated": "تم تحديث الوصفة", "deleted": "تم حذف الوصفة" },
+  "reactions": { "toggled": "تم تبديل التفاعل", "invalid_kind": "نوع تفاعل غير صالح" },
+  "ai": { "generated": "تم إنشاء وصفة بالذكاء الاصطناعي" }
+}

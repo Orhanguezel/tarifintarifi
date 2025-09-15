@@ -1,0 +1,57 @@
+{
+  "aiGen": {
+    "head": { "title": "Générer une recette avec l’IA" },
+    "prompt": {
+      "label": "Prompt",
+      "placeholder": "Décrivez brièvement et clairement : « 4 portions, cuisine turque ; sans four ; 25 min ; sans poulet ; 8–12 étapes détaillées. »"
+    },
+    "samples": {
+      "s1": "Dîner pour 4, cuisine turque ; sans viande mais protéiné ; sans four ; moins de 30 min ; 8–12 étapes détaillées.",
+      "s2": "Snack sans gluten ; sans four ; économique ; 20 min ; inclure des pois chiches ; étapes claires.",
+      "s3": "Pour le petit-déjeuner ; végétarien ; à la poêle ; peu d’ingrédients ; 15 min ; option fromage ; 8–12 étapes."
+    },
+    "chips": {
+      "detail812": "8–12 étapes détaillées",
+      "quick15": "prêt en 15 min",
+      "noOven": "sans four",
+      "onePot": "tout-en-un",
+      "fewIngredients": "peu d’ingrédients",
+      "notSpicy": "non épicé",
+      "budget": "économique",
+      "glutenFree": "sans gluten"
+    },
+    "advanced": { "title": "Options avancées" },
+    "fields": {
+      "cuisine": {
+        "label": "Cuisine",
+        "placeholder": "ex. : turque, italienne",
+        "help": "Optionnel ; peut rester vide."
+      },
+      "servings": { "label": "Portions", "placeholder": "4" },
+      "maxMinutes": { "label": "Temps max (min)", "placeholder": "25" }
+    },
+    "checks": {
+      "aria": "Contraintes alimentaires",
+      "vegetarian": "Végétarien",
+      "vegan": "Vegan",
+      "glutenFree": "Sans gluten",
+      "lactoseFree": "Sans lactose"
+    },
+    "include": {
+      "labelSimple": "À inclure",
+      "placeholderSimple": "ex. : pois chiches, yaourt",
+      "helpSimple": "Ajoutez avec virgule/Entrée."
+    },
+    "exclude": {
+      "labelSimple": "À exclure",
+      "placeholderSimple": "ex. : poulet, champignons",
+      "helpSimple": "Ajoutez avec virgule/Entrée."
+    },
+    "buttons": {
+      "fillExample": "Remplir avec un exemple",
+      "generate": { "loading": "Génération…", "default": "Générer la recette" }
+    },
+    "error": { "generic": "Une erreur s’est produite. Réessayez." },
+    "success": { "created": "Créé : {title}", "viewLink": "Voir la recette" }
+  }
+}
