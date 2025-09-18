@@ -38,7 +38,7 @@ import {
 } from "./utils/ai.refine";
 
 // LLM
-import { llmChat, extractJsonSafe } from "@/services/llm.service";
+import { llmChat, extractJsonSafe, LLMError } from "@/services/llm.service";
 
 /* ------------------ Helpers ------------------ */
 
@@ -265,10 +265,7 @@ export async function publicGetRecipeBySlug(
 }
 
 
-
-/* ----------------- Public: AI Generate & Save ----------------- */
-
-export async function aiGeneratePublic(req: Request, res: Response, next: NextFunction) {
+export async function aiGeneratePublic(req: Request, res: Response, _next: NextFunction) {
   try {
     const {
       lang: langRaw,
@@ -301,25 +298,34 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
     if (cuisine) criteriaParts.push(`cuisine=${cuisine}`);
     if (category) criteriaParts.push(`category=${category}`);
     if (dietaryFlags.length) criteriaParts.push(`dietary=[${dietaryFlags.join(", ")}]`);
-    if (servings != null && String(servings).trim() !== "")
-      criteriaParts.push(`servings=${servings}`);
-    if (maxMinutes != null && String(maxMinutes).trim() !== "")
-      criteriaParts.push(`maxMinutes<=${maxMinutes}`);
+    if (servings != null && String(servings).trim() !== "") criteriaParts.push(`servings=${servings}`);
+    if (maxMinutes != null && String(maxMinutes).trim() !== "") criteriaParts.push(`maxMinutes<=${maxMinutes}`);
     if (includeArr.length) criteriaParts.push(`include=[${includeArr.join(", ")}]`);
     if (excludeArr.length) criteriaParts.push(`exclude=[${excludeArr.join(", ")}]`);
     if (prompt && String(prompt).trim()) criteriaParts.push(`note=${String(prompt).trim()}`);
 
     const criteriaText = criteriaParts.join("; ");
     if (!criteriaText) {
-      return res
-        .status(422)
-        .json({ success: false, message: "recipes.error.promptInvalid" });
+      return res.status(422).json({ success: false, message: "recipes.error.promptInvalid" });
     }
 
-    // ---- LLM generate (JSON beklenir) – Grok öncelikli, 429'da Groq fallback
+    // ---- LLM generate (JSON beklenir) – tek provider kaynağı: AI_PROVIDER -> LLM_PROVIDER -> "groq"
     const sys = buildRecipeJsonSysPromptBase(lang);
     const user = `Criteria:\n${criteriaText}`;
-    const raw = await callModelWithFallback(sys, user);
+
+    const provider = (process.env.AI_PROVIDER || process.env.LLM_PROVIDER || "groq").toLowerCase() as "groq" | "grok";
+    const raw = await llmChat({
+      provider,
+      // model: boş bırakırsan llm.service.ts GROQ_MODEL/GROK_MODEL/env varsayılanlarını kullanır
+      messages: [
+        { role: "system", content: sys },
+        { role: "user", content: user },
+      ],
+      temperature: 0.5,
+      forceJson: true,
+      maxRetries: 3,
+    });
+
     const d: any = extractJsonSafe(raw);
 
     // ---- Başlık & açıklama
@@ -349,12 +355,8 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
     let steps = normalizeStepsBase(d.steps, { ensureServeStep: false, maxSteps: 12 })!;
 
     // ---- Kategoriye göre min–max aralıkları
-    const { min: minSteps, max: maxSteps } = determineStepRangeByCategory(
-      d.category || category
-    );
-    const { min: minIngr, max: maxIngr } = determineIngredientRangeByCategory(
-      d.category || category
-    );
+    const { min: minSteps, max: maxSteps } = determineStepRangeByCategory(d.category || category);
+    const { min: minIngr, max: maxIngr } = determineIngredientRangeByCategory(d.category || category);
 
     // ---- ADIM genişletme
     if (steps.length < minSteps) {
@@ -375,11 +377,7 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
         {
           title: title as any,
           description: description as any,
-          cuisines: Array.isArray(d.cuisines)
-            ? d.cuisines
-            : cuisine
-            ? [String(cuisine)]
-            : [],
+          cuisines: Array.isArray(d.cuisines) ? d.cuisines : cuisine ? [String(cuisine)] : [],
           category: d.category || category || null,
           include: includeArr,
           exclude: excludeArr,
@@ -408,7 +406,7 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
       }
     }
 
-    // ---- İpuçları (tips) — kopya-base metinleri gerçek çeviriye çevir
+    // ---- İpuçları (tips)
     let tips: IRecipeTip[] = Array.isArray(d.tips)
       ? d.tips
           .map((t: any, i: number) => ({
@@ -419,19 +417,17 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
       : [];
 
     if (auto) {
-  for (const tp of tips) {
-    tp.text = await ensureRealTranslations(tp.text as any, lang);
-    tp.text = await replaceClonedEnglish(tp.text as any); // ⬅️ yeni
-  }
-} else {
-      // auto=false ise, base dışındaki kopya metinleri boşalt → FE/BE fallback çalışsın
+      for (const tp of tips) {
+        tp.text = await ensureRealTranslations(tp.text as any, lang);
+        tp.text = await replaceClonedEnglish(tp.text as any);
+      }
+    } else {
+      // auto=false: base dışındaki kopya metinleri boşalt → FE/BE fallback çalışsın
       for (const tp of tips) {
         const txt = tp.text as any;
         const baseVal = String(txt[lang] || "").trim();
         for (const l of SUPPORTED_LOCALES as readonly SupportedLocale[]) {
-          if (l !== lang && String(txt[l] || "").trim() === baseVal) {
-            txt[l] = "";
-          }
+          if (l !== lang && String(txt[l] || "").trim() === baseVal) txt[l] = "";
         }
         tp.text = txt;
       }
@@ -457,11 +453,7 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
       const expandedTags = await expandTagsIfTooShort(tags as TranslatedLabel[], {
         title: title as any,
         description: description as any,
-        cuisines: Array.isArray(d.cuisines)
-          ? d.cuisines
-          : cuisine
-          ? [String(cuisine)]
-          : [],
+        cuisines: Array.isArray(d.cuisines) ? d.cuisines : cuisine ? [String(cuisine)] : [],
         category: d.category || category || null,
         dietFlags: dietaryFlags,
       });
@@ -507,11 +499,7 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
     const inferred = new Set(inferAllergenFlagsFromIngredients(ingNorm));
     const givenAllergenFlags = sanitizeAllergenFlags(d.allergenFlags);
     const allergenFlags = Array.from(new Set([...(givenAllergenFlags || []), ...inferred]));
-    const dietFlags = reconcileDietFlagsWithAllergens(
-      dietaryFlags,
-      new Set(allergenFlags),
-      ingNorm
-    );
+    const dietFlags = reconcileDietFlagsWithAllergens(dietaryFlags, new Set(allergenFlags), ingNorm);
 
     // ---- Son tag normalize + forbidden filtre
     tags = (normalizeTagsLocalized(hardenTags(tags || [])) || [])
@@ -523,9 +511,7 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
     try {
       const last = await Recipe.find().select("order").sort({ order: -1 }).limit(1).lean();
       nextOrder = Math.max(0, Number(last?.[0]?.order || 0)) + 1;
-    } catch {
-      nextOrder = 1;
-    }
+    } catch { nextOrder = 1; }
 
     const doc = await Recipe.create({
       slug: slugObj,
@@ -534,7 +520,7 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
       title,
       description,
       images: [],
-      category: finalCategoryRaw, // model setter normalize eder
+      category: finalCategoryRaw,
       cuisines,
       tags,
       servings:
@@ -559,26 +545,34 @@ export async function aiGeneratePublic(req: Request, res: Response, next: NextFu
       message: req.t?.("ai.generated") || "Generated",
     });
   } catch (err: any) {
+    const isDebug = String(process.env.AI_DEBUG_ERRORS || "").toLowerCase() === "true";
     const msg = String(err?.message || "");
-    const is429 = err?.status === 429 || /429|rate[_\s-]?limit/i.test(msg);
-    if (is429) {
+    const status = Number(err?.status || 0);
+
+    // Rate limit (429) → Retry-After ile dön
+    if (status === 429 || /429|rate[_\s-]?limit/i.test(msg)) {
       res.setHeader("Retry-After", String(process.env.AI_GEN_RETRY_AFTER_SEC || 20));
       return res.status(429).json({
         success: false,
-        message:
-          req.t?.("ai.rate_limit") ||
-          "AI hizmeti yoğun. Lütfen kısa bir süre sonra tekrar deneyin.",
+        message: req.t?.("ai.rate_limit") || "AI hizmeti yoğun. Lütfen kısa bir süre sonra tekrar deneyin.",
+        ...(isDebug ? { details: msg } : {}),
       });
     }
+
+    // Diğer hatalar (auth/model/network vs.) → 503 + isteğe bağlı detay
+    const base = req.t?.("ai.unavailable") || "AI hizmeti geçici olarak kullanılamıyor. Lütfen tekrar deneyin.";
+    const details =
+      err instanceof LLMError
+        ? [err.provider, err.status, err.code, err.message].filter(Boolean).join(" | ")
+        : msg;
+
     return res.status(503).json({
       success: false,
-      message:
-        req.t?.("ai.unavailable") ||
-        "AI hizmeti geçici olarak kullanılamıyor. Lütfen tekrar deneyin.",
+      message: base,
+      ...(isDebug ? { details } : {}),
     });
   }
 }
-
 /* --------------- Public: Manual Submit (Form) --------------- */
 export async function publicSubmitRecipe(req: Request, res: Response, next: NextFunction) {
   try {

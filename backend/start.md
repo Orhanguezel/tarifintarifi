@@ -33,6 +33,18 @@ pm2 save
 
 ```
 
+
+cd /var/www/tariftarif/backend
+# dist yoksa önce build
+npm run build   # (ya da pnpm/bun)
+
+pm2 startOrReload ecosystem.config.js
+pm2 save
+
+# hızlı sağlık kontrolü
+curl -i http://127.0.0.1:5035/api/healthz
+
+
 ```sh
 npx ts-node -r tsconfig-paths/register src/scripts/sync/masterSync.ts
 ```
