@@ -29,18 +29,11 @@ function localesJsonShape() {
 /** Metinden ilk JSON dizisini esnekçe çıkar */
 function parseFirstJsonArray(text: string): any[] | undefined {
   if (!text) return undefined;
-  try {
-    const direct = JSON.parse(text);
-    if (Array.isArray(direct)) return direct;
-  } catch { /* ignore */ }
-  const start = text.indexOf("[");
-  const end = text.lastIndexOf("]");
+  try { const direct = JSON.parse(text); if (Array.isArray(direct)) return direct; } catch {}
+  const start = text.indexOf("["); const end = text.lastIndexOf("]");
   if (start >= 0 && end > start) {
     const slice = text.slice(start, end + 1);
-    try {
-      const arr = JSON.parse(slice);
-      if (Array.isArray(arr)) return arr;
-    } catch { /* ignore */ }
+    try { const arr = JSON.parse(slice); if (Array.isArray(arr)) return arr; } catch {}
   }
   return undefined;
 }
@@ -49,6 +42,64 @@ function parseFirstJsonArray(text: string): any[] | undefined {
 function reindex1N<T extends { order?: number }>(arr: T[], max?: number): T[] {
   const out = (arr || []).map((x, i) => ({ ...x, order: i + 1 })) as T[];
   return typeof max === "number" && out.length > max ? out.slice(0, max) : out;
+}
+
+/* ---------- NEW: DESCRIPTION (genişletme) ---------- */
+/**
+ * baseLocale metni 300 karakterin altındaysa 300–600 aralığına genişletir.
+ * Diğer locale alanları boş kalır (şema korunur).
+ */
+export async function expandDescriptionIfTooShort(
+  baseLocale: SupportedLocale,
+  descriptionTL: TranslatedLabel,
+  context: {
+    title: TranslatedLabel;
+    category?: string | null;
+    cuisines?: string[];
+    dietFlags?: string[];
+    maxMinutes?: number | null;
+  },
+  minChars = 300,
+  maxChars = 600
+): Promise<TranslatedLabel> {
+  const current = String((descriptionTL as any)?.[baseLocale] || "").trim();
+  if (current.length >= minChars) return descriptionTL;
+
+  const jsonFields = SUPPORTED_LOCALES.map(l => `"${l}":""`).join(",");
+
+  const sys = [
+    `You rewrite a recipe description ONLY in ${baseLocale}, other locales stay empty strings.`,
+    `Return ONLY a JSON object like: { ${jsonFields} }`,
+    `Length STRICTLY between ${minChars} and ${maxChars} characters.`,
+    `Single paragraph, no bullets. Vivid but concise: overview → key flavors & textures → method summary → serving ideas → optional dietary/occasion note.`,
+    `Avoid repeating the title; do not list ingredients.`,
+  ].join("\n");
+
+  const payload = {
+    baseLocale,
+    current,
+    title: context.title,
+    category: context.category || null,
+    cuisines: context.cuisines || [],
+    dietFlags: context.dietFlags || [],
+    maxMinutes: context.maxMinutes ?? null,
+  };
+  const user = `Context:\n${JSON.stringify(payload)}\n\nRewrite ONLY the ${baseLocale} field to ${minChars}-${maxChars} chars; keep others empty strings.`;
+
+  const raw = await llmChat({
+    messages: [{ role: "system", content: sys }, { role: "user", content: user }],
+    temperature: 0.4,
+    forceJson: true,
+  });
+
+  const obj = extractJsonSafe(raw);
+  if (obj && typeof obj === "object") {
+    const out: any = { ...(descriptionTL as any) };
+    for (const l of SUPPORTED_LOCALES) out[l] = ""; // hepsini boşla
+    out[baseLocale] = String(obj?.[baseLocale] || "").trim();
+    return out as TranslatedLabel;
+  }
+  return descriptionTL;
 }
 
 /* ---------- STEPS (genişletme) ---------- */
@@ -74,6 +125,7 @@ export async function expandStepsIfTooShort(
   const raw = await llmChat({
     messages: [{ role: "system", content: sys }, { role: "user", content: user }],
     temperature: 0.25,
+    forceJson: true,
   });
 
   let arr = extractJsonSafe(raw);
@@ -131,6 +183,7 @@ export async function expandTagsIfTooShort(
   const raw = await llmChat({
     messages: [{ role: "system", content: sys }, { role: "user", content: user }],
     temperature: 0.3,
+    forceJson: true,
   });
 
   let arr = extractJsonSafe(raw);
@@ -183,6 +236,7 @@ export async function expandIngredientsIfTooShort(
   const raw = await llmChat({
     messages: [{ role: "system", content: sys }, { role: "user", content: user }],
     temperature: 0.25,
+    forceJson: true,
   });
 
   let arr = extractJsonSafe(raw);

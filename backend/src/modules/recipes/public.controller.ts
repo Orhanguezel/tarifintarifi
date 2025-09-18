@@ -35,6 +35,7 @@ import {
   expandStepsIfTooShort,
   expandTagsIfTooShort,
   expandIngredientsIfTooShort,
+  expandDescriptionIfTooShort,
 } from "./utils/ai.refine";
 
 // LLM
@@ -264,7 +265,7 @@ export async function publicGetRecipeBySlug(
   }
 }
 
-
+// ------------------ Public: AI Generate ------------------
 export async function aiGeneratePublic(req: Request, res: Response, _next: NextFunction) {
   try {
     const {
@@ -329,13 +330,23 @@ export async function aiGeneratePublic(req: Request, res: Response, _next: NextF
     const d: any = extractJsonSafe(raw);
 
     // ---- Başlık & açıklama
-    let title = normalizeTranslatedLabel(d.title || {}, { trim: true });
-    let description = normalizeTranslatedLabel(d.description || {}, { trim: true });
-    const auto = process.env.RECIPES_AUTO_TRANSLATE !== "false";
-    if (auto) {
-      title = (await translateMissingLocales(title as any)) as any;
-      description = (await translateMissingLocales(description as any)) as any;
-    }
+   let title = normalizeTranslatedLabel(d.title || {}, { trim: true });
+let description = normalizeTranslatedLabel(d.description || {}, { trim: true });
+
+// ⬇️ 300–600 karakter zorlaması (yalnız baseLocale doldurulur)
+description = await expandDescriptionIfTooShort(lang, description as any, {
+  title: title as any,
+  category: d.category || category || null,
+  cuisines: Array.isArray(d.cuisines) ? d.cuisines : [],
+  dietFlags: Array.isArray(d.dietFlags) ? d.dietFlags : [],
+  maxMinutes: maxMinutes != null ? Number(maxMinutes) : undefined
+});
+ // (sonra auto çeviri varsa devam…)
+const auto = process.env.RECIPES_AUTO_TRANSLATE !== "false";
+if (auto) {
+  title = (await translateMissingLocales(title as any)) as any;
+  description = (await translateMissingLocales(description as any)) as any;
+}
 
     // ---- Tagler
     let tags = normalizeTagsLocalized(d.tags || []);
