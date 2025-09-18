@@ -1,5 +1,5 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "Kolay, güvenilir tarifler" },
+    "brand": { "name": "tarifintarifi.com", "tagline": "Kolay, güvenilir tarifler", "logoAlt": "tarifintarifi.com logosu" },
     "sections": { "categories": "Kategoriler", "help": "Yardım" },
     "links": { "about": "Hakkımızda", "contact": "İletişim", "privacy": "Gizlilik", "terms": "Kullanım Şartları" },
     "copyright": "© {year} {brand}. Tüm hakları saklıdır.",

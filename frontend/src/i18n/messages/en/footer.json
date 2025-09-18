@@ -1,5 +1,5 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "Easy, reliable recipes" },
+    "brand": { "name": "tarifintarifi.com", "tagline": "Easy, reliable recipes", "logoAlt": "tarifintarifi.com logo" },
     "sections": { "categories": "Categories", "help": "Help" },
     "links": { "about": "About", "contact": "Contact", "privacy": "Privacy", "terms": "Terms of Use" },
     "copyright": "© {year} {brand}. All rights reserved.",

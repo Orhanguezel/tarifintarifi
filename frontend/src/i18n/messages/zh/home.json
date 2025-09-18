@@ -7,5 +7,8 @@
     "pagination": { "aria": "分页", "prev": "上一页", "next": "下一页" },
     "popular": { "title": "热门菜谱" },
     "all": { "title": "全部菜谱" },
-    "quick": { "title": "快速分类" }, "clear": "清除"
+    "quick": { "title": "快速分类" }, "clear": "清除",
+    "hero": {
+        "h1": "找到数千个菜谱"
+    }
   }

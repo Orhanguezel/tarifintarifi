@@ -7,5 +7,9 @@
     "pagination": { "aria": "Pagination", "prev": "Previous", "next": "Next" },
     "popular": { "title": "Popular Recipes" },
     "all": { "title": "All Recipes" },
-     "quick": { "title": "Quick Categories" }, "clear": "Clear"
+     "quick": { "title": "Quick Categories" }, "clear": "Clear",
+    "hero": {
+        "h1": "Find thousands of recipes"
+
   }
+}

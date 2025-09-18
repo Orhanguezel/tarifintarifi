@@ -1,5 +1,5 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "简单、可靠的菜谱" },
+    "brand": { "name": "tarifintarifi.com", "tagline": "简单、可靠的菜谱","logoAlt": "tarifintarifi.com 徽标" },
     "sections": { "categories": "分类", "help": "帮助" },
     "links": { "about": "关于我们", "contact": "联系我们", "privacy": "隐私政策", "terms": "使用条款" },
     "copyright": "© {year} {brand}. 保留所有权利。",

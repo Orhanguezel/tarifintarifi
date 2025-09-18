@@ -2,6 +2,7 @@
   "seo": {
     "homeTitle": "{site} — Ricette deliziose",
     "homeDesc": "Ricette facili e collaudate con istruzioni passo-passo, valori nutrizionali e trucchi.",
-    "ogAlt": "Immagine per i social — {site}"
+    "ogAlt": "Immagine per i social — {site}",
+    "homeH1": "{site} — Ricette deliziose"
   }
 }

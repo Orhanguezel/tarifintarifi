@@ -1,1 +1,5 @@
-{ "latest": "En Yeni Tarifler" }
+{ "latest": "En Yeni Tarifler",
+"listTitle": "Tarifler",
+"title": "Tarif",
+"all.title": "Tüm Tarifler"
+}

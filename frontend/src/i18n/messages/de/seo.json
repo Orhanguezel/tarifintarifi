@@ -2,6 +2,7 @@
   "seo": {
     "homeTitle": "{site} — Leckere Rezepte",
     "homeDesc": "Einfache, erprobte Rezepte mit Schritt-für-Schritt-Anleitungen, Nährwertangaben und Tipps.",
-    "ogAlt": "Social-Sharing-Bild — {site}"
+    "ogAlt": "Social-Sharing-Bild — {site}",
+    "homeH1": "{site} — Leckere Rezepte"
   }
 }

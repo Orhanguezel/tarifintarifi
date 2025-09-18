@@ -187,7 +187,7 @@ const classicTheme: DefaultTheme = {
     textOnDanger: "#7a0920",
 
     // marka & aksiyon renkleri
-    primary: "#ff6b2c",                 // turuncu CTA (Yapay Zeka ile Tarif Oluştur)
+    primary: "#C55225",                 // turuncu CTA (Yapay Zeka ile Tarif Oluştur)
     primaryLight: "#ffe6d8",
     primaryHover: "#e95f25",
     primaryDark: "#b84714",
@@ -215,9 +215,9 @@ const classicTheme: DefaultTheme = {
     cardBackground: "#ffffff",
 
     // buton (varsayılanlar)
-    buttonBackground: "#ff6b2c",
+    buttonBackground: "#C55225",
     buttonText: "#ffffff",
-    buttonBorder: "#ff6b2c",
+    buttonBorder: "#C55225",
 
     // linkler
     link: "#2d6cdf",
@@ -264,7 +264,7 @@ const classicTheme: DefaultTheme = {
   /* ---------- Button / Input / Card Presets ---------- */
   buttons: {
     primary: {
-      background: "#ff6b2c",
+      background: "#C55225",
       backgroundHover: "#e95f25",
       text: "#ffffff",
       textHover: "#ffffff",

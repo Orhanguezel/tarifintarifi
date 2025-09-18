@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Script from "next/script";
 import styled, { createGlobalStyle } from "styled-components";
 import { useTranslations, useLocale } from "next-intl";
 import { useCreateRecipeCommentMutation } from "@/lib/comments/api";
+
 
 /* ---------- reCAPTCHA config ---------- */
 const ENABLED = (process.env.NEXT_PUBLIC_ENABLE_RECAPTCHA || "false") === "true";
@@ -60,6 +61,17 @@ export default function CommentForm({ recipeId }: { recipeId: string }) {
   const [text, setText] = useState("");
   const [create, { isLoading }] = useCreateRecipeCommentMutation();
   const [note, setNote] = useState<null | { ok?: boolean; msg: string }>(null);
+
+  // ✅ Form kapandığında reCAPTCHA rozetini temizle
+  useEffect(() => {
+    return () => {
+      try {
+        document.querySelectorAll(".grecaptcha-badge").forEach((el) => {
+          el.parentElement?.removeChild(el);
+        });
+      } catch {}
+    };
+  }, []);
 
   const canSend =
     name.trim().length >= 2 &&

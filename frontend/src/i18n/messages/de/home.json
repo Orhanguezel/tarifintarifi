@@ -7,5 +7,8 @@
     "pagination": { "aria": "Seitennavigation", "prev": "Zurück", "next": "Weiter" },
     "popular": { "title": "Beliebte Rezepte" },
     "all": { "title": "Alle Rezepte" },
-    "quick": { "title": "Schnellkategorien" }, "clear": "Leeren"
+    "quick": { "title": "Schnellkategorien" }, "clear": "Leeren",
+    "hero": {
+        "h1": "Finde tausende Rezepte"
+    }
   }

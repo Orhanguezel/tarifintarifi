@@ -1,1 +1,5 @@
-{ "latest": "最新菜谱" }
+{ "latest": "最新菜谱",
+"listTitle": "菜谱",
+"title": "菜谱",
+"all.title": "所有菜谱"
+}
