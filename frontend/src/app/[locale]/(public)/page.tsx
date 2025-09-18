@@ -1,4 +1,4 @@
-// app/[locale]/page.tsx
+// src/app/[locale]/(public)/page.tsx
 import type { Recipe } from "@/lib/recipes/types";
 import HomeView from "./(home)/HomeView";
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
@@ -20,15 +20,15 @@ function SrOnlyH1({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default async function Home({
-  params,
-  searchParams
-}: {
-  params: { locale: string };
-  searchParams: Record<string, string | string[] | undefined>;
+export default async function Home(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const { locale } = params;
-  const page = Math.max(1, parseInt(String(searchParams.page ?? "1"), 10) || 1);
+  // ✅ Next 15: params & searchParams await edilmeli
+  const { locale } = await props.params;
+  const sp = await props.searchParams;
+
+  const page = Math.max(1, parseInt(String(sp.page ?? "1"), 10) || 1);
   const limit = 12;
 
   const loc: SupportedLocale =
@@ -54,7 +54,6 @@ export default async function Home({
     console.warn(`[home] fetch failed during build/ISR: ${e?.message || e}`);
   }
 
-  // Dil destekli H1
   let h1Text = process.env.NEXT_PUBLIC_SITE_NAME || "tarifintarifi.com";
   try {
     const t = await getTranslations({ locale: loc, namespace: "seo" });

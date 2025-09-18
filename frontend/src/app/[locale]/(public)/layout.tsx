@@ -1,4 +1,4 @@
-// app/[locale]/layout.tsx
+// src/app/[locale]/(public)/layout.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, getMessages, setRequestLocale } from "next-intl/server";

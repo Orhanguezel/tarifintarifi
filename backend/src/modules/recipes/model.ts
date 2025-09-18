@@ -1,5 +1,4 @@
-// /modules/recipes/model.ts
-import { Schema, model, models, Types, type Model } from "mongoose";
+import { Schema, model, models, type Model } from "mongoose";
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
 import type {
   IRecipe,
@@ -105,11 +104,12 @@ const RecipeSchema = new Schema<IRecipe>(
       default: null,
       set: (v: any) => {
         const norm = normalizeCategoryKey(v);
-        if (norm) return norm;                       // bilinen sabit anahtar
+        if (norm) return norm;                       // sabit anahtar
         const s = String(v ?? "").trim().toLowerCase();
-        return s || null;                            // dinamikse ham string (lc) olarak sakla
+        return s || null;                            // dinamikse ham string (lc)
       },
-    },  
+    },
+
     servings:     { type: Number, min: 1 },
     prepMinutes:  { type: Number, min: 0 },
     cookMinutes:  { type: Number, min: 0 },
@@ -138,11 +138,11 @@ const RecipeSchema = new Schema<IRecipe>(
     effectiveTo:   { type: Date },
 
     isPublished: { type: Boolean, default: true, index: true },
+    publishedAt: { type: Date, default: null },
     isActive:    { type: Boolean, default: true, index: true }
   },
   { timestamps: true }
 );
-
 
 /* ---------- Indexes ---------- */
 RecipeSchema.index({ slugCanonical: 1 }, { unique: true, name: "slug_canonical_unique" });
@@ -173,21 +173,17 @@ RecipeSchema.index({ ratingAvg: -1, ratingCount: -1 }, { name: "rating_sort_idx"
   RecipeSchema.index(textIdx, { name: "recipe_text_search", default_language: "none" });
 }
 
-
-/* ---------- Slug & Category normalize (utils üzerinden) ---------- */
+/* ---------- Slug normalize ---------- */
 RecipeSchema.pre("validate", function (next) {
   const anyThis = this as any;
 
   anyThis.slug = buildSlugPerLocale(anyThis.slug as TranslatedLabel, anyThis.title as TranslatedLabel);
   anyThis.slugCanonical = pickCanonical(anyThis.slug as TranslatedLabel, anyThis.title as TranslatedLabel);
 
-  // Boş kalan locale sluglarını canonical ile doldur
   for (const l of SUPPORTED_LOCALES as ReadonlyArray<SupportedLocale>) {
     const v = String(anyThis.slug?.[l] || "").trim();
     if (!v) anyThis.slug[l] = anyThis.slugCanonical;
   }
-
-
   next();
 });
 
@@ -199,7 +195,15 @@ RecipeSchema.pre("save", function (next) {
   }
 
   if (anyThis.totalMinutes == null) {
-    anyThis.totalMinutes = (Number(anyThis.prepMinutes) || 0) + (Number(anyThis.cookMinutes) || 0);
+    anyThis.totalMinutes =
+      (Number(anyThis.prepMinutes) || 0) + (Number(anyThis.cookMinutes) || 0);
+  }
+
+  if (anyThis.isPublished && !anyThis.publishedAt) {
+    anyThis.publishedAt = new Date();
+  }
+  if (!anyThis.isPublished) {
+    anyThis.publishedAt = null;
   }
 
   if (anyThis.ratingAvg != null) {

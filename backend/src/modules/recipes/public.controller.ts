@@ -85,7 +85,6 @@ async function callModelWithFallback(sys: string, user: string) {
 /* ------------------ Public: List/Search ----------------- */
 export async function publicGetRecipes(req: Request, res: Response, next: NextFunction) {
   try {
-    // ← hl eklendi
     const { q, tag, hl, maxTime, limit = "50", page = "1", fields, category } =
       req.query as Record<string, string>;
 
@@ -107,7 +106,6 @@ export async function publicGetRecipes(req: Request, res: Response, next: NextFu
 
     const qx = (q || "").trim();
 
-    // Text search / basit or search
     const useText = !!qx && process.env.RECIPES_USE_TEXT_SEARCH !== "false" && qx.length >= 2;
     if (useText) {
       filter.$text = { $search: qx };
@@ -120,32 +118,22 @@ export async function publicGetRecipes(req: Request, res: Response, next: NextFu
       ];
     }
 
-    // --- TAG filtresi (en kuvvetli kısım) ---
-    // Önce 'hl' (görünen/yerel etiket), yoksa 'tag' (EN/slug)
+    // TAG filtresi (hl > tag)
     const tgRaw = String(hl || tag || "").trim();
     if (tgRaw) {
       const base = decodeURIComponent(tgRaw).replace(/-/g, " ").trim();
-
-      // 1) orijinal (diakritikli) regex
       const rxMain = looseTagRegex(base);
-
-      // 2) diakritik normalize edilmiş alternatif (ör. "akşam" → "aksam")
       const folded = base.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").trim();
       const rxAlt = folded && folded !== base ? looseTagRegex(folded) : null;
-
-      // 3) tüm locale alanlarında OR (main + alt)
       const orMain = SUPPORTED_LOCALES.map((lng) => ({ [`tags.${lng}`]: rxMain }));
       const orAlt  = rxAlt ? SUPPORTED_LOCALES.map((lng) => ({ [`tags.${lng}`]: rxAlt })) : [];
-
       filter.$and = [...(filter.$and || []), { $or: [...orMain, ...orAlt] }];
     }
 
-    // Süre filtresi
     if (maxTime != null && String(maxTime).trim() !== "") {
       filter.totalMinutes = { $lte: Number(maxTime) };
     }
 
-    // Sayfalama
     const MAX_LIMIT = Math.min(Number(process.env.RECIPES_PUBLIC_LIST_MAX || 200), 1000);
     const lim = Math.max(1, Math.min(Number(limit) || 50, MAX_LIMIT));
     const pg = Math.max(1, Number(page) || 1);
@@ -185,6 +173,7 @@ export async function publicGetRecipes(req: Request, res: Response, next: NextFu
 }
 
 
+
 /** GET /recipes/search?q=...&category=...&limit=10 */
 export async function publicSearchSuggest(
   req: Request,
@@ -196,7 +185,6 @@ export async function publicSearchSuggest(
 
     const filter: any = { isActive: true, isPublished: true };
 
-    // Dinamik kategori desteği
     const rawCat = String(category || "").trim().toLowerCase();
     const catKey = normalizeCategoryKey(rawCat);
     if (catKey) filter.category = catKey;
@@ -205,12 +193,8 @@ export async function publicSearchSuggest(
     const qx = String(q).trim();
     if (qx) {
       filter.$or = [
-        ...SUPPORTED_LOCALES.map((lng) => ({
-          [`title.${lng}`]: { $regex: qx, $options: "i" },
-        })),
-        ...SUPPORTED_LOCALES.map((lng) => ({
-          [`slug.${lng}`]: { $regex: qx, $options: "i" },
-        })),
+        ...SUPPORTED_LOCALES.map((lng) => ({ [`title.${lng}`]: { $regex: qx, $options: "i" } })),
+        ...SUPPORTED_LOCALES.map((lng) => ({ [`slug.${lng}`]: { $regex: qx, $options: "i" } })),
       ];
     }
 
@@ -235,19 +219,13 @@ export async function publicGetRecipeBySlug(
   try {
     const now = new Date();
 
-    // slug'ı güvenle çöz (örn: %2F vs) ve normalize et
     const raw = String((req.params as any).slug || "");
     const slug = decodeURIComponent(raw).trim().toLowerCase();
 
-    // locale: middleware yoksa header fallback (x-lang > accept-language)
     const hdrLang = String(
-      (req.headers["x-lang"] ||
-        (req.headers["accept-language"] as string) ||
-        "")
-    )
-      .split(",")[0]
-      .trim()
-      .toLowerCase();
+      (req.headers["x-lang"] || (req.headers["accept-language"] as string) || "")
+    ).split(",")[0].trim().toLowerCase();
+
     const loc =
       (req.locale as SupportedLocale) ||
       ((SUPPORTED_LOCALES as readonly string[]).includes(hdrLang)
@@ -264,34 +242,28 @@ export async function publicGetRecipeBySlug(
     };
 
     const fields =
-      "slug slugCanonical title description images cuisines tags category servings prepMinutes cookMinutes totalMinutes difficulty nutrition allergens allergenFlags dietFlags ingredients steps tips isActive isPublished order createdAt updatedAt effectiveFrom effectiveTo";
+      "slug slugCanonical title description images cuisines tags category servings prepMinutes cookMinutes totalMinutes difficulty nutrition allergens allergenFlags dietFlags ingredients steps tips isActive isPublished publishedAt order createdAt updatedAt effectiveFrom effectiveTo";
 
     let doc =
-      // 1) canonical ile dene
       (await Recipe.findOne({ ...baseQ, slugCanonical: slug }).select(fields).lean()) ||
-      // 2) belirlenen locale alanıyla dene
       (await Recipe.findOne({ ...baseQ, [`slug.${loc}`]: slug }).select(fields).lean());
 
     if (!doc) {
-      // 3) tüm locale alanlarında dene
       const or = SUPPORTED_LOCALES.map((lng) => ({ [`slug.${lng}`]: slug }));
       doc = await Recipe.findOne({ ...baseQ, $or: or }).select(fields).lean();
     }
 
     if (!doc) {
-      return res
-        .status(404)
-        .json({ success: false, message: req.t?.("errors.not_found") || "Not Found" });
+      return res.status(404).json({ success: false, message: req.t?.("errors.not_found") || "Not Found" });
     }
 
     setPublicCache(res);
-    return res
-      .status(200)
-      .json({ success: true, message: req.t?.("recipes.fetched") || "OK", data: doc });
+    return res.status(200).json({ success: true, message: req.t?.("recipes.fetched") || "OK", data: doc });
   } catch (err) {
     next(err);
   }
 }
+
 
 
 /* ----------------- Public: AI Generate & Save ----------------- */

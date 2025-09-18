@@ -1,3 +1,4 @@
+// src/lib/recipes/types.ts
 // FE tipi -> BE'deki IRecipe ile uyumlu sadeleştirilmiş sürüm
 import type { SupportedLocale } from "@/types/common";
 

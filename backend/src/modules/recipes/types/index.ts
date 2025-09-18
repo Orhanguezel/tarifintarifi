@@ -1,4 +1,3 @@
-// /modules/recipes/types.ts
 import type { Types } from "mongoose";
 import type { SupportedLocale } from "@/types/common";
 import type { RecipeCategoryKey } from "../categories";
@@ -34,13 +33,15 @@ export interface IRecipeTip {
 }
 
 /* ---------- Categorization ---------- */
-// Kategoriler serbest string -> ObjectId ihtiyacı kalmadı; gerek yoksa silin
-// export type RecipeCategoryId = Types.ObjectId;
-
 export type ReactionKind = "like" | "love" | "yum" | "wow";
 export type ReactionTotals = Partial<Record<ReactionKind, number>>;
 
-export type DietFlag = "vegetarian" | "vegan" | "gluten-free" | "lactose-free";
+export type DietFlag =
+  | "vegetarian"
+  | "vegan"
+  | "gluten-free"
+  | "lactose-free";
+
 export type AllergenFlag =
   | "gluten" | "dairy" | "egg" | "nuts" | "peanut" | "soy" | "sesame" | "fish" | "shellfish";
 
@@ -71,7 +72,7 @@ export interface IRecipe {
   cuisines?: string[];
   tags?: TranslatedLabel[];
 
-  category?: RecipeCategoryKey | null;
+  category?: RecipeCategoryKey | string | null;
 
   servings?: number;
   prepMinutes?: number;
@@ -100,7 +101,9 @@ export interface IRecipe {
   effectiveFrom?: Date;
   effectiveTo?: Date;
 
+  /** yayın/durum */
   isPublished: boolean;
+  publishedAt?: Date | null;
   isActive: boolean;
 
   // create sırasında yok → opsiyonel

@@ -1,3 +1,4 @@
+// src/lib/recipes/api.ts
 "use client";
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
