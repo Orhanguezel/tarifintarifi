@@ -7,24 +7,28 @@ const DEFAULT_LOCALE = "tr";
 export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
-  // Statik/SEO yollarını atla
+  // 1) Statik ve SEO yollarını net dışla
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
-    pathname.startsWith("/favicon") ||
     pathname.startsWith("/assets") ||
     pathname.startsWith("/static") ||
+    pathname.startsWith("/images") ||
+    pathname.startsWith("/fonts") ||
+    pathname === "/favicon.ico" ||
     pathname === "/robots.txt" ||
-    pathname === "/sitemap.xml"
+    /^\/sitemap(\-\w+)?\.xml$/.test(pathname) // /sitemap.xml, /sitemap-index.xml, /sitemap-1.xml
   ) {
     return NextResponse.next();
   }
 
-  // Locale prefix zaten varsa devam
-  const hasLocale = SUPPORTED.some((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`));
+  // 2) Zaten locale prefix varsa geç
+  const hasLocale = SUPPORTED.some(
+    (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`)
+  );
   if (hasLocale) return NextResponse.next();
 
-  // Yoksa cookie veya varsayılan ile ekle (RELATIVE/aynı host)
+  // 3) Locale cookie -> yoksa DEFAULT
   const cookieLocale = req.cookies.get("NEXT_LOCALE")?.value;
   const locale = (SUPPORTED as readonly string[]).includes(cookieLocale || "")
     ? (cookieLocale as typeof SUPPORTED[number])
@@ -33,10 +37,13 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   url.pathname = `/${locale}${pathname}`;
   url.search = search;
-  // 307 = method-preserving temporary redirect
   return NextResponse.redirect(url, 307);
 }
 
 export const config = {
-  matcher: ["/((?!_next|api|favicon.ico|assets|static|robots.txt|sitemap.xml).*)"],
+  // Aynı dışlama mantığını matcher’da da uygula (performans)
+  matcher: [
+    // her şeyi yakala fakat şu desenleri hariç tut
+    "/((?!_next|api|assets|static|images|fonts|favicon.ico|robots.txt|sitemap\\.xml|sitemap-.*\\.xml).*)",
+  ],
 };
