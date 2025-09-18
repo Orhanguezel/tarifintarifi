@@ -7,5 +7,8 @@
     "pagination": { "aria": "Paginação", "prev": "Anterior", "next": "Próximo" },
     "popular": { "title": "Receitas populares" },
     "all": { "title": "Todas as receitas" },
-    "quick": { "title": "Categorias rápidas" }, "clear": "Limpar"
+    "quick": { "title": "Categorias rápidas" }, "clear": "Limpar",
+    "hero": {
+        "h1": "Encontre milhares de receitas"
+    }
   }

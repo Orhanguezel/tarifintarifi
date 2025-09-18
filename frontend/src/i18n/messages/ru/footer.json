@@ -1,5 +1,5 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "Простые и надёжные рецепты" },
+    "brand": { "name": "tarifintarifi.com", "tagline": "Простые и надёжные рецепты", "logoAlt": "Логотип tarifintarifi.com" },
     "sections": { "categories": "Категории", "help": "Помощь" },
     "links": { "about": "О нас", "contact": "Контакты", "privacy": "Конфиденциальность", "terms": "Условия использования" },
     "copyright": "© {year} {brand}. Все права защищены.",

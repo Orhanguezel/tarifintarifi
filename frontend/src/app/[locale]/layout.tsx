@@ -2,13 +2,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, getMessages, setRequestLocale } from "next-intl/server";
-import Script from "next/script";
 
 import Providers from "@/app/providers";
 import Navbar from "@/layout/Navbar";
 import Footer from "@/layout/Footer";
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
 import IntlProviderClient from "@/i18n/IntlProviderClient";
+import GAScripts from "@/features/analytics/GAScripts";
+import GAView from "@/features/analytics/GAView";
+import SiteJsonLd from "@/features/seo/SiteJsonLd";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
@@ -25,13 +27,15 @@ const RTL_LOCALES: ReadonlySet<SupportedLocale> = new Set(
 );
 const isRTL = (l: SupportedLocale) => RTL_LOCALES.has(l);
 
-const isSupported = (x: any): x is SupportedLocale =>
+const isSupported = (x: unknown): x is SupportedLocale =>
   typeof x === "string" && (SUPPORTED_LOCALES as readonly string[]).includes(x as any);
 
-function languageAlternates() {
+function languageAlternates(defaultLocale: SupportedLocale) {
   const map: Record<string, string> = {};
   for (const loc of SUPPORTED_LOCALES) map[loc] = `/${loc}`;
-  map["x-default"] = "/";
+  // 🔴 Eskiden "/"
+  // ✅ Artık x-default = varsayılan dilin sayfası
+  map["x-default"] = `/${defaultLocale}`;
   return map;
 }
 
@@ -42,22 +46,22 @@ export function generateStaticParams() {
 /** Next 15: params Promise döner */
 type RouteParams = Promise<{ locale: string }>;
 
-/** ✅ params’ı await etmeden asla kullanma */
 export async function generateMetadata(
   props: { params: RouteParams }
 ): Promise<Metadata> {
-  const { locale: rawLocale } = await props.params; // <— önemli
+  const { locale: rawLocale } = await props.params;
   const locale = (isSupported(rawLocale) ? rawLocale : DEFAULT_LOCALE) as SupportedLocale;
 
+  // Varsayılan meta
   let title = SITE_NAME;
   let description = "Pratik ve güvenilir yemek tarifleri.";
   let ogAlt = SITE_NAME;
 
   try {
     const t = await getTranslations({ locale, namespace: "seo" });
-    title = t("homeTitle", { site: SITE_NAME });
-    description = t("homeDesc");
-    ogAlt = t("ogAlt", { site: SITE_NAME });
+    title = t("homeTitle", { site: SITE_NAME }) || title;
+    description = t("homeDesc") || description;
+    ogAlt = t("ogAlt", { site: SITE_NAME }) || ogAlt;
   } catch {}
 
   const ogImage = `${SITE_URL}/og.jpg`;
@@ -68,7 +72,7 @@ export async function generateMetadata(
     description,
     alternates: {
       canonical: `/${locale}`,
-      languages: languageAlternates()
+      languages: languageAlternates(DEFAULT_LOCALE),
     },
     openGraph: {
       type: "website",
@@ -89,33 +93,27 @@ export async function generateMetadata(
   };
 }
 
-/** ✅ Burada da params await edilmeli */
+/** ✅ Layout (locale bağlamı) — reCAPTCHA burada YÜKLENMİYOR */
 export default async function LocaleLayout(props: {
   children: React.ReactNode;
   params: RouteParams;
 }) {
-  const { locale: rawLocale } = await props.params; // <— önemli
+  const { locale: rawLocale } = await props.params;
   const current: SupportedLocale = isSupported(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   if (!isSupported(current)) notFound();
 
-  // i18n bağlamını segment için sabitle
   setRequestLocale(current);
 
   const messages = await getMessages();
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "";
 
   return (
     <>
-      {siteKey && (
-        <Script
-          id="recaptcha-enterprise"
-          src={`https://www.google.com/recaptcha/enterprise.js?render=${siteKey}`}
-          strategy="afterInteractive"
-        />
-      )}
+      <GAScripts />
       <Providers locale={current}>
         <IntlProviderClient locale={current} messages={messages}>
           <div dir={isRTL(current) ? "rtl" : "ltr"}>
+            <SiteJsonLd locale={current} />
+            <GAView locale={current} />
             <Navbar locale={current} showSearch />
             {props.children}
             <Footer locale={current} />

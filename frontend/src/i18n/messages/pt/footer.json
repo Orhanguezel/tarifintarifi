@@ -1,5 +1,5 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "Receitas fáceis e confiáveis" },
+    "brand": { "name": "tarifintarifi.com", "tagline": "Receitas fáceis e confiáveis", "logoAlt": "Logotipo do tarifintarifi.com" },
     "sections": { "categories": "Categorias", "help": "Ajuda" },
     "links": { "about": "Sobre", "contact": "Contato", "privacy": "Privacidade", "terms": "Termos de uso" },
     "copyright": "© {year} {brand}. Todos os direitos reservados.",

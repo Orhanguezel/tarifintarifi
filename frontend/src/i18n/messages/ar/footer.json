@@ -1,5 +1,5 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "وصفات سهلة وموثوقة" },
+    "brand": { "name": "tarifintarifi.com", "tagline": "وصفات سهلة وموثوقة", "logoAlt": "شعار tarifintarifi.com" },
     "sections": { "categories": "الفئات", "help": "المساعدة" },
     "links": { "about": "من نحن", "contact": "اتصل بنا", "privacy": "الخصوصية", "terms": "شروط الاستخدام" },
     "copyright": "© {year} {brand}. جميع الحقوق محفوظة.",

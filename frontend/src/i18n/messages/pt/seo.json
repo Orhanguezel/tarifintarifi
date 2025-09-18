@@ -2,6 +2,7 @@
   "seo": {
     "homeTitle": "{site} — Receitas deliciosas",
     "homeDesc": "Receitas fáceis e testadas, passo a passo, com informações nutricionais e dicas.",
-    "ogAlt": "Imagem de compartilhamento — {site}"
+    "ogAlt": "Imagem de compartilhamento — {site}",
+    "homeH1": "{site} — Receitas deliciosas"
   }
 }

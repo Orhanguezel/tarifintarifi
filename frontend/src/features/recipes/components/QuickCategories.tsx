@@ -107,70 +107,96 @@ export default function QuickCategories({
     </Box>
   );
 }
-
 /* ---------- styled ---------- */
 const Box = styled.section`
   background: ${({ theme }) => theme.colors.sectionBackground};
   border-radius: ${({ theme }) => theme.radii.lg};
   padding: 14px;
   margin-top: 18px;
-  border: 1px solid ${({ theme }) => theme.colors.borderLight};
+  border: 1px solid ${({ theme }) => theme.colors.border};
 `;
+
 const Title = styled.h3<{ $sm?: boolean }>`
   margin: 0 0 10px;
   font-size: ${({ $sm, theme }) => ($sm ? theme.fontSizes.md : theme.fontSizes.h3)};
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.textLight};
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.title};
 `;
+
 const Pills = styled.div`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 `;
+
 const Pill = styled.button`
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 8px;
+
+  /* ≥44px touch target */
+  min-height: 40px;
+  padding: 10px 14px;
+
   font-size: ${({ theme }) => theme.fontSizes.sm};
-  background: ${({ theme }) => theme.colors.inputBackgroundLight};
-  border: 1px solid ${({ theme }) => theme.colors.borderBright};
+  font-weight: 600;
+  line-height: 1;
+
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.pill};
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
-  transition: background 0.12s ease, border-color 0.12s ease;
+
+  transition:
+    background ${({ theme }) => theme.transition.fast},
+    border-color ${({ theme }) => theme.transition.fast},
+    box-shadow ${({ theme }) => theme.transition.fast};
 
   &:hover {
-    background: ${({ theme }) => theme.colors.inputBackgroundFocus};
+    background: ${({ theme }) => theme.colors.hoverBackground};
+    border-color: ${({ theme }) => theme.colors.inputBorder};
   }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: ${({ theme }) => theme.colors.shadowHighlight};
+    border-color: ${({ theme }) => theme.colors.inputBorderFocus};
+  }
+
   &[aria-pressed="true"],
   &[data-selected="true"] {
     background: ${({ theme }) => theme.colors.primaryTransparent};
-    border-color: ${({ theme }) => theme.colors.borderHighlight};
-    color: ${({ theme }) => theme.colors.text};
+    border-color: ${({ theme }) => theme.colors.inputBorderFocus};
+    color: ${({ theme }) => theme.colors.text}; /* koyu kalsın */
   }
+
+  span[aria-hidden="true"] { display: inline-flex; }
 `;
+
 const Clear = styled(Pill)`
   background: ${({ theme }) => theme.colors.backgroundSecondary};
 `;
+
 const SkeletonRow = styled.div`
   display: inline-flex;
   gap: 10px;
   i {
-    width: 84px;
-    height: 34px;
+    width: 96px;
+    height: 40px;
     border-radius: 999px;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.06));
+    background: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.colors.skeletonBackground},
+      ${({ theme }) => theme.colors.skeleton},
+      ${({ theme }) => theme.colors.skeletonBackground}
+    );
     background-size: 200% 100%;
     animation: shimmer 1.1s linear infinite;
     border: 1px solid ${({ theme }) => theme.colors.borderBright};
   }
   @keyframes shimmer {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
-    }
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 `;

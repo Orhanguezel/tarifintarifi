@@ -1,22 +1,34 @@
 // app/[locale]/page.tsx
 import type { Recipe } from "@/lib/recipes/types";
-import HomeView from "./HomeView";
+import HomeView from "./(home)/HomeView";
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
+import { getTranslations } from "next-intl/server";
 
 export const revalidate = 60;
 
 const isSupported = (x: unknown): x is SupportedLocale =>
   typeof x === "string" && (SUPPORTED_LOCALES as readonly string[]).includes(x as any);
 
-export default async function Home(
-  { params, searchParams }: {
-    params: Promise<{ locale: string }>;
-    searchParams: Promise<Record<string, string | string[] | undefined>>;
-  }
-) {
-  const { locale } = await params;
-  const sp = await searchParams;
-  const page = Math.max(1, parseInt(String(sp.page ?? "1"), 10) || 1);
+function SrOnlyH1({ children }: { children: React.ReactNode }) {
+  return (
+    <h1 style={{
+      position: "absolute", width: 1, height: 1, padding: 0, margin: -1,
+      overflow: "hidden", clip: "rect(0 0 0 0)", whiteSpace: "nowrap", border: 0
+    }}>
+      {children}
+    </h1>
+  );
+}
+
+export default async function Home({
+  params,
+  searchParams
+}: {
+  params: { locale: string };
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  const { locale } = params;
+  const page = Math.max(1, parseInt(String(searchParams.page ?? "1"), 10) || 1);
   const limit = 12;
 
   const loc: SupportedLocale =
@@ -42,5 +54,17 @@ export default async function Home(
     console.warn(`[home] fetch failed during build/ISR: ${e?.message || e}`);
   }
 
-  return <HomeView items={items} locale={loc} />;
+  // Dil destekli H1
+  let h1Text = process.env.NEXT_PUBLIC_SITE_NAME || "tarifintarifi.com";
+  try {
+    const t = await getTranslations({ locale: loc, namespace: "seo" });
+    h1Text = t("homeH1", { site: process.env.NEXT_PUBLIC_SITE_NAME || "tarifintarifi.com" }) || h1Text;
+  } catch {}
+
+  return (
+    <>
+      <SrOnlyH1>{h1Text}</SrOnlyH1>
+      <HomeView items={items} locale={loc} />
+    </>
+  );
 }

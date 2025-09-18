@@ -8,7 +8,10 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch",
-    "prebuild": "npm run typecheck"
+    "prebuild": "npm run typecheck",
+    "test:unit": "vitest run -c vitest.config.ts",
+    "test:unit:ui": "vitest --ui -c vitest.config.ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.5",
@@ -22,11 +25,32 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/node": "^24.3.1",
+    "@playwright/test": "^1.55.0",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^24.5.1",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.5",
-    "typescript": "^5.9.2"
+    "jsdom": "^27.0.0",
+    "typescript": "^5.9.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5% in TR",
+      "last 2 versions",
+      "not dead",
+      "not ie <= 11",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
