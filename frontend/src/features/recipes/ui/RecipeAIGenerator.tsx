@@ -107,10 +107,12 @@ export default function RecipeAIGenerator({ locale }: { locale: SupportedLocale 
     created?.slugCanonical ||
     "";
 
-  const errMsg =
-    (error as any)?.data?.message ||
-    (error as any)?.error ||
-    "";
+  const is503 = (error as any)?.status === 503;
+const errMsg =
+  is503
+    ? tAI("error.aiUnavailable") // i18n: "Yapay zeka hizmeti şu an kullanılamıyor. Lütfen daha sonra tekrar deneyin."
+    : (error as any)?.data?.message || (error as any)?.error || "";
+
 
   return (
     <Card>
