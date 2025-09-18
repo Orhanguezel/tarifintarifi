@@ -1,21 +1,21 @@
 import type { Request, Response, NextFunction } from "express";
 import { normalizeCategoryKey } from "./categories";
 
-/** ortak küçük yardımcılar */
+/** ortak yardımcılar */
 const isNonNegInt = (v: unknown) => /^\d+$/.test(String(v));
 const inRange = (n: number, min: number, max: number) => n >= min && n <= max;
+
+/* ===================== PUBLIC ===================== */
 
 export function validatePublicQuery(req: Request, res: Response, next: NextFunction) {
   const { q, tag, maxTime, limit, category } = req.query as Record<string, unknown>;
 
-  // maxTime: non-negative integer
   if (maxTime != null && String(maxTime).trim() !== "") {
     if (!isNonNegInt(maxTime)) {
       return res.status(400).json({ success: false, message: "maxTime must be a non-negative integer" });
     }
   }
 
-  // limit: 1..ENV_MAX (controller ile tutarlı)
   const MAX_LIMIT = Number(process.env.RECIPES_PUBLIC_LIST_MAX || 200);
   if (limit != null && String(limit).trim() !== "") {
     if (!isNonNegInt(limit) || !inRange(Number(limit), 1, MAX_LIMIT)) {
@@ -35,13 +35,11 @@ export function validatePublicQuery(req: Request, res: Response, next: NextFunct
 export function validateSlug(req: Request, res: Response, next: NextFunction) {
   const { slug: raw } = req.params as { slug?: string };
   const dec = decodeURIComponent(String(raw || "")).trim();
-  // küçük harf + rakam + tire (slugify ile uyumlu)
   if (!dec || !/^[a-z0-9-]+$/.test(dec)) {
     return res.status(400).json({ success: false, message: "Invalid slug" });
   }
   next();
 }
-
 
 export function validateSearchQuery(req: Request, res: Response, next: NextFunction) {
   const { q, limit, category } = req.query as Record<string, unknown>;
@@ -50,7 +48,6 @@ export function validateSearchQuery(req: Request, res: Response, next: NextFunct
     return res.status(400).json({ success: false, message: "q must be string" });
   }
 
-  // suggest/listesi üst sınırı env’den (controller’da default 25)
   const SUGGEST_MAX = Number(process.env.RECIPES_PUBLIC_SUGGEST_LIMIT_MAX || 25);
   if (limit != null && String(limit).trim() !== "") {
     if (!isNonNegInt(limit) || !inRange(Number(limit), 1, SUGGEST_MAX)) {
@@ -76,8 +73,6 @@ export function apiKeyGuard(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-
-/** Manuel gönderim payload doğrulama (hafif) */
 export function validateSubmitRecipe(req: Request, res: Response, next: NextFunction) {
   const b = (req.body || {}) as Record<string, unknown>;
 
@@ -97,7 +92,6 @@ export function validateSubmitRecipe(req: Request, res: Response, next: NextFunc
     }
   }
 
-  // nutrition.* sayısal olabilir; calories tek başına da kabul
   const n = (b.nutrition || {}) as Record<string, unknown>;
   const numericOk = (...vals: unknown[]) =>
     vals.every((v) => v == null || v === "" || (Number.isFinite(Number(v)) && Number(v) >= 0));
@@ -110,5 +104,40 @@ export function validateSubmitRecipe(req: Request, res: Response, next: NextFunc
     return res.status(400).json({ success: false, message: "tipsText must be string" });
   }
 
+  next();
+}
+
+/* ===================== ADMIN (ek) ===================== */
+
+export function validateAdminListQuery(req: Request, res: Response, next: NextFunction) {
+  const { page = "1", limit = "20", q, status, tag, category } =
+    req.query as Record<string, string>;
+
+  if (!isNonNegInt(page) || Number(page) < 1) {
+    return res.status(400).json({ error: "page must be >=1" });
+  }
+  if (!isNonNegInt(limit) || !inRange(Number(limit), 1, 100)) {
+    return res.status(400).json({ error: "limit must be 1..100" });
+  }
+  if (q != null && typeof q !== "string") {
+    return res.status(400).json({ error: "q must be string" });
+  }
+  if (status && !["draft", "published"].includes(status)) {
+    return res.status(400).json({ error: "status must be draft|published" });
+  }
+  if (tag != null && typeof tag !== "string") {
+    return res.status(400).json({ error: "tag must be string" });
+  }
+  if (category != null && String(category).trim() !== "" && !normalizeCategoryKey(category)) {
+    return res.status(400).json({ error: "invalid category key" });
+  }
+  next();
+}
+
+export function validateAdminStatusPatch(req: Request, res: Response, next: NextFunction) {
+  const { isPublished } = (req.body || {}) as { isPublished?: unknown };
+  if (typeof isPublished !== "boolean") {
+    return res.status(400).json({ error: "isPublished(boolean) is required" });
+  }
   next();
 }

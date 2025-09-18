@@ -6,7 +6,7 @@ import {
   publicSearchSuggest,
   aiGeneratePublic,
   publicSubmitRecipe
-} from "./controller";
+} from "./public.controller";
 import {
   validatePublicQuery,
   validateSlug,
