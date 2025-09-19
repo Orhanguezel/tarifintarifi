@@ -10,5 +10,13 @@
     "quick": { "title": "Hızlı Kategoriler" }, "clear": "Temizle",
     "hero": {
         "h1": "Binlerce Tarif Bulun"
-    }
+    },
+    "sort.options.date_desc":"📅 Yeni → Eski",
+    "sort.options.date_asc":"📅 Eski → Yeni",
+    "sort.options.name_asc":"🔤 A → Z",
+    "sort.options.name_desc":"🔤 Z → A",
+    "sort.options.likes_desc":"❤️ Beğeni",
+    "sort.options.comments_desc":"💬 Yorum",
+    "sort.options.rating_desc":"⭐ Puan",
+    "sort.label":"Sırala"
   }

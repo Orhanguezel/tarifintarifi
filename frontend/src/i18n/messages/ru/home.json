@@ -10,5 +10,13 @@
     "quick": { "title": "Быстрые категории" }, "clear": "Очистить",
     "hero": {
         "h1": "Найдите тысячи рецептов"
-    }
+    },
+    "sort.options.date_desc":"📅 Новые → Старые",
+    "sort.options.date_asc":"📅 Старые → Новые",
+    "sort.options.name_asc":"🔤 A → Z",
+    "sort.options.name_desc":"🔤 Z → A",
+    "sort.options.likes_desc":"❤️ Нравится",
+    "sort.options.comments_desc":"💬 Комментарии",
+    "sort.options.rating_desc":"⭐ Рейтинг",
+    "sort.label":"Сортировать по"
   }

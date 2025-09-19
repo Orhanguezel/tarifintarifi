@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { SupportedLocale } from "@/types/common";
 import type { Recipe } from "@/lib/recipes/types";
 import RecipeGrid from "@/features/recipes/components/RecipeGrid";
-import Pagination from "@/features/common/Pagination";
+import Pagination from "@/components/common/Pagination";
 import { getApiBase, getLangHeaders } from "@/lib/http";
 
 /* ---------- helpers ---------- */
@@ -28,7 +28,7 @@ function makeTx(t: ReturnType<typeof useTranslations>) {
     try {
       const res = t(key, values as any);
       if (typeof res === "string" && res.trim()) return res;
-    } catch {}
+    } catch { }
     if (values && typeof fallback === "string") {
       return fallback.replace(/\{(\w+)\}/g, (_m, k) => String(values?.[k] ?? ""));
     }

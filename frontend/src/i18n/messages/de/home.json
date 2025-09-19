@@ -10,5 +10,13 @@
     "quick": { "title": "Schnellkategorien" }, "clear": "Leeren",
     "hero": {
         "h1": "Finde tausende Rezepte"
-    }
+    },
+    "sort.options.date_desc":"📅 Neu → Alt",
+    "sort.options.date_asc":"📅 Alt → Neu",
+    "sort.options.name_asc":"🔤 A → Z",
+    "sort.options.name_desc":"🔤 Z → A",
+    "sort.options.likes_desc":"❤️ Gefällt mir",
+    "sort.options.comments_desc":"💬 Kommentare",
+    "sort.options.rating_desc":"⭐ Bewertung",
+    "sort.label":"Sortieren nach"
   }

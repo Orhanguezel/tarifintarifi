@@ -1,12 +1,13 @@
+// src/layout/AdminSidebar.tsx
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import { usePathname, useParams, useRouter } from "next/navigation";
 import {
   MdHome, MdFastfood, MdRateReview, MdFavoriteBorder,
-  MdSettings, MdLogout, MdClose, MdPerson       
+  MdSettings, MdLogout, MdClose, MdPerson
 } from "react-icons/md";
 import { useLogoutMutation } from "@/lib/users/api.client";
 
@@ -17,13 +18,51 @@ type SidebarProps = {
 
 const SIDEBAR_WIDTH = 240;
 
+/* Aktif link kontrolü */
 const isActive = (currentPath: string, linkPath: string) => {
+  if (!currentPath) return false;
   if (linkPath.endsWith("/")) linkPath = linkPath.replace(/\/+$/, "");
   return currentPath === linkPath || currentPath.startsWith(linkPath + "/");
 };
 
+/**
+ * Next Link'i styled-components ile güvenle sarmalıyoruz
+ * ve prefetch'i attrs ile kalıcı olarak kapatıyoruz.
+ * (Map içinde verilen prefetch={false} bazı sürümlerde sızmayabiliyor.)
+ */
+type NextLinkProps = React.ComponentProps<typeof Link>;
+const LinkBase = (props: NextLinkProps) => <Link {...props} />;
+const NavLink = styled(LinkBase).attrs({ prefetch: false })<{ $active?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacings.sm};
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  padding: ${({ theme }) => theme.spacings.sm} ${({ theme }) => theme.spacings.md};
+  margin: ${({ theme }) => theme.spacings.xs} 0;
+  text-decoration: none;
+  color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.textMuted)};
+  font-weight: ${({ $active, theme }) => ($active ? theme.fontWeights.semiBold : theme.fontWeights.regular)};
+  background: ${({ $active, theme }) => ($active ? theme.colors.backgroundAlt : "transparent")};
+  border-left: 3px solid ${({ $active, theme }) => ($active ? theme.colors.primary : "transparent")};
+  transition: ${({ theme }) => theme.transition.fast};
+  &:hover { color: ${({ theme }) => theme.colors.primary}; background: ${({ theme }) => theme.colors.hoverBackground}; }
+  &:focus-visible { outline: none; box-shadow: ${({ theme }) => theme.colors.shadowHighlight}; }
+`;
+
+/* Brand (logo) linki için de prefetch'i kapatıyoruz */
+const BrandLink = styled(LinkBase).attrs({ prefetch: false })`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacings.sm};
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+  min-width: 0;
+  &:hover span { color: ${({ theme }) => theme.colors.primary}; }
+`;
+
 export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() || "";
   const { locale } = useParams<{ locale: string }>();
   const router = useRouter();
   const [logout, { isLoading: loggingOut }] = useLogoutMutation();
@@ -45,26 +84,25 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
   }, [isOpen]);
 
   const LINKS = [
-  { href: `/${locale}/admin`, label: "Dashboard", Icon: MdHome },
-  { href: `/${locale}/admin/users`, label: "Kullanıcı", Icon: MdPerson }, // ⬅️ yeni
-  { href: `/${locale}/admin/recipes`, label: "Tarifler", Icon: MdFastfood },
-  { href: `/${locale}/admin/comments`, label: "Yorumlar", Icon: MdRateReview },
-  { href: `/${locale}/admin/reactions`, label: "Reaksiyonlar", Icon: MdFavoriteBorder },
-  { href: `/${locale}/admin/settings`, label: "Ayarlar", Icon: MdSettings },
-];
+    { href: `/${locale}/admin`, label: "Dashboard", Icon: MdHome },
+    { href: `/${locale}/admin/users`, label: "Kullanıcı", Icon: MdPerson },
+    { href: `/${locale}/admin/recipes`, label: "Tarifler", Icon: MdFastfood },
+    { href: `/${locale}/admin/comments`, label: "Yorumlar", Icon: MdRateReview },
+    { href: `/${locale}/admin/reactions`, label: "Reaksiyonlar", Icon: MdFavoriteBorder },
+    { href: `/${locale}/admin/settings`, label: "Ayarlar", Icon: MdSettings },
+  ];
 
   return (
     <>
-      {/* SSR'da window kullanma: aria-hidden hesaplamasını kaldırdık */}
       <Aside $isOpen={isOpen} aria-label="Admin menü" aria-expanded={isOpen} data-open={isOpen}>
         <TopBar>
-          <Brand href={`/${locale}`} onClick={onClose}>
+          <BrandLink href={`/${locale}`} onClick={onClose}>
             <BrandIcon>🍳</BrandIcon>
             <div>
               <BrandTitle>tarifintarifi</BrandTitle>
               <BrandSub>Admin</BrandSub>
             </div>
-          </Brand>
+          </BrandLink>
           <CloseBtn onClick={onClose} aria-label="Kapat">
             <MdClose size={22} />
           </CloseBtn>
@@ -154,17 +192,6 @@ const TopBar = styled.div`
   border-bottom: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
 `;
 
-const Brand = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacings.sm};
-  text-decoration: none;
-  color: inherit;
-  flex: 1;
-  min-width: 0;
-  &:hover span { color: ${({ theme }) => theme.colors.primary}; }
-`;
-
 const BrandIcon = styled.div`
   width: 32px; height: 32px;
   background: ${({ theme }) => theme.colors.primary};
@@ -200,23 +227,6 @@ const Nav = styled.nav`
   flex-direction: column;
   padding: ${({ theme }) => theme.spacings.sm} 0;
   overflow-y: auto;
-`;
-
-const NavLink = styled(Link)<{ $active?: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacings.sm};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  padding: ${({ theme }) => theme.spacings.sm} ${({ theme }) => theme.spacings.md};
-  margin: ${({ theme }) => theme.spacings.xs} 0;
-  text-decoration: none;
-  color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.textMuted)};
-  font-weight: ${({ $active, theme }) => ($active ? theme.fontWeights.semiBold : theme.fontWeights.regular)};
-  background: ${({ $active, theme }) => ($active ? theme.colors.backgroundAlt : "transparent")};
-  border-left: 3px solid ${({ $active, theme }) => ($active ? theme.colors.primary : "transparent")};
-  transition: ${({ theme }) => theme.transition.fast};
-  &:hover { color: ${({ theme }) => theme.colors.primary}; background: ${({ theme }) => theme.colors.hoverBackground}; }
-  &:focus-visible { outline: none; box-shadow: ${({ theme }) => theme.colors.shadowHighlight}; }
 `;
 
 const IconBox = styled.div<{ $active?: boolean }>`

@@ -11,5 +11,13 @@
     "hero": {
         "h1": "Find thousands of recipes"
 
-  }
+  },
+    "sort.options.date_desc":"📅 New → Old",
+    "sort.options.date_asc":"📅 Old → New",
+    "sort.options.name_asc":"🔤 A → Z",
+    "sort.options.name_desc":"🔤 Z → A",
+    "sort.options.likes_desc":"❤️ Likes",
+    "sort.options.comments_desc":"💬 Comments",
+    "sort.options.rating_desc":"⭐ Rating",
+    "sort.label":"Sort by"
 }

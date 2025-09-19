@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import { useTranslations } from "next-intl";
-import { useSubmitRecipeMutation } from "@/lib/recipes/api";
+import { useSubmitRecipeMutation } from "@/lib/recipes/api.client";
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
 
 /* ---------- helpers ---------- */

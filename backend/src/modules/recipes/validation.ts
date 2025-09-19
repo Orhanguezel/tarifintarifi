@@ -61,18 +61,6 @@ export function validateSearchQuery(req: Request, res: Response, next: NextFunct
   next();
 }
 
-/** Basit API key guard — header: x-api-key */
-export function apiKeyGuard(req: Request, res: Response, next: NextFunction) {
-  const expected = process.env.RECIPES_SUBMIT_API_KEY || process.env.API_KEY;
-  const given = (req.headers["x-api-key"] || req.query.apiKey) as string | undefined;
-
-  if (!expected) return res.status(500).json({ success: false, message: "server api key not configured" });
-  if (!given || String(given) !== String(expected)) {
-    return res.status(401).json({ success: false, message: "invalid api key" });
-  }
-  next();
-}
-
 export function validateSubmitRecipe(req: Request, res: Response, next: NextFunction) {
   const b = (req.body || {}) as Record<string, unknown>;
 

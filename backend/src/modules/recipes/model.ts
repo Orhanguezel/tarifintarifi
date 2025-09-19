@@ -155,12 +155,14 @@ for (const l of SUPPORTED_LOCALES as ReadonlyArray<SupportedLocale>) {
   RecipeSchema.index({ [`tags.${l}`]: 1 }, { name: `tags_${l}_idx` });
 }
 
-RecipeSchema.index(
-  { isActive: 1, isPublished: 1, effectiveFrom: 1, effectiveTo: 1 },
-  { name: "pub_window_idx" }
-);
-RecipeSchema.index({ totalMinutes: 1 }, { name: "time_filter_idx" });
-RecipeSchema.index({ ratingAvg: -1, ratingCount: -1 }, { name: "rating_sort_idx" });
+// yayın tarihi odaklı sıralama için
+RecipeSchema.index({ publishedAt: -1, createdAt: -1 }, { name: "pubdate_desc_idx" });
+
+// beğeni / yorum / süre için (opsiyonel ama faydalı)
+RecipeSchema.index({ "reactionTotals.like": -1 }, { name: "likes_desc_idx" });
+RecipeSchema.index({ commentCount: -1 }, { name: "comments_desc_idx" });
+RecipeSchema.index({ totalMinutes: 1 }, { name: "time_asc_idx" }); // zaten vardı; bırakabilirsiniz
+
 
 // Çok dilli metin text index
 {

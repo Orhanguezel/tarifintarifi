@@ -1,3 +1,4 @@
+// src/app/[locale]/admin/users/page.tsx
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -48,18 +49,20 @@ export default function AdminUserPage() {
 
         <Divider />
 
-        <DangerZone meEmail={me.email} onAfterDelete={async () => {
-          try { await logout().unwrap(); } finally {
-            router.replace(`/${locale}/login?tab=login`);
-          }
-        }} />
+        <DangerZone
+          meEmail={me.email}
+          onAfterDelete={async () => {
+            try { await logout().unwrap(); } finally {
+              router.replace(`/${locale}/login?tab=login`);
+            }
+          }}
+        />
       </Card>
     </PageWrap>
   );
 }
 
-/* ---------------------- Şifre Değiştir ---------------------- */
-
+/* -------- Şifre değiştir -------- */
 function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
   const [currentPassword, setCurrent] = useState("");
   const [newPassword, setNew] = useState("");
@@ -76,10 +79,10 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
       onSubmit={async (e) => {
         e.preventDefault();
         if (!canSubmit) return;
-        await changePassword({ payload: { currentPassword, newPassword, confirmNewPassword } })
-          .unwrap()
-          .then(onSuccess)
-          .catch(() => {});
+        try {
+          await changePassword({ payload: { currentPassword, newPassword, confirmNewPassword } }).unwrap();
+          onSuccess();
+        } catch {}
       }}
     >
       <Field>
@@ -105,8 +108,7 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
   );
 }
 
-/* ---------------------- Danger Zone (Hesabı Sil) ---------------------- */
-
+/* -------- Tehlikeli Bölge -------- */
 function DangerZone({ meEmail, onAfterDelete }:{
   meEmail: string;
   onAfterDelete: () => Promise<void> | void;
@@ -120,7 +122,6 @@ function DangerZone({ meEmail, onAfterDelete }:{
     if (!canDelete) return;
     setBusy(true);
     try {
-      // Backend uç noktan hazırsa bu isteği karşılar: POST /api/users/delete
       const r = await fetch("/api/users/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -128,8 +129,7 @@ function DangerZone({ meEmail, onAfterDelete }:{
       });
       if (!r.ok) {
         const j = await r.json().catch(() => ({}));
-        const msg = j?.error || `Silme başarısız (HTTP ${r.status})`;
-        alert(msg);
+        alert(j?.error || `Silme başarısız (HTTP ${r.status})`);
         return;
       }
       await onAfterDelete();
@@ -160,14 +160,12 @@ function DangerZone({ meEmail, onAfterDelete }:{
             {busy ? "Siliniyor…" : "Hesabı Kalıcı Olarak Sil"}
           </ButtonDanger>
         </Form>
-        <SmallMuted>Not: Sunucuda <code>POST /api/users/delete</code> ucu yoksa bu buton uyarı gösterecektir.</SmallMuted>
       </DangerBox>
     </>
   );
 }
 
-/* ---------------------- styled ---------------------- */
-
+/* -------- styled -------- */
 const PageWrap = styled.main`
   max-width: ${({ theme }) => theme.layout.containerWidth};
   margin: 24px auto 48px;
@@ -200,18 +198,11 @@ const Muted = styled.p`
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: ${({ theme }) => theme.fontSizes.sm};
 `;
-const SmallMuted = styled.p`
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  margin-top: 8px;
-`;
-
 const Divider = styled.hr`
   border: 0;
   border-top: 1px solid ${({ theme }) => theme.colors.borderLight};
   margin: 18px 0;
 `;
-
 const DangerBox = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
   background: ${({ theme }) => theme.colors.dangerBg};
@@ -219,11 +210,7 @@ const DangerBox = styled.div`
   padding: 14px;
   p { margin: 4px 0; }
 `;
-
-const Form = styled.form`
-  display: grid;
-  gap: 12px;
-`;
+const Form = styled.form` display: grid; gap: 12px; `;
 const Field = styled.div` display: grid; gap: 6px; `;
 const Label = styled.label`
   font-size: ${({ theme }) => theme.fontSizes.sm};
@@ -249,7 +236,6 @@ const Input = styled.input`
     background: ${({ theme }) => theme.colors.inputBackgroundFocus};
   }
 `;
-
 const ButtonBase = styled.button`
   width: 100%;
   border: none;
@@ -272,12 +258,10 @@ const ButtonDanger = styled(ButtonBase)`
   background: ${({ theme }) => theme.colors.danger};
   &:hover { background: ${({ theme }) => theme.colors.dangerHover}; }
 `;
-
 const Note = styled.p`
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: ${({ theme }) => theme.fontSizes.md};
 `;
-
 const SuccessText = styled.p`
   color: ${({ theme }) => theme.colors.textOnSuccess};
   background: ${({ theme }) => theme.colors.successBg};
@@ -294,7 +278,6 @@ const ErrorText = styled.p`
   padding: 10px 12px;
   font-size: ${({ theme }) => theme.fontSizes.sm};
 `;
-
 const Hint = styled.p`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   color: ${({ theme }) => theme.colors.textSecondary};

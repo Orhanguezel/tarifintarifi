@@ -1,4 +1,4 @@
-// /home/orhan/Dokumente/tariftarif/frontend/src/app/[locale]/recipes/category/[slug]/page.tsx
+// src/app/[locale]/recipes/category/[slug]/page.tsx
 import type { Metadata } from "next";
 import type { SupportedLocale } from "@/types/common";
 import CategoryView from "./view";
@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   try { description = tCatPage("seoDesc", { category: title }); } catch {}
 
   return {
-    title, description,
+    title,
+    description,
     alternates: { canonical: `/${locale}/recipes/category/${slug}` },
     openGraph: { title, description }
   };
@@ -40,20 +41,32 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
   const key = decodeURIComponent(slug).toLowerCase();
 
-  // API URL normalize
-  const base = getApiBase().replace(/\/+$/, "");
-  const abs = base.startsWith("http") ? base : `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001"}${base}`;
-  const url = new URL("recipes", abs);
-  url.searchParams.set("category", key);
-  url.searchParams.set("limit", "200");
+  // ✅ API: her zaman relative / proxy edilen /api kullan
+  const base = getApiBase().replace(/\/+$/, ""); // örn: "/api" veya "https://backend..../api"
+  const url = new URL(`${base}/recipes`, "http://dummy"); // base absolute olabilir; URL ctor host ister
+  url.searchParams.set("category", encodeURIComponent(key));
+  url.searchParams.set("limit", String(200));
 
-  const res = await fetch(url.toString(), {
-    headers: getLangHeaders(locale),
-    next: { revalidate },
-  });
+  let res: Response;
+  try {
+    // base relative ise ("/api") fetch string'e dönüştürüp host’u atıyoruz:
+    const href = `${base}/recipes?category=${encodeURIComponent(key)}&limit=200`;
+    res = await fetch(href, {
+      headers: getLangHeaders(locale),
+      next: { revalidate },
+    });
+  } catch (e) {
+    console.warn("[category] fetch error:", e);
+    return (
+      <div style={{ maxWidth: 860, margin: "24px auto", padding: "0 16px" }}>
+        <h1>{t("error.title")}</h1>
+        <p>{t("error.desc")}</p>
+      </div>
+    );
+  }
 
   if (!res.ok) {
-    console.warn("[category] fetch not ok:", res.status, url.toString());
+    console.warn("[category] fetch not ok:", res.status);
     return (
       <div style={{ maxWidth: 860, margin: "24px auto", padding: "0 16px" }}>
         <h1>{t("error.title")}</h1>

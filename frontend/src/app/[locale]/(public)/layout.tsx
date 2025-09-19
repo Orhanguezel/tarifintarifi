@@ -30,12 +30,11 @@ const isRTL = (l: SupportedLocale) => RTL_LOCALES.has(l);
 const isSupported = (x: unknown): x is SupportedLocale =>
   typeof x === "string" && (SUPPORTED_LOCALES as readonly string[]).includes(x as any);
 
+/** hreflang map — hepsini trailing slash ile üret + x-default = varsayılan dil */
 function languageAlternates(defaultLocale: SupportedLocale) {
   const map: Record<string, string> = {};
-  for (const loc of SUPPORTED_LOCALES) map[loc] = `/${loc}`;
-  // 🔴 Eskiden "/"
-  // ✅ Artık x-default = varsayılan dilin sayfası
-  map["x-default"] = `/${defaultLocale}`;
+  for (const loc of SUPPORTED_LOCALES) map[loc] = `/${loc}/`; // <-- slash eklendi
+  map["x-default"] = `/${defaultLocale}/`;                   // <-- kök değil, varsayılan dil
   return map;
 }
 
@@ -52,7 +51,6 @@ export async function generateMetadata(
   const { locale: rawLocale } = await props.params;
   const locale = (isSupported(rawLocale) ? rawLocale : DEFAULT_LOCALE) as SupportedLocale;
 
-  // Varsayılan meta
   let title = SITE_NAME;
   let description = "Pratik ve güvenilir yemek tarifleri.";
   let ogAlt = SITE_NAME;
@@ -66,19 +64,22 @@ export async function generateMetadata(
 
   const ogImage = `${SITE_URL}/og.jpg`;
 
+  // ✅ tüm URL'leri /<locale>/ formunda tut
+  const PATH = `/${locale}/`;
+
   return {
     metadataBase: new URL(SITE_URL),
     title: { default: title, template: `%s • ${SITE_NAME}` },
     description,
     alternates: {
-      canonical: `/${locale}`,
-      languages: languageAlternates(DEFAULT_LOCALE),
+      canonical: PATH,                              // self-referencing canonical (slash’lı)
+      languages: languageAlternates(DEFAULT_LOCALE) // hreflang + x-default
     },
     openGraph: {
       type: "website",
       siteName: SITE_NAME,
       locale,
-      url: `/${locale}`,
+      url: PATH,
       title,
       description,
       images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: ogAlt }] : undefined
@@ -93,7 +94,6 @@ export async function generateMetadata(
   };
 }
 
-/** ✅ Layout (locale bağlamı) — reCAPTCHA burada YÜKLENMİYOR */
 export default async function LocaleLayout(props: {
   children: React.ReactNode;
   params: RouteParams;

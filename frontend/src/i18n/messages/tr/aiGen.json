@@ -27,8 +27,8 @@
         "placeholder": "örn: Turkish, Italian",
         "help": "İsteğe bağlı; boş bırakabilirsiniz."
       },
-      "servings": { "label": "Porsiyon", "placeholder": "4" },
-      "maxMinutes": { "label": "En fazla süre (dk)", "placeholder": "25" }
+      "servings": { "servings": "Porsiyon", "label": "Porsiyon", "placeholder": "4" },
+      "maxMinutes": { "maxMinutes": "En fazla süre (dk)", "label": "En fazla süre (dk)", "placeholder": "25" }
     },
     "checks": {
       "aria": "Diyet kısıtları",

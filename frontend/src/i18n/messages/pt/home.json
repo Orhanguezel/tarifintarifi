@@ -10,5 +10,13 @@
     "quick": { "title": "Categorias rápidas" }, "clear": "Limpar",
     "hero": {
         "h1": "Encontre milhares de receitas"
-    }
+    },
+    "sort.options.date_desc":"📅 Novas → Antigas",
+    "sort.options.date_asc":"📅 Antigas → Novas",
+    "sort.options.name_asc":"🔤 A → Z",
+    "sort.options.name_desc":"🔤 Z → A",
+    "sort.options.likes_desc":"❤️ Curtidas",
+    "sort.options.comments_desc":"💬 Comentários",
+    "sort.options.rating_desc":"⭐ Avaliação",
+    "sort.label":"Ordenar por"
   }
