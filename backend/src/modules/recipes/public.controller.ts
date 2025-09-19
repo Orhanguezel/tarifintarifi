@@ -83,6 +83,15 @@ async function callModelWithFallback(sys: string, user: string) {
   }
 }
 
+const sendGenError = (res: Response, err: any, fallback = "AI_GENERATE_FAILED") => {
+  const msg = err?.message || err?.toString?.() || String(err);
+  const code =
+    err?.name === "ValidationError" || err?.name === "CastError" ? 422 :
+    err?.status === 503 ? 503 :
+    400;
+  return res.status(code).json({ error: fallback, message: msg });
+};
+
 /* ------------------ Public: List/Search ----------------- */
 export async function publicGetRecipes(req: Request, res: Response, next: NextFunction) {
   try {
@@ -808,5 +817,64 @@ export async function publicSubmitRecipe(req: Request, res: Response, _next: Nex
       message: "internal_error",
       details: String(err?.message || ""),
     });
+  }
+}
+
+export async function generateRecipe(req: Request, res: Response) {
+  try {
+    const {
+      prompt,
+      cuisine,
+      servings,
+      maxMinutes,
+      vegetarian,
+      vegan,
+      glutenFree,
+      lactoseFree,
+      includeIngredients,
+      excludeIngredients,
+    } = (req.body || {}) as Record<string, any>;
+
+    if (!prompt || typeof prompt !== "string" || !prompt.trim()) {
+      return res.status(422).json({ error: "INVALID_PROMPT", message: "prompt zorunludur." });
+    }
+
+    // ⬇️ burada gerçek AI çağrısı yapılır; örnek/placeholder:
+    // const draft = await ai.generateRecipe({...});
+    // if (!draft) throw Object.assign(new Error("AI unavailable"), { status: 503 });
+
+    // --- MOCK (yerine kendi AI çıktını koy) ---
+    const draft = {
+      title: { tr: "AI Tarif", en: "AI Recipe" },
+      description: { tr: "Yapay zekâ ile üretildi." },
+      servings: Number(servings) || 2,
+      totalMinutes: Number(maxMinutes) || 20,
+      dietFlags: [
+        ...(vegetarian ? ["vegetarian"] : []),
+        ...(vegan ? ["vegan"] : []),
+        ...(glutenFree ? ["gluten-free"] : []),
+        ...(lactoseFree ? ["lactose-free"] : []),
+      ],
+      ingredients: [
+        { name: { tr: "Malzeme 1" }, amount: { tr: "1 adet" }, order: 0 },
+        { name: { tr: "Malzeme 2" }, amount: { tr: "100 g" }, order: 1 },
+      ],
+      steps: [
+        { order: 1, text: { tr: "Hazırlık yap." } },
+        { order: 2, text: { tr: "Pişir ve servis et." } },
+      ],
+      isPublished: false,
+      isActive: true,
+      category: "main-course",
+      tags: [{ tr: "ai" }],
+    };
+
+    const doc = await Recipe.create(draft);
+    return res.json({ success: true, data: doc.toObject() });
+  } catch (err: any) {
+    console.error("[recipes.generate] error:", err);
+    const status = err?.status === 503 ? 503 : undefined;
+    if (status === 503) return res.status(503).json({ error: "AI_UNAVAILABLE", message: "AI servis erişilemiyor." });
+    return sendGenError(res, err, "AI_GENERATE_FAILED");
   }
 }

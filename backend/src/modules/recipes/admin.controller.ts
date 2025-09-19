@@ -1,7 +1,6 @@
 // src/modules/recipes/admin.controller.ts
 import type { Request, Response } from "express";
 import { Types } from "mongoose";
-import { v2 as cloudinary } from "cloudinary";
 import path from "path";
 
 import { Recipe } from "./model";
@@ -25,14 +24,28 @@ import {
   buildCloudinaryWebpUrl,
 } from "@/middleware/uploadUtils";
 
-import { getTenantSlug } from "@/middleware/uploadMiddleware";
 import {
   deleteUploadedFilesLocal,
   deleteUploadedFilesCloudinary,
 } from "@/utils/deleteUploadedFiles";
-import { normalizeCategoryKey } from "./categories";
 
-/* ================= helpers (form-data aware) ================= */
+import { normalizeCategoryKey } from "./categories";
+import { SUPPORTED_LOCALES } from "@/config/locales";
+
+/* ================ shared error helper ================ */
+const sendSaveError = (res: Response, err: any, fallback = "SAVE_FAILED") => {
+  const msg = err?.message || err?.toString?.() || String(err);
+  // Şema/Tip hatalarını 422, diğerlerini 400 dön
+  const code =
+    err?.name === "ValidationError" || err?.name === "CastError" ? 422 : 400;
+  return res.status(code).json({
+    error: fallback,
+    message: msg,
+    details: err?.errors || null,
+  });
+};
+
+/* ================= helpers ================= */
 
 const parseIfJson = <T = any>(v: unknown): T | unknown => {
   try {
@@ -76,19 +89,12 @@ const ensureBoolean = (v: unknown): boolean | undefined => {
 const ensureStringArray = (v: unknown): string[] | undefined => {
   if (v == null || v === "") return undefined;
   const parsed = parseIfJson(v);
-  if (Array.isArray(parsed)) {
-    return parsed.map(String).filter((x) => x.trim() !== "");
-  }
-  if (typeof parsed === "string") {
-    return parsed
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-  }
+  if (Array.isArray(parsed)) return parsed.map(String).filter((x) => x.trim() !== "");
+  if (typeof parsed === "string")
+    return parsed.split(",").map((s) => s.trim()).filter(Boolean);
   return undefined;
 };
 
-/* ---- enum-safe flag normalizers (union tiplerine uygun) ---- */
 const DIET_FLAGS = [
   "vegetarian",
   "vegan",
@@ -107,10 +113,7 @@ const ALLERGEN_FLAGS = [
   "shellfish",
 ] as const satisfies Readonly<AllergenFlag[]>;
 
-function ensureEnumFlags<T extends string>(
-  v: unknown,
-  allowed: readonly T[]
-): T[] | undefined {
+function ensureEnumFlags<T extends string>(v: unknown, allowed: readonly T[]): T[] | undefined {
   const arr = ensureStringArray(v);
   if (!arr) return undefined;
   const set = new Set(arr.map((s) => s.toLowerCase()));
@@ -120,15 +123,10 @@ function ensureEnumFlags<T extends string>(
 
 const ensureDietFlags = (v: unknown): DietFlag[] | undefined =>
   ensureEnumFlags<DietFlag>(v, DIET_FLAGS);
+const ensureAllergenFlagEnums = (v: unknown): AllergenFlag[] | undefined =>
+  ensureEnumFlags<AllergenFlag>(v, ALLERGEN_FLAGS);
 
-const ensureAllergenFlagEnums = (
-  v: unknown
-): AllergenFlag[] | undefined => ensureEnumFlags<AllergenFlag>(v, ALLERGEN_FLAGS);
-
-/* ---- content arrays: type-safe dönüş ---- */
-const ensureIngredients = (
-  v: unknown
-): IRecipeIngredient[] | undefined => {
+const ensureIngredients = (v: unknown): IRecipeIngredient[] | undefined => {
   const p = parseIfJson(v);
   if (!Array.isArray(p)) return undefined;
   const out: IRecipeIngredient[] = [];
@@ -148,7 +146,7 @@ const ensureSteps = (v: unknown): IRecipeStep[] | undefined => {
   const out: IRecipeStep[] = [];
   for (const it of p) {
     const textTL = ensureTL((it as any)?.text);
-    if (!textTL) continue; // text artık asla undefined değil
+    if (!textTL) continue;
     const order = ensureNumber((it as any)?.order) ?? 1;
     out.push({ order, text: textTL });
   }
@@ -161,32 +159,55 @@ const ensureTips = (v: unknown): IRecipeTip[] | undefined => {
   const out: IRecipeTip[] = [];
   for (const it of p) {
     const textTL = ensureTL((it as any)?.text);
-    if (!textTL) continue; // text artık asla undefined değil
+    if (!textTL) continue;
     const order = ensureNumber((it as any)?.order) ?? 1;
     out.push({ order, text: textTL });
   }
   return out.length ? out : undefined;
 };
 
-/** Görsel dosyasını model alanına çevirir (local veya cloudinary) */
+/** req.files için güvenli normalleştirici (array/fields/single) */
+function getFilesFromRequest(req: Request): Express.Multer.File[] {
+  const anyReq = req as any;
+  const files = req.files;
+  if (!files) return [];
+
+  if (Array.isArray(files)) return files as Express.Multer.File[];
+
+  if (typeof files === "object") {
+    const candidates = [
+      (files as Record<string, any>).images,
+      (files as Record<string, any>)["images[]"],
+      (files as Record<string, any>).file,
+      (files as Record<string, any>)["file[]"],
+    ].filter(Boolean);
+
+    for (const c of candidates) {
+      if (!c) continue;
+      if (Array.isArray(c)) return c as Express.Multer.File[];
+      if ((c as any)?.buffer || (c as any)?.path) return [c as Express.Multer.File];
+    }
+  }
+
+  if (anyReq.file) return [anyReq.file as Express.Multer.File];
+  return [];
+}
+
+/** file -> IRecipeImage (local/cloudinary) */
 async function toRecipeImageFromFile(
   req: Request,
   f: Express.Multer.File
 ): Promise<IRecipeImage> {
-  const provider = (process.env.STORAGE_PROVIDER || "local") as
-    | "local"
-    | "cloudinary";
+  const provider = (process.env.STORAGE_PROVIDER || "local") as "local" | "cloudinary";
 
   if (provider === "cloudinary") {
     const publicId = (f as any).filename || (f as any).public_id;
-    const url =
-      (f as any).path || (publicId ? buildCloudinaryMainUrl(publicId) : "");
+    const url = (f as any).path || (publicId ? buildCloudinaryMainUrl(publicId) : "");
     const thumbnail = publicId ? buildCloudinaryThumbUrl(publicId) : url;
     const webp = publicId ? buildCloudinaryWebpUrl(publicId) : undefined;
     return { url, thumbnail, webp, publicId };
   }
 
-  // local
   const url = buildLocalPublicUrl(f, "recipe", req);
   let thumbUrl = url;
   let webpUrl: string | undefined = undefined;
@@ -201,30 +222,26 @@ async function toRecipeImageFromFile(
         webpUrl = `${base}.webp`;
       }
     } catch {
-      /* ignore */
+      /* no-op */
     }
   }
 
   return { url, thumbnail: thumbUrl, webp: webpUrl };
 }
 
-/** body -> IRecipe alanlarını form-data uyumlu toplar */
+/** body -> IRecipe (form-data aware) */
 function buildRecipeBodyFromForm(b: any): Partial<IRecipe> {
   const out: Partial<IRecipe> = {};
 
   out.title = ensureTL(b.title);
   out.description = ensureTL(b.description);
 
-  // Çok dilli tags (TranslatedLabel[])
   const tags = parseIfJson(b.tags);
   if (Array.isArray(tags)) {
-    const clean = tags
-      .map(ensureTL)
-      .filter((t): t is TranslatedLabel => !!t);
+    const clean = tags.map(ensureTL).filter((t): t is TranslatedLabel => !!t);
     if (clean.length) out.tags = clean;
   }
 
-  // kategori normalize
   if (b.category != null && String(b.category).trim() !== "") {
     const norm = normalizeCategoryKey(b.category);
     out.category = norm ?? String(b.category).trim().toLowerCase();
@@ -234,11 +251,7 @@ function buildRecipeBodyFromForm(b: any): Partial<IRecipe> {
   out.prepMinutes = ensureNumber(b.prepMinutes);
   out.cookMinutes = ensureNumber(b.cookMinutes);
   out.totalMinutes = ensureNumber(b.totalMinutes);
-  if (
-    !out.totalMinutes &&
-    out.prepMinutes != null &&
-    out.cookMinutes != null
-  ) {
+  if (!out.totalMinutes && out.prepMinutes != null && out.cookMinutes != null) {
     out.totalMinutes = (out.prepMinutes || 0) + (out.cookMinutes || 0);
   }
 
@@ -246,7 +259,6 @@ function buildRecipeBodyFromForm(b: any): Partial<IRecipe> {
   if (["easy", "medium", "hard"].includes(difficulty))
     out.difficulty = difficulty as IRecipe["difficulty"];
 
-  // Nutrition — obje ya da tek tek alanlar
   const nutrition = parseIfJson(b.nutrition) as any;
   if (nutrition && typeof nutrition === "object") {
     out.nutrition = {
@@ -266,12 +278,10 @@ function buildRecipeBodyFromForm(b: any): Partial<IRecipe> {
     if (Object.keys(n).length) out.nutrition = n;
   }
 
-  // flags
-  out.allergens = ensureStringArray(b.allergens); // serbest liste
-  out.dietFlags = ensureDietFlags(b.dietFlags); // DietFlag[]
-  out.allergenFlags = ensureAllergenFlagEnums(b.allergenFlags); // AllergenFlag[]
+  out.allergens = ensureStringArray(b.allergens);
+  out.dietFlags = ensureDietFlags(b.dietFlags);
+  out.allergenFlags = ensureAllergenFlagEnums(b.allergenFlags);
 
-  // içerik
   const ingredients = ensureIngredients(b.ingredients);
   if (ingredients) out.ingredients = ingredients;
 
@@ -281,17 +291,14 @@ function buildRecipeBodyFromForm(b: any): Partial<IRecipe> {
   const tips = ensureTips(b.tips);
   if (tips) out.tips = tips;
 
-  // zaman penceresi
   if (b.effectiveFrom) out.effectiveFrom = new Date(String(b.effectiveFrom));
   if (b.effectiveTo) out.effectiveTo = new Date(String(b.effectiveTo));
 
-  // yayın/durum
   const isPublished = ensureBoolean(b.isPublished);
   if (isPublished != null) out.isPublished = isPublished;
   const isActive = ensureBoolean(b.isActive);
   if (isActive != null) out.isActive = isActive;
 
-  // order
   const order = ensureNumber(b.order);
   if (order != null) out.order = order;
 
@@ -319,16 +326,7 @@ export async function list(req: Request, res: Response) {
     const tg = decodeURIComponent(tag).replace(/-/g, " ").trim();
     const esc = tg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const rx = new RegExp(esc, "i");
-    filter.$or = [
-      { "tags.tr": rx },
-      { "tags.en": rx },
-      { "tags.de": rx },
-      { "tags.fr": rx },
-      { "tags.es": rx },
-      { "tags.ru": rx },
-      { "tags.ar": rx },
-      { "tags.pl": rx },
-    ];
+    filter.$or = SUPPORTED_LOCALES.map((lng: string) => ({ [`tags.${lng}`]: rx }));
   }
 
   const [items, total] = await Promise.all([
@@ -343,24 +341,20 @@ export async function list(req: Request, res: Response) {
   res.json({ items, page: p, limit: l, total });
 }
 
-/** CREATE — multipart/form-data (images + alanlar) */
+/** CREATE — multipart/form-data (images + fields) */
 export async function create(req: Request, res: Response) {
-  const data = buildRecipeBodyFromForm(req.body || {});
-  const files = Array.isArray(req.files)
-    ? (req.files as Express.Multer.File[])
-    : [];
-  const newImages: IRecipeImage[] = [];
+  try {
+    const data = buildRecipeBodyFromForm(req.body || {});
+    const files = getFilesFromRequest(req);
+    const newImages: IRecipeImage[] = [];
+    for (const f of files) newImages.push(await toRecipeImageFromFile(req, f));
 
-  for (const f of files) {
-    newImages.push(await toRecipeImageFromFile(req, f));
+    const doc = await Recipe.create({ ...data, images: newImages });
+    return res.status(201).json({ id: doc._id });
+  } catch (err) {
+    console.error("[recipes.create] create error:", err);
+    return sendSaveError(res, err, "RECIPE_CREATE_FAILED");
   }
-
-  const doc = await Recipe.create({
-    ...data,
-    images: newImages,
-  });
-
-  res.status(201).json({ id: doc._id });
 }
 
 export async function detail(req: Request, res: Response) {
@@ -372,118 +366,121 @@ export async function detail(req: Request, res: Response) {
   res.json(r);
 }
 
-/** UPDATE — multipart/form-data (alan merge + yeni görseller + silme + reorder) */
+/** UPDATE — multipart/form-data (merge + add + remove + reorder) */
 export async function update(req: Request, res: Response) {
   const { id } = req.params;
   if (!Types.ObjectId.isValid(id))
     return res.status(404).json({ error: "NOT_FOUND" });
 
-  const doc = await Recipe.findById(id);
-  if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
+  try {
+    const doc = await Recipe.findById(id);
+    if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
 
-  const body = req.body || {};
-  const patch = buildRecipeBodyFromForm(body);
+    const body = req.body || {};
+    const patch = buildRecipeBodyFromForm(body);
 
-  // TL alanları merge
-  if (patch.title) doc.title = mergeTL(doc.title, patch.title)!;
-  if (patch.description)
-    doc.description = mergeTL(doc.description, patch.description)!;
+    if (patch.title) doc.title = mergeTL(doc.title, patch.title)!;
+    if (patch.description) doc.description = mergeTL(doc.description, patch.description)!;
 
-  // basit alanlar
-  const assignKeys: (keyof IRecipe)[] = [
-    "category",
-    "servings",
-    "prepMinutes",
-    "cookMinutes",
-    "totalMinutes",
-    "difficulty",
-    "nutrition",
-    "allergens",
-    "dietFlags",
-    "allergenFlags",
-    "ingredients",
-    "steps",
-    "tips",
-    "effectiveFrom",
-    "effectiveTo",
-    "isPublished",
-    "isActive",
-    "order",
-    "tags",
-  ];
-  for (const k of assignKeys) {
-    if ((patch as any)[k] !== undefined) (doc as any)[k] = (patch as any)[k];
-  }
-
-  // Yeni görseller (form-data)
-  const files = Array.isArray(req.files)
-    ? (req.files as Express.Multer.File[])
-    : [];
-  if (files.length) {
-    for (const f of files) {
-      const one = await toRecipeImageFromFile(req, f);
-      doc.images = doc.images || [];
-      doc.images.push(one);
+    const assignKeys: (keyof IRecipe)[] = [
+      "category",
+      "servings",
+      "prepMinutes",
+      "cookMinutes",
+      "totalMinutes",
+      "difficulty",
+      "nutrition",
+      "allergens",
+      "dietFlags",
+      "allergenFlags",
+      "ingredients",
+      "steps",
+      "tips",
+      "effectiveFrom",
+      "effectiveTo",
+      "isPublished",
+      "isActive",
+      "order",
+      "tags",
+    ];
+    for (const k of assignKeys) {
+      if ((patch as any)[k] !== undefined) (doc as any)[k] = (patch as any)[k];
     }
-  }
 
-  // Görsel silme: body.removedImageKeys → string | string[] (publicId veya url)
-  const rawRemoved =
-    (body as any).removedImageKeys ?? (body as any)["removedImageKeys[]"];
-  const removed: string[] = Array.isArray(rawRemoved)
-    ? rawRemoved.map((x: any) => String(x))
-    : typeof rawRemoved === "string" && rawRemoved
-    ? [rawRemoved]
-    : [];
-  if (removed.length && Array.isArray(doc.images)) {
-    const provider = (process.env.STORAGE_PROVIDER || "local") as
-      | "local"
-      | "cloudinary";
-    const keys = new Set(removed.map((s) => String(s)));
-    const keep: IRecipeImage[] = [];
-    for (const img of doc.images) {
-      const key = img.publicId || img.url;
-      if (key && keys.has(String(key))) {
-        try {
-          if (provider === "cloudinary" && img.publicId) {
-            await cloudinary.uploader.destroy(img.publicId);
-          } else {
-            const tenant = getTenantSlug(req);
-            deleteUploadedFilesLocal([img.url], "recipe", tenant);
-          }
-        } catch {}
-      } else {
-        keep.push(img);
+    // add images
+    const files = getFilesFromRequest(req);
+    if (files.length) {
+      for (const f of files) {
+        const one = await toRecipeImageFromFile(req, f);
+        doc.images = doc.images || [];
+        doc.images.push(one);
       }
+      doc.markModified("images");
     }
-    doc.images = keep;
-  }
 
-  // Reorder: body.existingImagesOrder → string[]
-  if ((body as any).existingImagesOrder) {
-    try {
-      const order = parseIfJson<string[]>(
-        (body as any).existingImagesOrder
-      );
-      if (Array.isArray(order) && order.length && Array.isArray(doc.images)) {
-        const map = new Map<string, IRecipeImage>();
-        for (const img of doc.images)
-          map.set(String(img.publicId || img.url), img);
-        const next: IRecipeImage[] = [];
-        for (const k of order) {
-          const hit = map.get(String(k));
-          if (hit) {
-            next.push(hit);
-            map.delete(String(k));
+    // remove images
+    const rawRemoved = (body as any).removedImageKeys ?? (body as any)["removedImageKeys[]"];
+    const parsedRemoved = parseIfJson<string[] | string>(rawRemoved);
+    const removed: string[] = Array.isArray(parsedRemoved)
+      ? parsedRemoved.map((x) => String(x))
+      : typeof parsedRemoved === "string" && parsedRemoved
+      ? [parsedRemoved]
+      : [];
+
+    if (removed.length && Array.isArray(doc.images)) {
+      const provider = (process.env.STORAGE_PROVIDER || "local") as "local" | "cloudinary";
+      const keys = new Set(removed.map((s) => String(s)));
+      const keep: IRecipeImage[] = [];
+
+      for (const img of doc.images) {
+        const key = img.publicId || img.url;
+        if (key && keys.has(String(key))) {
+          try {
+            if (provider === "cloudinary" && img.publicId) {
+              await deleteUploadedFilesCloudinary([img.publicId]);
+            } else {
+              const paths = [img.url, img.thumbnail, img.webp].filter(Boolean) as string[];
+              deleteUploadedFilesLocal(paths, "recipe");
+            }
+          } catch (e) {
+            console.error("[recipes.update] remove image error:", e);
           }
+        } else {
+          keep.push(img);
         }
-        doc.images = [...next, ...Array.from(map.values())];
       }
-    } catch {}
-  }
+      doc.images = keep;
+      doc.markModified("images");
+    }
 
-  await doc.save();
-  res.json(doc.toObject());
+    // reorder
+    if ((body as any).existingImagesOrder) {
+      try {
+        const order = parseIfJson<string[]>((body as any).existingImagesOrder);
+        if (Array.isArray(order) && order.length && Array.isArray(doc.images)) {
+          const map = new Map<string, IRecipeImage>();
+          for (const img of doc.images)
+            map.set(String(img.publicId || img.url), img);
+          const next: IRecipeImage[] = [];
+          for (const k of order) {
+            const hit = map.get(String(k));
+            if (hit) {
+              next.push(hit);
+              map.delete(String(k));
+            }
+          }
+          doc.images = [...next, ...Array.from(map.values())];
+          doc.markModified("images");
+        }
+      } catch {}
+    }
+
+    await doc.save();
+    return res.json(doc.toObject());
+  } catch (err) {
+    console.error("[recipes.update] save error:", err);
+    return sendSaveError(res, err, "RECIPE_UPDATE_FAILED");
+  }
 }
 
 export async function updateStatus(req: Request, res: Response) {
@@ -492,46 +489,58 @@ export async function updateStatus(req: Request, res: Response) {
   if (!Types.ObjectId.isValid(id))
     return res.status(404).json({ error: "NOT_FOUND" });
 
-  const patch: any = {
-    isPublished: !!isPublished,
-    publishedAt: isPublished ? new Date() : null,
-  };
-  const r = await Recipe.findByIdAndUpdate(id, patch, {
-    new: true,
-  }).lean();
-  if (!r) return res.status(404).json({ error: "NOT_FOUND" });
-  res.json({
-    id: r._id,
-    isPublished: r.isPublished,
-    publishedAt: r.publishedAt,
-  });
+  try {
+    const patch: any = {
+      isPublished: !!isPublished,
+      publishedAt: isPublished ? new Date() : null,
+    };
+    const r = await Recipe.findByIdAndUpdate(id, patch, { new: true }).lean();
+    if (!r) return res.status(404).json({ error: "NOT_FOUND" });
+    return res.json({
+      id: r._id,
+      isPublished: r.isPublished,
+      publishedAt: r.publishedAt,
+    });
+  } catch (err) {
+    console.error("[recipes.updateStatus] error:", err);
+    return sendSaveError(res, err, "STATUS_PATCH_FAILED");
+  }
 }
 
 export async function remove(req: Request, res: Response) {
   const { id } = req.params;
   if (!Types.ObjectId.isValid(id))
     return res.status(404).json({ error: "NOT_FOUND" });
-  const doc = await Recipe.findById(id);
-  if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
 
-  const provider = (process.env.STORAGE_PROVIDER || "local") as
-    | "local"
-    | "cloudinary";
-  if (provider === "cloudinary") {
-    const pids = (doc.images || [])
-      .map((i) => i.publicId)
-      .filter(Boolean) as string[];
-    await deleteUploadedFilesCloudinary(pids);
-  } else {
-    const tenant = getTenantSlug(req);
-    const urls = (doc.images || [])
-      .map((i) => i.url)
-      .filter(Boolean) as string[];
-    deleteUploadedFilesLocal(urls, "recipe", tenant);
+  try {
+    const doc = await Recipe.findById(id);
+    if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
+
+    const provider = (process.env.STORAGE_PROVIDER || "local") as "local" | "cloudinary";
+
+    try {
+      if (provider === "cloudinary") {
+        const pids = (doc.images || [])
+          .map((i) => i.publicId)
+          .filter(Boolean) as string[];
+        if (pids.length) await deleteUploadedFilesCloudinary(pids);
+      } else {
+        const urls = (doc.images || [])
+          .flatMap((i) => [i.url, i.thumbnail, i.webp])
+          .filter(Boolean) as string[];
+        if (urls.length) deleteUploadedFilesLocal(urls, "recipe");
+      }
+    } catch (e) {
+      console.error("[recipes.remove] media delete error:", e);
+      // medya silme hatası kritik değil, devam edelim
+    }
+
+    await doc.deleteOne();
+    return res.status(204).end();
+  } catch (err) {
+    console.error("[recipes.remove] delete error:", err);
+    return sendSaveError(res, err, "RECIPE_DELETE_FAILED");
   }
-
-  await doc.deleteOne();
-  res.status(204).end();
 }
 
 /* ===================== MEDIA ===================== */
@@ -540,24 +549,29 @@ export async function addImages(req: Request, res: Response) {
   const { id } = req.params;
   if (!Types.ObjectId.isValid(id))
     return res.status(404).json({ error: "NOT_FOUND" });
-  const doc = await Recipe.findById(id);
-  if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
 
-  const files = Array.isArray(req.files)
-    ? (req.files as Express.Multer.File[])
-    : [];
-  if (!files.length) return res.status(400).json({ error: "NO_FILES" });
+  try {
+    const doc = await Recipe.findById(id);
+    if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
 
-  const added: IRecipeImage[] = [];
-  for (const f of files) {
-    const one = await toRecipeImageFromFile(req, f);
-    doc.images = doc.images || [];
-    doc.images.push(one);
-    added.push(one);
+    const files = getFilesFromRequest(req);
+    if (!files.length) return res.status(400).json({ error: "NO_FILES" });
+
+    const added: IRecipeImage[] = [];
+    for (const f of files) {
+      const one = await toRecipeImageFromFile(req, f);
+      doc.images = doc.images || [];
+      doc.images.push(one);
+      added.push(one);
+    }
+
+    doc.markModified("images");
+    await doc.save();
+    return res.json({ ok: true, added, images: doc.images });
+  } catch (err) {
+    console.error("[recipes.addImages] save error:", err);
+    return sendSaveError(res, err, "ADD_IMAGES_FAILED");
   }
-
-  await doc.save();
-  res.json({ ok: true, added, images: doc.images });
 }
 
 export async function removeImage(req: Request, res: Response) {
@@ -565,35 +579,41 @@ export async function removeImage(req: Request, res: Response) {
   if (!Types.ObjectId.isValid(id))
     return res.status(404).json({ error: "NOT_FOUND" });
 
-  const doc = await Recipe.findById(id);
-  if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
-
-  const idx = (doc.images || []).findIndex(
-    (img) =>
-      img.publicId === publicId ||
-      path.basename(img.url) === publicId ||
-      img.url === publicId
-  );
-  if (idx === -1)
-    return res.status(404).json({ error: "IMAGE_NOT_FOUND" });
-
-  const img = doc.images[idx];
-  const provider = (process.env.STORAGE_PROVIDER || "local") as
-    | "local"
-    | "cloudinary";
-
   try {
-    if (provider === "cloudinary") {
-      if (img.publicId) await cloudinary.uploader.destroy(img.publicId);
-    } else {
-      const tenant = getTenantSlug(req);
-      deleteUploadedFilesLocal([img.url], "recipe", tenant);
-    }
-  } catch {}
+    const doc = await Recipe.findById(id);
+    if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
 
-  doc.images.splice(idx, 1);
-  await doc.save();
-  res.status(204).end();
+    const idx = (doc.images || []).findIndex(
+      (img) =>
+        img.publicId === publicId ||
+        path.basename(img.url) === publicId ||
+        img.url === publicId
+    );
+    if (idx === -1) return res.status(404).json({ error: "IMAGE_NOT_FOUND" });
+
+    const img = doc.images[idx];
+    const provider = (process.env.STORAGE_PROVIDER || "local") as "local" | "cloudinary";
+
+    try {
+      if (provider === "cloudinary") {
+        if (img.publicId) await deleteUploadedFilesCloudinary([img.publicId]);
+      } else {
+        const paths = [img.url, img.thumbnail, img.webp].filter(Boolean) as string[];
+        deleteUploadedFilesLocal(paths, "recipe");
+      }
+    } catch (e) {
+      console.error("[recipes.removeImage] delete error:", e);
+    }
+
+    doc.images.splice(idx, 1);
+    doc.markModified("images");
+
+    await doc.save();
+    return res.status(204).end();
+  } catch (err) {
+    console.error("[recipes.removeImage] save error:", err);
+    return sendSaveError(res, err, "REMOVE_IMAGE_FAILED");
+  }
 }
 
 export async function updateImageMeta(req: Request, res: Response) {
@@ -601,28 +621,35 @@ export async function updateImageMeta(req: Request, res: Response) {
   if (!Types.ObjectId.isValid(id))
     return res.status(404).json({ error: "NOT_FOUND" });
 
-  const { alt, source } = (req.body || {}) as {
-    alt?: TranslatedLabel | string;
-    source?: string;
-  };
+  try {
+    const { alt, source } = (req.body || {}) as {
+      alt?: TranslatedLabel | string;
+      source?: string;
+    };
 
-  const doc = await Recipe.findById(id);
-  if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
+    const doc = await Recipe.findById(id);
+    if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
 
-  const image = (doc.images || []).find(
-    (img) =>
-      img.publicId === publicId ||
-      path.basename(img.url) === publicId ||
-      img.url === publicId
-  );
-  if (!image) return res.status(404).json({ error: "IMAGE_NOT_FOUND" });
+    const image = (doc.images || []).find(
+      (img) =>
+        img.publicId === publicId ||
+        path.basename(img.url) === publicId ||
+        img.url === publicId
+    );
+    if (!image) return res.status(404).json({ error: "IMAGE_NOT_FOUND" });
 
-  const altTL = ensureTL(alt);
-  if (altTL) image.alt = altTL;
-  if (typeof source === "string") image.source = source.trim() || undefined;
+    const altTL = ensureTL(alt);
+    if (altTL) image.alt = altTL;
+    if (typeof source === "string") image.source = source.trim() || undefined;
 
-  await doc.save();
-  res.json({ ok: true, image });
+    // (alt/source) nested field – images array zaten işaretlenecek
+    doc.markModified("images");
+    await doc.save();
+    return res.json({ ok: true, image });
+  } catch (err) {
+    console.error("[recipes.updateImageMeta] save error:", err);
+    return sendSaveError(res, err, "IMAGE_META_UPDATE_FAILED");
+  }
 }
 
 export async function reorderImages(req: Request, res: Response) {
@@ -632,33 +659,35 @@ export async function reorderImages(req: Request, res: Response) {
   if (!Types.ObjectId.isValid(id))
     return res.status(404).json({ error: "NOT_FOUND" });
 
-  const arr = parseIfJson<string[] | string>(order);
-  const list = Array.isArray(arr)
-    ? arr
-    : typeof arr === "string" && arr
-    ? [arr]
-    : [];
-  if (!list.length) return res.status(400).json({ error: "INVALID_ORDER" });
+  try {
+    const arr = parseIfJson<string[] | string>(order);
+    const list = Array.isArray(arr) ? arr : typeof arr === "string" && arr ? [arr] : [];
+    if (!list.length) return res.status(400).json({ error: "INVALID_ORDER" });
 
-  const doc = await Recipe.findById(id);
-  if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
+    const doc = await Recipe.findById(id);
+    if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
 
-  const key = (img: IRecipeImage) => img.publicId || img.url;
-  const map = new Map<string, IRecipeImage>();
-  for (const img of doc.images || []) map.set(String(key(img)), img);
+    const key = (img: IRecipeImage) => img.publicId || img.url;
+    const map = new Map<string, IRecipeImage>();
+    for (const img of doc.images || []) map.set(String(key(img)), img);
 
-  const next: IRecipeImage[] = [];
-  for (const k of list) {
-    const hit = map.get(String(k));
-    if (hit) {
-      next.push(hit);
-      map.delete(String(k));
+    const next: IRecipeImage[] = [];
+    for (const k of list) {
+      const hit = map.get(String(k));
+      if (hit) {
+        next.push(hit);
+        map.delete(String(k));
+      }
     }
-  }
-  doc.images = [...next, ...Array.from(map.values())];
+    doc.images = [...next, ...Array.from(map.values())];
+    doc.markModified("images");
 
-  await doc.save();
-  res.json({ ok: true, images: doc.images });
+    await doc.save();
+    return res.json({ ok: true, images: doc.images });
+  } catch (err) {
+    console.error("[recipes.reorderImages] save error:", err);
+    return sendSaveError(res, err, "REORDER_IMAGES_FAILED");
+  }
 }
 
 export async function setCoverImage(req: Request, res: Response) {
@@ -666,21 +695,26 @@ export async function setCoverImage(req: Request, res: Response) {
   if (!Types.ObjectId.isValid(id))
     return res.status(404).json({ error: "NOT_FOUND" });
 
-  const doc = await Recipe.findById(id);
-  if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
+  try {
+    const doc = await Recipe.findById(id);
+    if (!doc) return res.status(404).json({ error: "NOT_FOUND" });
 
-  const idx = (doc.images || []).findIndex(
-    (img) =>
-      img.publicId === publicId ||
-      path.basename(img.url) === publicId ||
-      img.url === publicId
-  );
-  if (idx === -1)
-    return res.status(404).json({ error: "IMAGE_NOT_FOUND" });
+    const idx = (doc.images || []).findIndex(
+      (img) =>
+        img.publicId === publicId ||
+        path.basename(img.url) === publicId ||
+        img.url === publicId
+    );
+    if (idx === -1) return res.status(404).json({ error: "IMAGE_NOT_FOUND" });
 
-  const [img] = doc.images.splice(idx, 1);
-  doc.images.unshift(img);
+    const [img] = doc.images.splice(idx, 1);
+    doc.images.unshift(img);
+    doc.markModified("images");
 
-  await doc.save();
-  res.json({ ok: true, images: doc.images });
+    await doc.save();
+    return res.json({ ok: true, images: doc.images });
+  } catch (err) {
+    console.error("[recipes.setCoverImage] save error:", err);
+    return sendSaveError(res, err, "SET_COVER_FAILED");
+  }
 }
