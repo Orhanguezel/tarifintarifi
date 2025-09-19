@@ -3,7 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useRouter, useParams } from "next/navigation";
-import type { Recipe, RecipeIngredient, RecipeStep, RecipeTip, Translated } from "@/lib/recipes/types";
+import type {
+  Recipe,
+  RecipeIngredient,
+  RecipeStep,
+  RecipeTip,
+  Translated,
+} from "@/lib/recipes/types";
+import type { SupportedLocale } from "@/types/common";
 import {
   useAdminCreateRecipeMutation,
   useAdminUpdateRecipeMutation,
@@ -13,6 +20,34 @@ import {
 import JSONEditor from "@/components/common/JSONEditor";
 import ImageUploader, { type UploadImage } from "@/components/common/ImageUploader";
 
+/* ================= helpers ================= */
+
+const LOCALES =
+  (process.env.NEXT_PUBLIC_SUPPORTED_LOCALES?.split(",") as SupportedLocale[]) ||
+  (["tr", "en"] as SupportedLocale[]);
+
+const getUILang = (lng?: string): SupportedLocale => {
+  const two = (lng || "").slice(0, 2).toLowerCase();
+  return (LOCALES as ReadonlyArray<string>).includes(two as any)
+    ? (two as SupportedLocale)
+    : ("tr" as SupportedLocale);
+};
+
+function setTranslated(
+  prev: Record<SupportedLocale, string> | undefined,
+  locale: SupportedLocale,
+  value: string
+) {
+  const base = (prev || {}) as Record<SupportedLocale, string>;
+  const next = { ...base, [locale]: value };
+  Object.keys(next).forEach((k) => {
+    if (!next[k as SupportedLocale]) delete next[k as SupportedLocale];
+  });
+  return next;
+}
+
+/* ================= component ================= */
+
 type Props = {
   mode: "create" | "edit";
   initial?: Recipe | null;
@@ -20,22 +55,27 @@ type Props = {
   onCancel: () => void;
 };
 
-const emptyTL: Translated = {};
+type EditMode = "simple" | "json";
 
 export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
   const router = useRouter();
   const { locale } = useParams<{ locale: string }>();
+  const uiLang = getUILang(locale);
+
+  const [editMode, setEditMode] = useState<EditMode>("simple");
 
   // ---- temel state
-  const [title, setTitle] = useState<Translated>(initial?.title ?? emptyTL);
-  const [description, setDescription] = useState<Translated>(initial?.description ?? emptyTL);
+  const [title, setTitle] = useState<Translated>(initial?.title ?? {});
+  const [description, setDescription] = useState<Translated>(initial?.description ?? {});
 
   const [category, setCategory] = useState<string>(initial?.category ?? "");
   const [servings, setServings] = useState<number | undefined>(initial?.servings);
   const [prepMinutes, setPrep] = useState<number | undefined>(initial?.prepMinutes);
   const [cookMinutes, setCook] = useState<number | undefined>(initial?.cookMinutes);
   const [totalMinutes, setTotal] = useState<number | undefined>(initial?.totalMinutes);
-  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard" | undefined>(initial?.difficulty ?? "easy");
+  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard" | undefined>(
+    initial?.difficulty ?? "easy"
+  );
   const [order, setOrder] = useState<number | undefined>(initial?.order ?? 0);
   const [isActive, setActive] = useState<boolean>(initial?.isActive ?? true);
   const [isPublished, setPublished] = useState<boolean>(initial?.isPublished ?? false);
@@ -114,8 +154,11 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
     tips,
   };
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  /* ====== SUBMIT ====== */
+  async function handleSubmit(e?: React.FormEvent | React.MouseEvent) {
+    if (e) e.preventDefault();
+    if (saving) return;
+
     try {
       if (mode === "create") {
         const res = await createRecipe({
@@ -126,7 +169,8 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
           },
         }).unwrap();
 
-        if (res?.id) router.replace(`/${locale}/admin/recipes/${res.id}/edit`);
+        const newId = (res as any)?.id;
+        if (newId) router.replace(`/${locale}/admin/recipes/${newId}/edit`);
         onDone();
       } else if (mode === "edit" && initial?._id) {
         await updateRecipe({
@@ -144,9 +188,16 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
         }
         onDone();
       }
-    } catch {
-      // basit hata: toast vb. eklenebilir
-    }
+    } catch (err: any) {
+  const msg =
+    err?.data?.message ||
+    err?.data?.error ||
+    err?.error ||
+    err?.message ||
+    "Kaydetme başarısız.";
+  console.error("Recipe save failed:", err);
+  alert(msg);
+}
   }
 
   async function togglePublish() {
@@ -155,221 +206,250 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
         const next = !isPublished;
         setPublished(next);
         await patchStatus({ id: initial._id, isPublished: next }).unwrap();
-      } catch {
-        setPublished((v) => !v);
-      }
+      } catch (e: any) {
+  setPublished((v) => !v);
+  const msg = e?.data?.message || e?.data?.error || e?.message || "Yayın durumunu güncelleyemedik.";
+  alert(msg);
+}
     }
   }
 
+  /* ====== JSON Kombine (About benzeri) ====== */
+  const combinedJSONValue = useMemo(() => ({ title, description }), [title, description]);
+  const onCombinedJSONChange = (v: any) => {
+    const toTL = (val: any, lang: SupportedLocale): Translated =>
+      val && typeof val === "object" && !Array.isArray(val)
+        ? (val as Translated)
+        : val
+        ? ({ [lang]: String(val) } as Translated)
+        : ({});
+    setTitle(toTL(v?.title, uiLang));
+    setDescription(toTL(v?.description, uiLang));
+  };
+
   return (
-    <Form onSubmit={onSubmit}>
-      <Row>
-        <Col>
-          <Label>Başlık (Çok dilli JSON)</Label>
-          <JSONEditor label="" value={title} onChange={(v) => setTitle(v || {})} placeholder='{"tr":"...", "en":"..."}' />
+    <Form onSubmit={handleSubmit} autoComplete="off" noValidate>
+      {/* Düzen Modu */}
+      <ModeRow role="radiogroup" aria-label="Düzenleme modu">
+        <ModeBtn
+          type="button"
+          aria-pressed={editMode === "simple"}
+          $active={editMode === "simple"}
+          onClick={() => setEditMode("simple")}
+        >
+          Basit
+        </ModeBtn>
+        <ModeBtn
+          type="button"
+          aria-pressed={editMode === "json"}
+          $active={editMode === "json"}
+          onClick={() => setEditMode("json")}
+        >
+          JSON
+        </ModeBtn>
+      </ModeRow>
 
-          <Label>Açıklama (Çok dilli JSON)</Label>
-          <JSONEditor label="" value={description} onChange={(v) => setDescription(v || {})} placeholder='{"tr":"..."}' />
+      {editMode === "simple" ? (
+        <>
+          <Label>Başlık ({uiLang})</Label>
+          <Input
+            placeholder={`Başlık (${uiLang})`}
+            value={(title as any)?.[uiLang] || ""}
+            onChange={(e) => setTitle((prev) => setTranslated(prev as any, uiLang, e.target.value))}
+          />
 
-          <Grid2>
-            <Field>
-              <Label>Kategori</Label>
-              <Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="ör. main-course" />
-            </Field>
-            <Field>
-              <Label>Sıra</Label>
-              <Input type="number" value={order ?? 0} onChange={(e) => setOrder(Number(e.target.value))} />
-            </Field>
-          </Grid2>
-
-          <Grid3>
-            <Field>
-              <Label>Porsiyon</Label>
-              <Input
-                type="number"
-                value={servings ?? ""}
-                onChange={(e) => setServings(e.target.value ? Number(e.target.value) : undefined)}
-              />
-            </Field>
-            <Field>
-              <Label>Hazırlık (dk)</Label>
-              <Input
-                type="number"
-                value={prepMinutes ?? ""}
-                onChange={(e) => setPrep(e.target.value ? Number(e.target.value) : undefined)}
-              />
-            </Field>
-            <Field>
-              <Label>Pişirme (dk)</Label>
-              <Input
-                type="number"
-                value={cookMinutes ?? ""}
-                onChange={(e) => setCook(e.target.value ? Number(e.target.value) : undefined)}
-              />
-            </Field>
-            <Field>
-              <Label>Toplam (dk)</Label>
-              <Input
-                type="number"
-                value={totalMinutes ?? ""}
-                onChange={(e) => setTotal(e.target.value ? Number(e.target.value) : undefined)}
-              />
-            </Field>
-          </Grid3>
-
-          <Grid2>
-            <Field>
-              <Label>Zorluk</Label>
-              <Select value={difficulty ?? "easy"} onChange={(e) => setDifficulty(e.target.value as any)}>
-                <option value="easy">easy</option>
-                <option value="medium">medium</option>
-                <option value="hard">hard</option>
-              </Select>
-            </Field>
-            <Field>
-              <Label>Durum</Label>
-              <ToggleWrap>
-                <Check type="checkbox" checked={isActive} onChange={(e) => setActive(e.target.checked)} /> Aktif
-                <Spacer />
-                <Check
-                  type="checkbox"
-                  checked={isPublished}
-                  onChange={() => {}}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    togglePublish();
-                  }}
-                />{" "}
-                Yayında
-              </ToggleWrap>
-            </Field>
-          </Grid2>
-
-          <Label>Besin Değerleri (JSON)</Label>
-          <JSONEditor label="" value={nutrition} onChange={setNutrition} placeholder='{"calories":320,"protein":12}' />
-
-          <Grid2>
-            <Field>
-              <Label>Mutfaklar (JSON array)</Label>
-              <JSONEditor
-                label=""
-                value={cuisines}
-                onChange={(v) => setCuisines(v || [])}
-                placeholder='["turkish","mediterranean"]'
-              />
-            </Field>
-            <Field>
-              <Label>Etiketler (Translated[])</Label>
-              <JSONEditor
-                label=""
-                value={tags}
-                onChange={(v) => setTags(v || [])}
-                placeholder='[{"tr":"kolay","en":"easy"}]'
-              />
-            </Field>
-          </Grid2>
-
-          <Grid2>
-            <Field>
-              <Label>Diyet Bayrakları (JSON array)</Label>
-              <JSONEditor
-                label=""
-                value={dietFlags}
-                onChange={(v) => setDietFlags(v || [])}
-                placeholder='["vegetarian","gluten-free"]'
-              />
-            </Field>
-            <Field>
-              <Label>Alerjen Bayrakları (JSON array)</Label>
-              <JSONEditor label="" value={allergenFlags} onChange={(v) => setAllergenFlags(v || [])} placeholder='["gluten","nuts"]' />
-            </Field>
-          </Grid2>
-
-          <Label>
-            Malzemeler ({'{'}name, amount, order{'}'}[])
-          </Label>
+          <Label>Açıklama ({uiLang})</Label>
+          <Textarea
+            placeholder={`Açıklama (${uiLang})`}
+            value={(description as any)?.[uiLang] || ""}
+            onChange={(e) => setDescription((prev) => setTranslated(prev as any, uiLang, e.target.value))}
+          />
+        </>
+      ) : (
+        <>
+          <Label>Başlık + Açıklama (JSON)</Label>
           <JSONEditor
             label=""
-            value={ingredients}
-            onChange={(v) => setIngredients(v || [])}
-            placeholder='[{"name":{"tr":"Un"},"amount":{"tr":"2 su b."},"order":0}]'
+            value={combinedJSONValue}
+            onChange={onCombinedJSONChange}
+            placeholder={JSON.stringify({ title: { tr: "" }, description: { tr: "" } }, null, 2)}
           />
+        </>
+      )}
 
-          <Label>
-            Adımlar ({'{'}order, text{'}'}[])
-          </Label>
-          <JSONEditor
-            label=""
-            value={steps}
-            onChange={(v) => setSteps(v || [])}
-            placeholder='[{"order":1,"text":{"tr":"Fırını ısıt."}}]'
+      <Grid2>
+        <Field>
+          <Label>Kategori</Label>
+          <Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="ör. main-course" />
+        </Field>
+        <Field>
+          <Label>Sıra</Label>
+          <Input type="number" value={order ?? 0} onChange={(e) => setOrder(Number(e.target.value))} />
+        </Field>
+      </Grid2>
+
+      <Grid3>
+        <Field>
+          <Label>Porsiyon</Label>
+          <Input
+            type="number"
+            value={servings ?? ""}
+            onChange={(e) => setServings(e.target.value ? Number(e.target.value) : undefined)}
           />
-
-          <Label>
-            Püf Noktaları ({'{'}order, text{'}'}[])
-          </Label>
-          <JSONEditor
-            label=""
-            value={tips}
-            onChange={(v) => setTips(v || [])}
-            placeholder='[{"order":1,"text":{"tr":"Oda sıcaklığında dinlendir."}}]'
+        </Field>
+        <Field>
+          <Label>Hazırlık (dk)</Label>
+          <Input
+            type="number"
+            value={prepMinutes ?? ""}
+            onChange={(e) => setPrep(e.target.value ? Number(e.target.value) : undefined)}
           />
-        </Col>
-
-        <Col>
-          <Label>Görseller</Label>
-          <ImageUploader
-            existing={existing}
-            onExistingChange={setExisting}
-            removedExisting={removedExisting}
-            onRemovedExistingChange={setRemovedExisting}
-            files={files}
-            onFilesChange={setFiles}
-            maxFiles={12}
-            accept="image/*"
-            sizeLimitMB={15}
-            helpText="webp önerilir"
+        </Field>
+        <Field>
+          <Label>Pişirme (dk)</Label>
+          <Input
+            type="number"
+            value={cookMinutes ?? ""}
+            onChange={(e) => setCook(e.target.value ? Number(e.target.value) : undefined)}
           />
+        </Field>
+        <Field>
+          <Label>Toplam (dk)</Label>
+          <Input
+            type="number"
+            value={totalMinutes ?? ""}
+            onChange={(e) => setTotal(e.target.value ? Number(e.target.value) : undefined)}
+          />
+        </Field>
+      </Grid3>
 
-          <Actions>
-            <Btn type="submit" disabled={saving}>
-              {mode === "create" ? "Oluştur" : "Kaydet"}
-            </Btn>
-            <BtnLight type="button" onClick={onCancel}>
-              İptal
-            </BtnLight>
-          </Actions>
-        </Col>
-      </Row>
+      <Grid2>
+        <Field>
+          <Label>Zorluk</Label>
+          <Select value={difficulty ?? "easy"} onChange={(e) => setDifficulty(e.target.value as any)}>
+            <option value="easy">easy</option>
+            <option value="medium">medium</option>
+            <option value="hard">hard</option>
+          </Select>
+        </Field>
+        <Field>
+          <Label>Durum</Label>
+          <ToggleWrap>
+            <Check type="checkbox" checked={isActive} onChange={(e) => setActive(e.target.checked)} /> Aktif
+            <Spacer />
+            <Check
+              type="checkbox"
+              checked={isPublished}
+              onClick={(e) => {
+                e.preventDefault();
+                togglePublish();
+              }}
+              onChange={() => {}}
+            />{" "}
+            Yayında
+          </ToggleWrap>
+        </Field>
+      </Grid2>
+
+      <Label>Besin Değerleri (JSON)</Label>
+      <JSONEditor label="" value={nutrition} onChange={setNutrition} placeholder='{"calories":320,"protein":12}' />
+
+      <Grid2>
+        <Field>
+          <Label>Mutfaklar (JSON array)</Label>
+        </Field>
+        <Field>
+          <Label>Etiketler (Translated[])</Label>
+        </Field>
+      </Grid2>
+
+      <Grid2>
+        <JSONEditor
+          label=""
+          value={cuisines}
+          onChange={(v) => setCuisines(v || [])}
+          placeholder='["turkish","mediterranean"]'
+        />
+        <JSONEditor
+          label=""
+          value={tags}
+          onChange={(v) => setTags(v || [])}
+          placeholder='[{"tr":"kolay","en":"easy"}]'
+        />
+      </Grid2>
+
+      <Grid2>
+        <JSONEditor
+          label="Diyet Bayrakları"
+          value={dietFlags}
+          onChange={(v) => setDietFlags(v || [])}
+          placeholder='["vegetarian","gluten-free"]'
+        />
+        <JSONEditor
+          label="Alerjen Bayrakları"
+          value={allergenFlags}
+          onChange={(v) => setAllergenFlags(v || [])}
+          placeholder='["gluten","nuts"]'
+        />
+      </Grid2>
+
+      <Label>Malzemeler ({'{'}name, amount, order{'}'}[])</Label>
+      <JSONEditor
+        label=""
+        value={ingredients}
+        onChange={(v) => setIngredients(v || [])}
+        placeholder='[{"name":{"tr":"Un"},"amount":{"tr":"2 su b."},"order":0}]'
+      />
+
+      <Label>Adımlar ({'{'}order, text{'}'}[])</Label>
+      <JSONEditor
+        label=""
+        value={steps}
+        onChange={(v) => setSteps(v || [])}
+        placeholder='[{"order":1,"text":{"tr":"Fırını ısıt."}}]'
+      />
+
+      <Label>Püf Noktaları ({'{'}order, text{'}'}[])</Label>
+      <JSONEditor
+        label=""
+        value={tips}
+        onChange={(v) => setTips(v || [])}
+        placeholder='[{"order":1,"text":{"tr":"Oda sıcaklığında dinlendir."}}]'
+      />
+
+      <BlockTitle>Görseller</BlockTitle>
+      <ImageUploader
+        existing={existing}
+        onExistingChange={setExisting}
+        removedExisting={removedExisting}
+        onRemovedExistingChange={setRemovedExisting}
+        files={files}
+        onFilesChange={setFiles}
+        maxFiles={12}
+        accept="image/*"
+        sizeLimitMB={15}
+        helpText="webp önerilir"
+      />
+
+      <Actions>
+        <BtnLight type="button" onClick={onCancel}>
+          İptal
+        </BtnLight>
+        {/* garanti tetikleme */}
+        <Btn type="button" onClick={handleSubmit} disabled={saving} aria-busy={saving}>
+          {mode === "create" ? "Oluştur" : "Kaydet"}
+        </Btn>
+      </Actions>
     </Form>
   );
 }
 
-/* ---- styled (classic theme) ---- */
+/* ================= styled ================= */
+
 const Form = styled.form`
-  display: block;
-`;
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 16px;
-  @media (max-width: 1000px) {
-    grid-template-columns: 1fr;
-  }
-`;
-const Col = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: ${({ theme }) => theme.colors.cardBackground};
-  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.lg};
-  padding: 14px;
-`;
-const Field = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  gap: ${({ theme }) => theme.spacings.md};
 `;
 const Label = styled.label`
   font-size: ${({ theme }) => theme.fontSizes.small};
@@ -382,33 +462,43 @@ const Input = styled.input`
   background: ${({ theme }) => theme.inputs.background};
   color: ${({ theme }) => theme.inputs.text};
 `;
-const Select = styled.select`
+const Textarea = styled.textarea`
+  width: 100%;
+  min-height: 92px;
   padding: 10px 12px;
   border-radius: ${({ theme }) => theme.radii.md};
   border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.inputBorder};
   background: ${({ theme }) => theme.inputs.background};
   color: ${({ theme }) => theme.inputs.text};
-`;
-const ToggleWrap = styled.div`
-  display: flex;
-  align-items: center;
-`;
-const Check = styled.input``;
-const Spacer = styled.span`
-  flex: 1;
+  resize: vertical;
 `;
 const Grid2 = styled.div`
   display: grid;
   gap: 12px;
   grid-template-columns: 1fr 1fr;
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
 `;
 const Grid3 = styled.div`
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(4, 1fr);
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
     grid-template-columns: 1fr 1fr;
   }
+`;
+const ToggleWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const Check = styled.input.attrs({ type: "checkbox" })``;
+const Spacer = styled.span`
+  flex: 1;
+`;
+const BlockTitle = styled.h3`
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  margin: ${({ theme }) => theme.spacings.sm} 0;
 `;
 const Actions = styled.div`
   display: flex;
@@ -430,4 +520,30 @@ const BtnLight = styled.button`
   background: ${({ theme }) => theme.buttons.secondary.background};
   color: ${({ theme }) => theme.buttons.secondary.text};
   border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
+`;
+const ModeRow = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacings.xs};
+  align-items: center;
+  margin: -4px 0 8px;
+`;
+const ModeBtn = styled.button<{ $active?: boolean }>`
+  padding: 8px 10px;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
+  background: ${({ $active, theme }) => ($active ? theme.colors.primaryLight : theme.colors.cardBackground)};
+  color: ${({ theme }) => theme.colors.text};
+  cursor: pointer;
+`;
+const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+const Select = styled.select`
+  padding: 10px 12px;
+  border-radius: ${({ theme }) => theme.radii.md};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.inputBorder};
+  background: ${({ theme }) => theme.inputs.background};
+  color: ${({ theme }) => theme.inputs.text};
 `;

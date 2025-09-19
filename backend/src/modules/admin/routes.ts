@@ -1,17 +1,17 @@
 // src/modules/admin/routes.ts
 import express from "express";
 
-// 🔐 Mevcut auth middleware'lerin (relative path!)
+// 🔐 Auth & CSRF
 import { requireAdmin } from "@/middleware/auth/requireAdmin";
 import { csrf } from "@/middleware/auth/csrf";
 
 // 🧪 Validation (recipes/validation.ts)
 import {
   validateAdminListQuery,
-  validateAdminStatusPatch
+  validateAdminStatusPatch,
 } from "../recipes/validation";
 
-// 📦 Upload (relative paths!)
+// 📦 Upload
 import { upload } from "@/middleware/uploadMiddleware";
 import { uploadTypeWrapper } from "@/middleware/uploadTypeWrapper";
 
@@ -27,13 +27,22 @@ import {
   removeImage as adminRemoveRecipeImage,
   updateImageMeta as adminUpdateRecipeImageMeta,
   reorderImages as adminReorderRecipeImages,
-  setCoverImage as adminSetRecipeCoverImage
+  setCoverImage as adminSetRecipeCoverImage,
 } from "../recipes/admin.controller";
 
 const router = express.Router();
 
-/* Guard */
+/* ===== Guards ===== */
 router.use(requireAdmin);
+
+/**
+ * CSRF’i TÜM admin router’ına uygula.
+ * - Güvenli methodlarda (GET/HEAD/OPTIONS) **token zorunlu tutulmaz**,
+ *   sadece CSRF cookie’si üretir/yeniler.
+ * - Yazma methodlarında (POST/PUT/PATCH/DELETE) doğrulama yapılır.
+ *   (Bu davranış, `csrf` middleware’inin kendi iç kuralına bağlıdır.)
+ */
+router.use(csrf);
 
 /* Yardımcı: ObjectId doğrulama */
 const validateObjectId =
@@ -46,7 +55,13 @@ const validateObjectId =
     next();
   };
 
-/* Admin — Recipes (List / Detail / CRUD / Publish) */
+/* (Opsiyonel) CSRF primer/debug: mevcut token’ı json döndürür */
+router.get("/csrf", (req, res) => {
+  const token = req.cookies?.[process.env.CSRF_COOKIE_NAME || "tt_csrf"] || "";
+  res.json({ csrfToken: token });
+});
+
+/* ===== Admin — Recipes (List / Detail / CRUD / Publish) ===== */
 
 // GET /api/admin/recipes?page&limit&q&status&tag&category
 router.get("/", validateAdminListQuery, adminListRecipes);
@@ -57,7 +72,6 @@ router.get("/:id", validateObjectId("id"), adminGetRecipe);
 // POST /api/admin/recipes
 router.post(
   "/",
-  csrf,
   uploadTypeWrapper("recipe"),
   upload("recipe").array("images", 20),
   adminCreateRecipe
@@ -66,7 +80,6 @@ router.post(
 // PUT /api/admin/recipes/:id
 router.put(
   "/:id",
-  csrf,
   uploadTypeWrapper("recipe"),
   upload("recipe").array("images", 20),
   validateObjectId("id"),
@@ -76,21 +89,19 @@ router.put(
 // PATCH /api/admin/recipes/:id/status   { isPublished: boolean }
 router.patch(
   "/:id/status",
-  csrf,
   validateObjectId("id"),
   validateAdminStatusPatch,
   adminUpdateRecipeStatus
 );
 
 // DELETE /api/admin/recipes/:id
-router.delete("/:id", csrf, validateObjectId("id"), adminDeleteRecipe);
+router.delete("/:id", validateObjectId("id"), adminDeleteRecipe);
 
-/* Admin — Recipes (Media) */
+/* ===== Admin — Recipes (Media) ===== */
 
 // POST /api/admin/recipes/:id/images
 router.post(
   "/:id/images",
-  csrf,
   uploadTypeWrapper("recipe"),
   upload("recipe").array("images", 20),
   validateObjectId("id"),
@@ -100,7 +111,6 @@ router.post(
 // PATCH /api/admin/recipes/:id/images/reorder
 router.patch(
   "/:id/images/reorder",
-  csrf,
   validateObjectId("id"),
   adminReorderRecipeImages
 );
@@ -108,7 +118,6 @@ router.patch(
 // PATCH /api/admin/recipes/:id/images/:publicId
 router.patch(
   "/:id/images/:publicId",
-  csrf,
   validateObjectId("id"),
   adminUpdateRecipeImageMeta
 );
@@ -116,7 +125,6 @@ router.patch(
 // PATCH /api/admin/recipes/:id/cover/:publicId
 router.patch(
   "/:id/cover/:publicId",
-  csrf,
   validateObjectId("id"),
   adminSetRecipeCoverImage
 );
@@ -124,7 +132,6 @@ router.patch(
 // DELETE /api/admin/recipes/:id/images/:publicId
 router.delete(
   "/:id/images/:publicId",
-  csrf,
   validateObjectId("id"),
   adminRemoveRecipeImage
 );

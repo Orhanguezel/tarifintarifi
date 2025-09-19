@@ -51,7 +51,7 @@ export default function RecipeAIGenerator({ locale }: { locale: SupportedLocale 
     "chips.fewIngredients",
     "chips.notSpicy",
     "chips.budget",
-    "chips.glutenFree"
+    "chips.glutenFree",
   ] as const;
   const chips = chipKeys.map((k) => tAI(k));
 
@@ -69,30 +69,43 @@ export default function RecipeAIGenerator({ locale }: { locale: SupportedLocale 
       tx(
         "samples.s3",
         "Kahvaltı için; vejetaryen; tavada; az malzemeyle; 15 dk; peynirli seçenek; 8–12 adım lütfen."
-      )
+      ),
     ],
     [tAI]
   );
 
   const onGenerate = async () => {
-    await generate({
-      locale,
-      body: {
-        prompt: prompt || undefined,
-        cuisine: cuisine || undefined,
-        servings: servings === "" ? undefined : Number(servings),
-        maxMinutes: maxMinutes === "" ? undefined : Number(maxMinutes),
-        vegetarian,
-        vegan,
-        glutenFree,
-        lactoseFree,
-        includeIngredients: splitCsv(includeCsv),
-        excludeIngredients: splitCsv(excludeCsv)
-      }
-    }).unwrap();
+    try {
+      await generate({
+        locale,
+        body: {
+          prompt: prompt || undefined,
+          cuisine: cuisine || undefined,
+          servings: servings === "" ? undefined : Number(servings),
+          maxMinutes: maxMinutes === "" ? undefined : Number(maxMinutes),
+          vegetarian,
+          vegan,
+          glutenFree,
+          lactoseFree,
+          includeIngredients: splitCsv(includeCsv),
+          excludeIngredients: splitCsv(excludeCsv),
+        },
+      }).unwrap();
+    } catch (e: any) {
+      // UI'da gerçek mesajı göster
+      const msg =
+        e?.data?.message ||
+        e?.data?.error ||
+        e?.error ||
+        e?.message ||
+        "Üretim başarısız.";
+      console.error("AI generate failed:", e);
+      alert(msg);
+    }
   };
 
-  const created: Recipe | undefined = data?.data;
+  // RTK transformResponse doğrudan Recipe döndürüyor
+  const created: Recipe | undefined = data as Recipe | undefined;
 
   const createdSlug = useMemo(() => {
     if (!created) return null;
@@ -108,11 +121,10 @@ export default function RecipeAIGenerator({ locale }: { locale: SupportedLocale 
     "";
 
   const is503 = (error as any)?.status === 503;
-const errMsg =
-  is503
-    ? tAI("error.aiUnavailable") // i18n: "Yapay zeka hizmeti şu an kullanılamıyor. Lütfen daha sonra tekrar deneyin."
-    : (error as any)?.data?.message || (error as any)?.error || "";
-
+  const errMsg =
+    is503
+      ? tAI("error.aiUnavailable") // "Yapay zeka hizmeti şu an kullanılamıyor..."
+      : (error as any)?.data?.message || (error as any)?.error || "";
 
   return (
     <Card>
@@ -136,14 +148,19 @@ const errMsg =
         {/* Örnek şablonlar */}
         <Samples>
           {samples.map((s) => (
-            <SampleBtn key={s} onClick={() => setPrompt(s)}>{s}</SampleBtn>
+            <SampleBtn key={s} onClick={() => setPrompt(s)}>
+              {s}
+            </SampleBtn>
           ))}
         </Samples>
 
         {/* Hızlı çipler */}
         <Chips>
           {chips.map((c) => (
-            <Chip key={c} onClick={() => setPrompt((p) => (p ? `${p} • ${c}` : c))}>
+            <Chip
+              key={c}
+              onClick={() => setPrompt((p) => (p ? `${p} • ${c}` : c))}
+            >
               {c}
             </Chip>
           ))}
@@ -178,7 +195,9 @@ const errMsg =
                   inputMode="numeric"
                   placeholder={tx("fields.servings.placeholder", "4")}
                   value={servings}
-                  onChange={(e) => setServings(e.target.value ? Number(e.target.value) : "")}
+                  onChange={(e) =>
+                    setServings(e.target.value ? Number(e.target.value) : "")
+                  }
                 />
               </Field>
 
@@ -190,23 +209,45 @@ const errMsg =
                   inputMode="numeric"
                   placeholder={tx("fields.maxMinutes.placeholder", "25")}
                   value={maxMinutes}
-                  onChange={(e) => setMaxMinutes(e.target.value ? Number(e.target.value) : "")}
+                  onChange={(e) =>
+                    setMaxMinutes(e.target.value ? Number(e.target.value) : "")
+                  }
                 />
               </Field>
             </Grid2>
 
             <Checks aria-label={tAI("checks.aria")}>
               <label>
-                <input type="checkbox" checked={vegetarian} onChange={(e) => setVegetarian(e.target.checked)} /> {tAI("checks.vegetarian")}
+                <input
+                  type="checkbox"
+                  checked={vegetarian}
+                  onChange={(e) => setVegetarian(e.target.checked)}
+                />{" "}
+                {tAI("checks.vegetarian")}
               </label>
               <label>
-                <input type="checkbox" checked={vegan} onChange={(e) => setVegan(e.target.checked)} /> {tAI("checks.vegan")}
+                <input
+                  type="checkbox"
+                  checked={vegan}
+                  onChange={(e) => setVegan(e.target.checked)}
+                />{" "}
+                {tAI("checks.vegan")}
               </label>
               <label>
-                <input type="checkbox" checked={glutenFree} onChange={(e) => setGlutenFree(e.target.checked)} /> {tAI("checks.glutenFree")}
+                <input
+                  type="checkbox"
+                  checked={glutenFree}
+                  onChange={(e) => setGlutenFree(e.target.checked)}
+                />{" "}
+                {tAI("checks.glutenFree")}
               </label>
               <label>
-                <input type="checkbox" checked={lactoseFree} onChange={(e) => setLactoseFree(e.target.checked)} /> {tAI("checks.lactoseFree")}
+                <input
+                  type="checkbox"
+                  checked={lactoseFree}
+                  onChange={(e) => setLactoseFree(e.target.checked)}
+                />{" "}
+                {tAI("checks.lactoseFree")}
               </label>
             </Checks>
 
@@ -239,7 +280,9 @@ const errMsg =
         <Small
           type="button"
           onClick={() => {
-            setPrompt('Akşam yemeği için 4 kişilik, Türk mutfağından; fırınsız; 25 dk; tavuk yok; detaylı 8–12 adım.');
+            setPrompt(
+              "Akşam yemeği için 4 kişilik, Türk mutfağından; fırınsız; 25 dk; tavuk yok; detaylı 8–12 adım."
+            );
             setCuisine("turkish");
             setServings(4);
             setMaxMinutes(25);
@@ -249,8 +292,14 @@ const errMsg =
           {tAI("buttons.fillExample")}
         </Small>
 
-        <Primary type="button" onClick={onGenerate} disabled={isLoading || !prompt.trim()}>
-          {isLoading ? tAI("buttons.generate.loading") : tAI("buttons.generate.default")}
+        <Primary
+          type="button"
+          onClick={onGenerate}
+          disabled={isLoading || !prompt.trim()}
+        >
+          {isLoading
+            ? tAI("buttons.generate.loading")
+            : tAI("buttons.generate.default")}
         </Primary>
       </Foot>
 
@@ -282,20 +331,31 @@ const Card = styled.section`
   border-radius: ${({ theme }) => theme.radii.lg};
   box-shadow: ${({ theme }) => theme.cards.shadow};
   padding: 12px;
-  @media (min-width: 769px) { padding: 16px 18px; }
+  @media (min-width: 769px) {
+    padding: 16px 18px;
+  }
 `;
 
 const Head = styled.header`
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding-bottom: 8px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderBright};
   margin-bottom: 12px;
   color: ${({ theme }) => theme.colors.textAlt};
-  strong { font-size: ${({ theme }) => theme.fontSizes.lg}; }
+  strong {
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+  }
 `;
 
-const Field = styled.div`display: grid; gap: 6px;`;
-const FieldFull = styled(Field)`grid-column: 1 / -1;`;
+const Field = styled.div`
+  display: grid;
+  gap: 6px;
+`;
+const FieldFull = styled(Field)`
+  grid-column: 1 / -1;
+`;
 
 const Label = styled.label`
   font-size: ${({ theme }) => theme.fontSizes.sm};
@@ -312,7 +372,9 @@ const TextArea = styled.textarea`
   color: ${({ theme }) => theme.inputs.text};
   outline: none;
   transition: border-color ${({ theme }) => theme.transition.fast};
-  &::placeholder { color: ${({ theme }) => theme.colors.placeholder}; }
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.placeholder};
+  }
   &:focus {
     border-color: ${({ theme }) => theme.inputs.borderFocus};
     box-shadow: ${({ theme }) => theme.colors.shadowHighlight};
@@ -339,25 +401,42 @@ const baseInput = `
 `;
 const Input = styled.input`${baseInput}`;
 
-const Chips = styled.div`display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;`;
+const Chips = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+`;
 const Chip = styled.button`
   border: 1px solid ${({ theme }) => theme.colors.borderBright};
   background: ${({ theme }) => theme.colors.inputBackgroundLight};
   color: ${({ theme }) => theme.colors.textSecondary};
   border-radius: ${({ theme }) => theme.radii.pill};
-  padding: 6px 10px; cursor: pointer; font-size: ${({ theme }) => theme.fontSizes.xsmall};
-  &:hover { background: ${({ theme }) => theme.colors.inputBackgroundFocus }; }
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: ${({ theme }) => theme.fontSizes.xsmall};
+  &:hover {
+    background: ${({ theme }) => theme.colors.inputBackgroundFocus};
+  }
 `;
 
-const Samples = styled.div`display: grid; gap: 6px; margin: 6px 0 2px;`;
+const Samples = styled.div`
+  display: grid;
+  gap: 6px;
+  margin: 6px 0 2px;
+`;
 const SampleBtn = styled.button`
   text-align: left;
   border: 1px dashed ${({ theme }) => theme.colors.borderBright};
   background: ${({ theme }) => theme.colors.inputBackgroundLight};
   color: ${({ theme }) => theme.colors.text};
   border-radius: ${({ theme }) => theme.radii.md};
-  padding: 8px 10px; cursor: pointer; font-size: ${({ theme }) => theme.fontSizes.xsmall};
-  &:hover { background: ${({ theme }) => theme.colors.inputBackgroundFocus}; }
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: ${({ theme }) => theme.fontSizes.xsmall};
+  &:hover {
+    background: ${({ theme }) => theme.colors.inputBackgroundFocus};
+  }
 `;
 
 const Adv = styled.section`
@@ -367,7 +446,9 @@ const Adv = styled.section`
 `;
 const AdvHeader = styled.button`
   width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px 12px;
   background: ${({ theme }) => theme.colors.inputBackgroundLight};
   border: 0;
@@ -387,15 +468,24 @@ const AdvBody = styled.div`
 `;
 
 const Grid2 = styled.div`
-  display: grid; gap: 12px;
+  display: grid;
+  gap: 12px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  ${({ theme }) => theme.media.mobile} { grid-template-columns: 1fr; }
+  ${({ theme }) => theme.media.mobile} {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Checks = styled.div`
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 6px 0 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 6px 0 2px;
   label {
-    display: inline-flex; align-items: center; gap: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: ${({ theme }) => theme.fontSizes.sm};
     color: ${({ theme }) => theme.colors.text};
   }
@@ -407,7 +497,12 @@ const Help = styled.div`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-const Foot = styled.div`display: flex; align-items: center; justify-content: space-between; margin-top: 12px;`;
+const Foot = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+`;
 const Small = styled.button`
   padding: 8px 10px;
   border-radius: ${({ theme }) => theme.radii.md};
@@ -415,7 +510,10 @@ const Small = styled.button`
   background: ${({ theme }) => theme.colors.inputBackgroundLight};
   color: ${({ theme }) => theme.colors.textSecondary};
   cursor: pointer;
-  &:hover { background: ${({ theme }) => theme.colors.inputBackgroundFocus}; border-color: ${({ theme }) => theme.colors.borderHighlight}; }
+  &:hover {
+    background: ${({ theme }) => theme.colors.inputBackgroundFocus};
+    border-color: ${({ theme }) => theme.colors.borderHighlight};
+  }
 `;
 const Primary = styled.button`
   --bg: ${({ theme }) => theme.buttons.primary.background};
@@ -430,18 +528,37 @@ const Primary = styled.button`
   cursor: pointer;
   box-shadow: ${({ theme }) => theme.shadows.button};
   transition: background ${({ theme }) => theme.transition.fast};
-  &:hover { background: var(--bgH); color: var(--tx); }
-  &:disabled { opacity: .7; cursor: not-allowed; }
+  &:hover {
+    background: var(--bgH);
+    color: var(--tx);
+  }
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
 `;
 
 const Note = styled.div`
-  margin-top: 10px; padding: 10px 12px; border-radius: ${({ theme }) => theme.radii.md};
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: ${({ theme }) => theme.radii.md};
   font-size: ${({ theme }) => theme.fontSizes.sm};
-  &.ok { background: ${({ theme }) => theme.colors.successBg}; color: ${({ theme }) => theme.colors.textOnSuccess}; border: 1px solid rgba(24,169,87,.2); }
-  &.err { background: ${({ theme }) => theme.colors.dangerBg}; color: ${({ theme }) => theme.colors.textOnDanger}; border: 1px solid rgba(229,72,77,.22); }
+  &.ok {
+    background: ${({ theme }) => theme.colors.successBg};
+    color: ${({ theme }) => theme.colors.textOnSuccess};
+    border: 1px solid rgba(24, 169, 87, 0.2);
+  }
+  &.err {
+    background: ${({ theme }) => theme.colors.dangerBg};
+    color: ${({ theme }) => theme.colors.textOnDanger};
+    border: 1px solid rgba(229, 72, 77, 0.22);
+  }
 `;
 const NextLink = styled(Link)`
   color: ${({ theme }) => theme.colors.link};
   text-decoration: none;
-  &:hover { text-decoration: underline; color: ${({ theme }) => theme.colors.linkHover}; }
+  &:hover {
+    text-decoration: underline;
+    color: ${({ theme }) => theme.colors.linkHover};
+  }
 `;

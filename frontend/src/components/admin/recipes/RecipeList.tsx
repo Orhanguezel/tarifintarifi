@@ -21,7 +21,6 @@ export default function RecipeList({
   onDelete,
   onTogglePublish,
 }: Props) {
-
   const d = (v?: unknown) => {
     if (!v) return "-";
     const raw =
@@ -91,7 +90,6 @@ export default function RecipeList({
                       {r.isPublished ? "Yayında" : "Taslak"}
                     </Badge>
                   </td>
-                  {/* ✅ publishedAt yerine updatedAt gösteriyoruz */}
                   <td>{d(r.updatedAt as any)}</td>
                   <td className="mono">{r.order ?? 0}</td>
                   <td className="actions">

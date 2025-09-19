@@ -1,9 +1,7 @@
-// src/core/middleware/uploadUtils.ts
 import path from "path";
 import sharp from "sharp";
 import { v2 as cloudinary } from "cloudinary";
-import { getTenantSlug } from "./uploadMiddleware";
-// ⬇️ sadece klasör sabitleri buradan
+// ⬇️ sadece klasör sabitleri; tenant yok
 import { UPLOAD_FOLDERS, type UploadFolderKey } from "./upload.constants";
 
 export function shouldProcessImage() {
@@ -26,15 +24,19 @@ export async function makeThumbAndWebp(fullPath: string) {
   return { thumb, webp };
 }
 
+/**
+ * Local public URL’i üretir.
+ * Örn: http://localhost:5019/uploads/{folder}/{filename}
+ * (tenant yok)
+ */
 export function buildLocalPublicUrl(
   file: Express.Multer.File,
   folderKey: UploadFolderKey,
-  req?: any
+  _req?: any
 ) {
-  const tenant = getTenantSlug(req);
   const folder = UPLOAD_FOLDERS[folderKey] || UPLOAD_FOLDERS.default;
-  const baseUrl = process.env.BASE_URL?.replace(/\/$/, "") || "http://localhost:5019";
-  return `${baseUrl}/uploads/${tenant}/${folder}/${file.filename}`;
+  const baseUrl = (process.env.BASE_URL || "http://localhost:5019").replace(/\/$/, "");
+  return `${baseUrl}/uploads/${folder}/${file.filename}`;
 }
 
 export function buildCloudinaryThumbUrl(publicId: string) {

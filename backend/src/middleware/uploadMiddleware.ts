@@ -5,21 +5,10 @@ import express from "express";
 import type { Request } from "express";
 import { storageAdapter } from "./storageAdapter";
 
-// ⬇️ merkezi sabitler buradan
+// ⬇️ merkezi sabitler
 import { UPLOAD_FOLDERS, BASE_UPLOAD_DIR, type UploadFolderKey } from "./upload.constants";
 
-export { UPLOAD_FOLDERS, BASE_UPLOAD_DIR }; // gerektiği yerde yeniden export edilebilir
-
-// Basit tenant; çoklu deploy yoksa env veya "default"
-export function getTenantSlug(req?: any): string {
-  return (
-    req?.tenant ||
-    process.env.NEXT_PUBLIC_TENANT_NAME ||
-    process.env.TENANT_NAME ||
-    process.env.APP_ENV ||
-    "default"
-  );
-}
+export { UPLOAD_FOLDERS, BASE_UPLOAD_DIR };
 
 const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".pdf"];
 const allowedMimeTypes = [

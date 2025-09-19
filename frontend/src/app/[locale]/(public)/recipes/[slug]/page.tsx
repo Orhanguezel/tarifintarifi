@@ -1,4 +1,3 @@
-// app/[locale]/recipes/[slug]/page.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -6,13 +5,14 @@ import { getTranslations } from "next-intl/server";
 import RecipeDetailView from "@/features/recipes/components/detail/RecipeDetailView";
 import { getRecipeBySlug } from "@/lib/recipes/api.server";
 import { ALL_LOCALES } from "@/lib/recipes/constants";
-import RecipeJsonLd from "@/features/recipes/RecipeJsonLd";
+import RecipeJsonLd from "@/features/seo/RecipeJsonLd"; // ⬅️ DÜZELTİLEN YOL
 import BreadcrumbJsonLd from "@/features/seo/BreadcrumbJsonLd";
+import type { SupportedLocale } from "@/types/common";
 
 export const dynamic = "force-dynamic";
 
 // Next 15: params Promise
-type RouteParams = Promise<{ locale: string; slug: string }>;
+type RouteParams = Promise<{ locale: SupportedLocale; slug: string }>;
 
 function absUrl(base: string, p?: string): string | undefined {
   if (!p) return undefined;
@@ -22,20 +22,16 @@ function absUrl(base: string, p?: string): string | undefined {
 
 function pickOgImage(data: any, base: string): string | undefined {
   const candidates = [
-    // Tekil alan isimleri (projene uyarsa kullanılır)
     data?.image,
     data?.cover,
     data?.coverUrl,
     data?.thumbnail,
     data?.hero,
     data?.mainImage?.url,
-    // Koleksiyon alanları
     data?.images?.[0]?.url,
     data?.images?.[0]?.webp,
     data?.images?.[0]?.thumbnail,
-    // Ortam değişkeni (site-wide)
     process.env.NEXT_PUBLIC_OG_IMAGE,
-    // Public fallback (public/og-recipe-default.jpg ekleyin)
     "/og-recipe-default.jpg"
   ].filter(Boolean) as string[];
 
@@ -55,7 +51,7 @@ export async function generateMetadata(
   const descs  = (data?.description ?? {}) as Record<string, string>;
 
   const title = titles[locale] ?? titles.tr ?? "Tarif";
-  const description = descs[locale] ?? descs.tr ?? "";
+  const description = (descs[locale] ?? descs.tr ?? "").slice(0, 160);
 
   const canonicalSlug =
     ((data?.slug ?? {}) as Record<string, string>)[locale] ??
@@ -66,30 +62,30 @@ export async function generateMetadata(
     (process.env.NEXT_PUBLIC_SITE_URL || "https://www.tarifintarifi.com").replace(/\/+$/, "");
   const path = `/${locale}/recipes/${canonicalSlug}`;
 
-  // ✅ Görsel: tariften → env → public fallback
   const ogImg = pickOgImage(data, base);
 
   return {
+    metadataBase: new URL(base),
     title,
     description,
     alternates: {
-      canonical: `${base}${path}`,
+      canonical: path,
       languages: Object.fromEntries(
         ALL_LOCALES.map((l) => {
           const s =
             ((data?.slug ?? {}) as Record<string, string>)[l] ??
             data?.slugCanonical ??
             slug;
-          return [l, `${base}/${l}/recipes/${s}`];
+          return [l, `/${l}/recipes/${s}`];
         })
       ),
     },
     openGraph: {
+      type: "article",
       title,
       description,
-      url: `${base}${path}`,
-      images: ogImg ? [{ url: ogImg, width: 1200, height: 630, alt: title }] : undefined,
-      type: "article",
+      url: path,
+      images: ogImg ? [{ url: ogImg, width: 1200, height: 630, alt: title }] : undefined
     },
     twitter: {
       card: "summary_large_image",
@@ -104,6 +100,7 @@ export default async function RecipePage(
   { params }: { params: RouteParams }
 ) {
   const { locale, slug } = await params;
+
   const data = await getRecipeBySlug(locale, slug).catch(() => null);
   if (!data) notFound();
 
@@ -117,9 +114,13 @@ export default async function RecipePage(
 
   const detailUrl = `${base}/${locale}/recipes/${encodeURIComponent(resolvedSlug)}`;
 
-  // --- i18n breadcrumb etiketleri (home.json + recipes.json) ---
+  // i18n breadcrumb etiketleri
   const siteName = (process.env.NEXT_PUBLIC_SITE_NAME || "tarifintarifi.com").trim();
   let homeLabel = siteName;
+  try {
+    const th = await getTranslations({ locale, namespace: "home" });
+    homeLabel = th("title");
+  } catch {/* fallback siteName */}
 
   let recipesLabel = "Recipes";
   try {
@@ -129,7 +130,7 @@ export default async function RecipePage(
         try { return tr("listTitle"); } catch {}
         try { return tr("title"); } catch {}
         try { return tr("all.title"); } catch {}
-        return recipesLabel; // fallback
+        return recipesLabel;
       })();
   } catch {}
 
@@ -138,8 +139,9 @@ export default async function RecipePage(
 
   return (
     <>
-      {/* JSON-LD şemaları */}
-      <RecipeJsonLd r={data} locale={locale} />
+      {/* ✅ Yapılandırılmış veri */}
+      <RecipeJsonLd recipe={data} locale={locale} />
+
       <BreadcrumbJsonLd
         items={[
           { name: homeLabel,    url: `${base}/${locale}` },
@@ -148,7 +150,7 @@ export default async function RecipePage(
         ]}
       />
 
-      {/* Görsel içerik */}
+      {/* İçerik */}
       <RecipeDetailView data={data} locale={locale} />
     </>
   );
