@@ -2,11 +2,9 @@ import { getServerApiBaseAbsolute } from "@/lib/server/http";
 import { getLangHeaders } from "@/lib/http";
 import type { Me } from "./types";
 
-type Success<T> = { success?: boolean; data?: T } & Partial<T>;
-
 async function abs(path: string): Promise<string> {
-  const base = await getServerApiBaseAbsolute();
-  return base.replace(/\/+$/, "") + "/" + path.replace(/^\/+/, "");
+  const base = await getServerApiBaseAbsolute(); // örn: "https://.../api"
+  return base.replace(/\/+$/, "") + "/" + String(path).replace(/^\/+/, "");
 }
 
 export async function fetchMeServer(locale = "tr", cookie?: string): Promise<Me | null> {
@@ -16,12 +14,11 @@ export async function fetchMeServer(locale = "tr", cookie?: string): Promise<Me 
       ...getLangHeaders(locale),
       ...(cookie ? { cookie } : {}),
     },
-    // SSR’da da cookie forward etmek istersen next/headers’tan alıp buraya geçirirsin
+    // cache: "no-store", // istersen ekle
   });
   if (r.status === 401) return null;
   if (!r.ok) throw new Error(`ME failed: ${r.status}`);
-  const j = (await r.json()) as Me;
-  return j ?? null;
+  return (await r.json()) as Me;
 }
 
 export async function postLogoutServer(locale = "tr", cookie?: string): Promise<boolean> {

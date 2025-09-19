@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useListRecipesQuery } from "@/lib/recipes/api";
+import { useListRecipesQuery } from "@/lib/recipes/api.client";
 import type { SupportedLocale } from "@/types/common";
 
 export function useTopRecipeCategories(locale: SupportedLocale, sampleSize = 120, topN = 10) {

@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import { useTranslations } from "next-intl";
-import { useGenerateRecipePublicMutation } from "@/lib/recipes/api";
+import { useGenerateRecipePublicMutation } from "@/lib/recipes/api.client";
 import type { SupportedLocale } from "@/types/common";
 import type { Recipe } from "@/lib/recipes/types";
 
@@ -171,7 +171,7 @@ const errMsg =
               </Field>
 
               <Field>
-                <Label>{tAI("fields.servings")}</Label>
+                <Label>{tAI("fields.servings.label")}</Label>
                 <Input
                   type="number"
                   min={1}
@@ -183,7 +183,7 @@ const errMsg =
               </Field>
 
               <Field>
-                <Label>{tAI("fields.maxMinutes")}</Label>
+                <Label>{tAI("fields.maxMinutes.label")}</Label>
                 <Input
                   type="number"
                   min={1}

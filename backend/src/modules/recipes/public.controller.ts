@@ -86,7 +86,7 @@ async function callModelWithFallback(sys: string, user: string) {
 /* ------------------ Public: List/Search ----------------- */
 export async function publicGetRecipes(req: Request, res: Response, next: NextFunction) {
   try {
-    const { q, tag, hl, maxTime, limit = "50", page = "1", fields, category } =
+    const { q, tag, hl, maxTime, limit = "50", page = "1", fields, category, sort } =
       req.query as Record<string, string>;
 
     const now = new Date();
@@ -99,14 +99,14 @@ export async function publicGetRecipes(req: Request, res: Response, next: NextFu
       ],
     };
 
-    // Kategori
+    // kategori filtresi (aynı)
     const rawCat = String(category || "").trim().toLowerCase();
     const catKey = normalizeCategoryKey(rawCat);
     if (catKey) filter.category = catKey;
     else if (rawCat) filter.category = rawCat;
 
+    // arama (aynı)
     const qx = (q || "").trim();
-
     const useText = !!qx && process.env.RECIPES_USE_TEXT_SEARCH !== "false" && qx.length >= 2;
     if (useText) {
       filter.$text = { $search: qx };
@@ -119,7 +119,7 @@ export async function publicGetRecipes(req: Request, res: Response, next: NextFu
       ];
     }
 
-    // TAG filtresi (hl > tag)
+    // TAG (hl > tag) (aynı)
     const tgRaw = String(hl || tag || "").trim();
     if (tgRaw) {
       const base = decodeURIComponent(tgRaw).replace(/-/g, " ").trim();
@@ -131,20 +131,67 @@ export async function publicGetRecipes(req: Request, res: Response, next: NextFu
       filter.$and = [...(filter.$and || []), { $or: [...orMain, ...orAlt] }];
     }
 
+    // süre (aynı)
     if (maxTime != null && String(maxTime).trim() !== "") {
       filter.totalMinutes = { $lte: Number(maxTime) };
     }
 
+    // --- PAGİNATİON ---
     const MAX_LIMIT = Math.min(Number(process.env.RECIPES_PUBLIC_LIST_MAX || 200), 1000);
     const lim = Math.max(1, Math.min(Number(limit) || 50, MAX_LIMIT));
     const pg = Math.max(1, Number(page) || 1);
     const skip = (pg - 1) * lim;
 
+    // --- SIRALAMA ---
+    // desteklenen alias -> gerçek alan eşlemesi
+    const ALIASES: Record<string, string> = {
+      // tarih
+      publishedAt: "publishedAt",
+      createdAt: "createdAt",
+      updatedAt: "updatedAt",
+      // metin
+      title: `title.tr`,             // basit ve stabil olması için TR’e sabitliyoruz (çok dillide karmaşıklık olmasın)
+      // sayaçlar
+      likes: "reactionTotals.like",
+      comments: "commentCount",
+      rating: "ratingAvg",
+      time: "totalMinutes",
+      order: "order",
+    };
+
+    function parseSortParam(raw?: string) {
+      const parts = String(raw || "").split(",").map(s => s.trim()).filter(Boolean);
+      if (!parts.length) return null;
+
+      const obj: any = {};
+      for (const p of parts) {
+        const dir = p.startsWith("-") ? -1 : 1;
+        const key = p.replace(/^[-+]/, "");
+        const mapped = ALIASES[key] || key;
+        // yalnız whitelist kabul
+        if (Object.values(ALIASES).includes(mapped) || Object.keys(ALIASES).includes(key)) {
+          obj[mapped] = dir;
+        }
+      }
+      return Object.keys(obj).length ? obj : null;
+    }
+
+    const requestedSort = parseSortParam(sort);
+
+    // text search’te skor önce gelsin
+    const defaultSort = useText
+      ? ({ score: { $meta: "textScore" }, publishedAt: -1, createdAt: -1 } as any)
+      : ({ publishedAt: -1, createdAt: -1 } as any); // ✔️ varsayılan: yeni → eski
+
+    const sortObj = requestedSort
+      ? (useText ? { score: { $meta: "textScore" }, ...requestedSort } : requestedSort)
+      : defaultSort;
+
     const total = await Recipe.countDocuments(filter);
     const totalPages = Math.max(1, Math.ceil(total / lim));
 
     let query = Recipe.find(filter)
-      .sort(useText ? { score: { $meta: "textScore" }, order: 1, createdAt: -1 } : { order: 1, createdAt: -1 })
+      .sort(sortObj)
       .skip(skip)
       .limit(lim)
       .lean();
@@ -202,7 +249,7 @@ export async function publicSearchSuggest(
     const list = await Recipe.find(filter)
       .select("slug title totalMinutes nutrition category images.thumbnail")
       .limit(Math.min(Number(limit) || 10, 25))
-      .sort({ createdAt: -1 })
+      .sort({ publishedAt: -1, createdAt: -1 })
       .lean();
 
     res.json({ success: true, data: list });
@@ -584,66 +631,102 @@ if (auto) {
     });
   }
 }
+// src/features/recipes/controller.public.ts
+
 /* --------------- Public: Manual Submit (Form) --------------- */
-export async function publicSubmitRecipe(req: Request, res: Response, next: NextFunction) {
+export async function publicSubmitRecipe(req: Request, res: Response, _next: NextFunction) {
   try {
     const b = (req.body || {}) as Record<string, any>;
 
+    // --- temel kontrol ---
     const titleStr = String(b.title || "").trim();
     if (!titleStr || titleStr.length < 3) {
-      return res
-        .status(400)
-        .json({ success: false, message: "title is required (min 3 chars)" });
+      return res.status(400).json({ success: false, message: "title is required (min 3 chars)" });
     }
-
-    const mins = Number(b.totalMinutes);
-    const auto = process.env.RECIPES_AUTO_TRANSLATE !== "false";
-
-    // Title & Description
-    const titleTL = auto ? await translateToAllLocales(titleStr) : ({ tr: titleStr } as any);
-    const descTL = b.description
-      ? (auto
-          ? await translateToAllLocales(String(b.description).trim())
-          : ({ tr: String(b.description).trim() } as any))
-      : emptyTranslatedLabel();
-
-    // Ingredients & Steps (line-by-line)
     const ingLines = lines(String(b.ingredientsText || ""));
     const stpLines = lines(String(b.stepsText || ""));
+    if (!ingLines.length || !stpLines.length) {
+      return res.status(400).json({ success: false, message: "ingredientsText and stepsText are required" });
+    }
 
+    // --- kategori (yeni kural) ---
+    // FE artık göndermeyebilir. Gönderse bile normalize et; geçersizse yok say.
+    // Şemanız 'required' ise .env ile default verin; değilse hiç set etmeyin.
+    const rawCat = b.category != null ? String(b.category).trim() : "";
+    const normCat = rawCat ? normalizeCategoryKey(rawCat) : "";
+    const categorySafe =
+      normCat ||
+      (process.env.RECIPES_SUBMIT_DEFAULT_CATEGORY
+        ? String(process.env.RECIPES_SUBMIT_DEFAULT_CATEGORY)
+        : ""); // required ise buraya "main-course" gibi güvenli bir değer koyabilirsiniz
+
+    const auto = process.env.RECIPES_AUTO_TRANSLATE !== "false";
+
+    // --- başlık & açıklama (çeviri hatasında TR fallback) ---
+    let titleTL: any;
+    let descTL: any;
+    if (auto) {
+      try {
+        titleTL = await translateToAllLocales(titleStr);
+      } catch {
+        titleTL = { tr: titleStr };
+      }
+      if (b.description && String(b.description).trim()) {
+        try {
+          descTL = await translateToAllLocales(String(b.description).trim());
+        } catch {
+          descTL = { tr: String(b.description).trim() };
+        }
+      } else {
+        descTL = emptyTranslatedLabel();
+      }
+    } else {
+      titleTL = { tr: titleStr };
+      descTL = b.description ? { tr: String(b.description).trim() } : emptyTranslatedLabel();
+    }
+
+    // --- malzeme & adımlar (satırdan TL; çeviri hatasında TR fallback) ---
     let ingredients: any[] = [];
     let steps: any[] = [];
-
     if (auto) {
-      const ingItems = ingLines.map((t, i) => ({ key: `ing_${i + 1}`, text: t }));
-      const stpItems = stpLines.map((t, i) => ({ key: `step_${i + 1}`, text: t }));
-      const ingTLMap = await translateBatchToAllLocales(ingItems, { keepNumbersUnits: true });
-      const stpTLMap = await translateBatchToAllLocales(stpItems);
-      ingredients = ingLines.map((_, i) => ({ order: i, name: ingTLMap[`ing_${i + 1}`] }));
-      steps = stpLines.map((_, i) => ({ order: i + 1, text: stpTLMap[`step_${i + 1}`] }));
+      try {
+        const ingItems = ingLines.map((t, i) => ({ key: `ing_${i + 1}`, text: t }));
+        const stpItems = stpLines.map((t, i) => ({ key: `step_${i + 1}`, text: t }));
+        const ingTLMap = await translateBatchToAllLocales(ingItems, { keepNumbersUnits: true });
+        const stpTLMap = await translateBatchToAllLocales(stpItems);
+        ingredients = ingLines.map((_, i) => ({ order: i, name: ingTLMap[`ing_${i + 1}`] }));
+        steps = stpLines.map((_, i) => ({ order: i + 1, text: stpTLMap[`step_${i + 1}`] }));
+      } catch {
+        ingredients = ingLines.map((t, i) => ({ name: { tr: t }, order: i }));
+        steps = stpLines.map((t, i) => ({ order: i + 1, text: { tr: t } }));
+      }
     } else {
       ingredients = ingLines.map((t, i) => ({ name: { tr: t }, order: i }));
       steps = stpLines.map((t, i) => ({ order: i + 1, text: { tr: t } }));
     }
 
-    // Tips
+    // --- ipuçları (opsiyonel; çeviri hatasında TR fallback) ---
     const tipLines = lines(String(b.tipsText || ""));
     let tips: IRecipeTip[] = [];
     if (tipLines.length) {
       if (auto) {
-        const tipItems = tipLines.map((t, i) => ({ key: `tip_${i + 1}`, text: t }));
-        const tipTLMap = await translateBatchToAllLocales(tipItems);
-        tips = tipLines.map((_, i) => ({ order: i + 1, text: tipTLMap[`tip_${i + 1}`] as any }));
+        try {
+          const tipItems = tipLines.map((t, i) => ({ key: `tip_${i + 1}`, text: t }));
+          const tipTLMap = await translateBatchToAllLocales(tipItems);
+          tips = tipLines.map((_, i) => ({ order: i + 1, text: tipTLMap[`tip_${i + 1}`] as any }));
+        } catch {
+          tips = tipLines.map((t, i) => ({ order: i + 1, text: { tr: t } as any }));
+        }
       } else {
         tips = tipLines.map((t, i) => ({ order: i + 1, text: { tr: t } as any }));
       }
     }
 
-    // Slug
+    // --- slug ---
     const slugObj = buildSlugPerLocale({}, titleTL as any);
     const slugCanonical = pickCanonical(slugObj, titleTL as any);
 
-    // Images
+    // --- görseller ---
     const imgNorm = Array.isArray(b.images)
       ? b.images
           .filter((x) => x?.url && x?.thumbnail)
@@ -657,7 +740,7 @@ export async function publicSubmitRecipe(req: Request, res: Response, next: Next
           }))
       : [];
 
-    // Cuisines & Tags
+    // --- mutfak & etiketler ---
     const cuisinesNorm = Array.isArray(b.cuisines)
       ? b.cuisines.map((c) => String(c).trim()).filter(Boolean)
       : [];
@@ -665,26 +748,24 @@ export async function publicSubmitRecipe(req: Request, res: Response, next: Next
       ? b.tags.map((t) => ({ tr: String(t).trim() })).filter((t) => !!t.tr)
       : [];
 
-    // Allergen & diet tutarlılığı
+    // --- besin & süre ---
+    const minsNum = Number.isFinite(Number(b.totalMinutes)) ? Number(b.totalMinutes) : undefined;
+
+    // --- alerjen & diyet tutarlılığı ---
     const inferred = new Set(inferAllergenFlagsFromIngredients(ingredients));
     const givenAllergenFlags = sanitizeAllergenFlags(b.allergenFlags);
     const allergenFlags = Array.from(new Set([...(givenAllergenFlags || []), ...inferred]));
     const givenDiet = Array.isArray(b.dietFlags) ? b.dietFlags : undefined;
-    const dietFlags = reconcileDietFlagsWithAllergens(
-      givenDiet as any,
-      new Set(allergenFlags),
-      ingredients
-    );
+    const dietFlags = reconcileDietFlagsWithAllergens(givenDiet as any, new Set(allergenFlags), ingredients);
 
-    // ORDER: max(order)+1
+    // --- order next ---
     let nextOrder = 1;
     try {
       const last = await Recipe.find().select("order").sort({ order: -1 }).limit(1).lean();
       nextOrder = Math.max(0, Number(last?.[0]?.order || 0)) + 1;
-    } catch {
-      nextOrder = 1;
-    }
+    } catch { nextOrder = 1; }
 
+    // --- create ---
     const doc = await Recipe.create({
       slug: slugObj,
       slugCanonical,
@@ -692,12 +773,12 @@ export async function publicSubmitRecipe(req: Request, res: Response, next: Next
       title: titleTL,
       description: descTL,
       images: imgNorm,
-      category: b.category != null ? String(b.category).trim() : null,
+      ...(categorySafe ? { category: categorySafe } : {}), // geçerli ise yaz, değilse şema defaultuna bırak
       cuisines: cuisinesNorm,
       tags: normalizeTagsLocalized(hardenTags(tagsNorm as any)),
       servings: b.servings != null ? Number(b.servings) : undefined,
-      totalMinutes: Number.isFinite(mins) ? mins : undefined,
-      difficulty: difficultyFromTime(mins),
+      totalMinutes: minsNum,
+      difficulty: difficultyFromTime(minsNum),
       nutrition: parseNutrition(b.nutrition || { calories: b.calories }),
       allergens: Array.isArray(b.allergens)
         ? b.allergens.map((x: any) => String(x).toLowerCase().trim()).filter(Boolean)
@@ -711,10 +792,21 @@ export async function publicSubmitRecipe(req: Request, res: Response, next: Next
       isActive: true,
     });
 
-    res
-      .status(201)
-      .json({ success: true, message: "recipe.submitted", data: doc.toJSON() });
-  } catch (err) {
-    next(err);
+    return res.status(201).json({ success: true, message: "recipe.submitted", data: doc.toJSON() });
+  } catch (err: any) {
+    // mongoose validation (ör. enum/required) → 400
+    if (err?.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: "validation_error",
+        details: err?.errors || String(err?.message || ""),
+      });
+    }
+    // diğerleri → 500 (detay loglarda)
+    return res.status(500).json({
+      success: false,
+      message: "internal_error",
+      details: String(err?.message || ""),
+    });
   }
 }

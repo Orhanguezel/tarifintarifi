@@ -3,8 +3,8 @@
 
 import React, { useRef } from "react";
 import { Provider as ReduxProvider } from "react-redux";
-import type { AppStore } from "@/store";
-import { makeStore } from "@/store";
+import type { AppStore } from "@/store/makeStore";
+import { makeStore } from "@/store/makeStore";
 import { ThemeProvider } from "styled-components";
 import classicTheme from "@/styles/classicTheme";
 import { GlobalStyle } from "@/styles/GlobalStyle";

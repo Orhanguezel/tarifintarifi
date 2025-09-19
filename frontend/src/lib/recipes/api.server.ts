@@ -1,4 +1,3 @@
-// src/lib/recipes/api.server.ts
 import type { Recipe } from "@/lib/recipes/types";
 import { getLangHeaders } from "@/lib/http";
 import { getServerApiBaseAbsolute } from "@/lib/server/http";
@@ -19,13 +18,16 @@ const TAG_VIEW_FIELDS = [
   "nutrition.calories",
   "difficulty","dietFlags","allergenFlags",
   "reactionTotals.like","commentCount","ratingAvg",
-  "createdAt","updatedAt"
+  "createdAt","updatedAt",
 ].join(" ");
 
 type SuccessData<T> = { success: true; data: T; message?: string };
 
-async function buildApiUrl(path: string, params?: Record<string, string | number | undefined>): Promise<URL> {
-  const base = await getServerApiBaseAbsolute();
+async function buildApiUrl(
+  path: string,
+  params?: Record<string, string | number | undefined>
+): Promise<URL> {
+  const base = await getServerApiBaseAbsolute(); // e.g. "https://site.com/api"
   const url = new URL(path.replace(/^\/+/, ""), base.endsWith("/") ? base : base + "/");
   if (params) {
     for (const [k, v] of Object.entries(params)) {
@@ -35,7 +37,11 @@ async function buildApiUrl(path: string, params?: Record<string, string | number
   return url;
 }
 
-async function fetchApi(url: URL | string, locale: string, opts?: { revalidate?: number; timeoutMs?: number }) {
+async function fetchApi(
+  url: URL | string,
+  locale: string,
+  opts?: { revalidate?: number; timeoutMs?: number }
+) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), opts?.timeoutMs ?? DEFAULT_TIMEOUT_MS);
   try {
@@ -49,7 +55,11 @@ async function fetchApi(url: URL | string, locale: string, opts?: { revalidate?:
   }
 }
 
-export async function getRecipeBySlug(locale: string, slug: string, opts?: { revalidate?: number }): Promise<Recipe | null> {
+export async function getRecipeBySlug(
+  locale: string,
+  slug: string,
+  opts?: { revalidate?: number }
+): Promise<Recipe | null> {
   const url = await buildApiUrl(`recipes/${encodeURIComponent(slug)}`);
   const r = await fetchApi(url, locale, { revalidate: opts?.revalidate });
   if (r.status === 404) return null;
@@ -67,11 +77,10 @@ export async function listRecipesByTag(
   const rawLimit = (opts?.limit ?? envDefault) ?? API_LIMIT_MAX;
   const limit = Math.max(1, Math.min(Number(rawLimit) || API_LIMIT_MAX, API_LIMIT_MAX));
 
-  // Backend hangi adı bekliyorsa yakalasın diye birden çok anahtar gönderiyoruz.
   const url = await buildApiUrl("recipes", {
     hl: opts?.hl,
     tag: tagKey,            // yaygın
-    tags: tagKey,           // bazı API'ler çoğul ister
+    tags: tagKey,           // alternatif
     tagKey: tagKey,         // alternatif
     tagSlug: tagKey,        // alternatif
     slugCanonical: tagKey,  // alternatif
@@ -105,8 +114,11 @@ export async function listRecipesByTagPaged(
   if (!r.ok) throw new Error(`Tag list failed: ${r.status} ${url}`);
 
   const j = (await r.json()) as PublicListResponse;
-  return { items: j?.data ?? [], meta: j?.meta ?? {
-    page, limit, total: (j?.data ?? []).length, totalPages: 1, count: (j?.data ?? []).length,
-    hasPrev: page > 1, hasNext: false
-  }};
+  return {
+    items: j?.data ?? [],
+    meta: j?.meta ?? {
+      page, limit, total: (j?.data ?? []).length, totalPages: 1,
+      count: (j?.data ?? []).length, hasPrev: page > 1, hasNext: false,
+    },
+  };
 }

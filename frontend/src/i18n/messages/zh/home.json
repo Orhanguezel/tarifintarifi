@@ -10,5 +10,13 @@
     "quick": { "title": "快速分类" }, "clear": "清除",
     "hero": {
         "h1": "找到数千个菜谱"
-    }
+    },
+    "sort.options.date_desc":"📅 新 → 旧",
+    "sort.options.date_asc":"📅 旧 → 新",
+    "sort.options.name_asc":"🔤 A → Z",
+    "sort.options.name_desc":"🔤 Z → A",
+    "sort.options.likes_desc":"❤️ 赞",
+    "sort.options.comments_desc":"💬 评论",
+    "sort.options.rating_desc":"⭐ 评分",
+    "sort.label":"排序方式"
   }

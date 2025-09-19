@@ -1,3 +1,4 @@
+// src/app/[locale]/(admin)/admin/layout.tsx
 import type { ReactNode } from "react";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import IntlProviderClient from "@/i18n/IntlProviderClient";
@@ -12,6 +13,7 @@ export default async function AdminLayout({
   children: ReactNode;
   params: Promise<{ locale: string }>;
 }) {
+  // ⬇️ params'ı burada await ediyoruz
   const { locale } = await paramsPromise;
   const loc = (locale as SupportedLocale) || "tr";
 

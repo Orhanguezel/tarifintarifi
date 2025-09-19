@@ -7,7 +7,7 @@ import {
   useToggleReactionMutation,
   useRateMutation
 } from "@/lib/reactions/api";
-import { useListRecipesQuery } from "@/lib/recipes/api";
+import { useListRecipesQuery } from "@/lib/recipes/api.client";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import type { Recipe } from "@/lib/recipes/types";
 import { EMOJI_TO_KEY } from "@/features/recipes/components/detail/shared/constants";

@@ -10,5 +10,13 @@
     "quick": { "title": "Categorie rapide" }, "clear": "Pulisci",
     "hero": {
         "h1": "Trova migliaia di ricette"
-    }
+    },
+    "sort.options.date_desc":"📅 Nuove → Vecchie",
+    "sort.options.date_asc":"📅 Vecchie → Nuove",
+    "sort.options.name_asc":"🔤 A → Z",
+    "sort.options.name_desc":"🔤 Z → A",
+    "sort.options.likes_desc":"❤️ Mi piace",
+    "sort.options.comments_desc":"💬 Commenti",
+    "sort.options.rating_desc":"⭐ Valutazione",
+    "sort.label":"Ordina per"
   }

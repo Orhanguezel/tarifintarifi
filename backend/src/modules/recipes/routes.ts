@@ -12,7 +12,6 @@ import {
   validateSlug,
   validateSearchQuery,
   validateSubmitRecipe,
-  apiKeyGuard
 } from "./validation";
 
 const router = express.Router();
@@ -37,7 +36,7 @@ router.get("/:slug",   detailLimiter, validateSlug,         publicGetRecipeBySlu
 // AI üretim + DB'ye kaydet (public; rate-limit zorunlu)
 router.post("/generate", generateLimiter, aiGeneratePublic);
 
-// Manuel tarif gönderme — x-api-key zorunlu
-router.post("/submit", apiKeyGuard, validateSubmitRecipe, publicSubmitRecipe);
+// Manuel tarif gönderme
+router.post("/submit", validateSubmitRecipe, publicSubmitRecipe);
 
 export default router;

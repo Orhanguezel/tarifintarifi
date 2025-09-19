@@ -8,7 +8,16 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/_next/", "/api/"], // ← iç yolları tarama
+        disallow: [
+          "/_next/",
+          "/api/",
+          "/admin/",
+          "/*/admin/",   // tr/en/... tüm locale segmentleri için
+          "/login/",
+          "/*/login/",
+          "/dashboard/",
+          "/*/dashboard/",
+        ],
       },
     ],
     sitemap: `${base}/sitemap.xml`,

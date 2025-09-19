@@ -10,5 +10,13 @@
     "quick": { "title": "فئات سريعة" }, "clear": "مسح",
     "hero": {
         "h1": "ابحث عن آلاف الوصفات"
-    }
+    },
+    "sort.options.date_desc":"📅 جديد → قديم",
+    "sort.options.date_asc":"📅 قديم → جديد",
+    "sort.options.name_asc":"🔤 أ → ي",
+    "sort.options.name_desc":"🔤 ي → أ",
+    "sort.options.likes_desc":"❤️ الإعجابات",
+    "sort.options.comments_desc":"💬 التعليقات",
+    "sort.options.rating_desc":"⭐ التقييم",
+    "sort.label":"ترتيب حسب"
   }

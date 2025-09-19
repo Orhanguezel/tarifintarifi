@@ -7,7 +7,7 @@ import {getApiBase, getLangHeaders} from "@/lib/http";
 
 export type ListMeta = {
   page: number; limit: number; total: number; totalPages: number;
-  count: number; hasPrev: boolean; hasNext: boolean;
+  count: number; hasPrev: boolean; hasNext: boolean;  sort?: string;
 };
 
 type Args = {
@@ -17,6 +17,7 @@ type Args = {
   selectedCat: string | null;
   pageSize?: number;
   initialItems: Recipe[];
+  sort?: string;
 };
 
 const absApiBase = () => {
