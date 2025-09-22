@@ -1,13 +1,16 @@
 // src/server/cloudinary.ts
 import { v2 as _cloudinary } from "cloudinary";
 
+/**
+ * Server-side Cloudinary config — tek kaynak.
+ * Not: İstemci için herhangi bir public key export etmiyoruz.
+ */
 const cloud_name =
   process.env.CLOUDINARY_CLOUD_NAME ||
-  process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME; // son çare, client değil
+  process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME; // (son çare) ama server'da beklenen: CLOUDINARY_CLOUD_NAME
 
 if (!cloud_name) {
-  // İstersen throw yerine warn atabilirsin
-  console.warn("[cloudinary] CLOUDINARY_CLOUD_NAME yok!");
+  console.warn("[cloudinary] CLOUDINARY_CLOUD_NAME tanımlı değil!");
 }
 
 _cloudinary.config({
@@ -17,4 +20,4 @@ _cloudinary.config({
   secure: true,
 });
 
-export const cloudinary = _cloudinary; // tek kaynak
+export const cloudinary = _cloudinary;

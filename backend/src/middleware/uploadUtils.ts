@@ -2,9 +2,9 @@
 import path from "path";
 import sharp from "sharp";
 import { cloudinary } from "@/server/cloudinary";
-// ⬇️ sadece klasör sabitleri; tenant yok
 import { UPLOAD_FOLDERS, type UploadFolderKey } from "./upload.constants";
 
+/** Yalnızca local kullanırken (dev) thumb/webp üretelim */
 export function shouldProcessImage() {
   return (process.env.STORAGE_PROVIDER || "local") === "local";
 }
@@ -25,11 +25,7 @@ export async function makeThumbAndWebp(fullPath: string) {
   return { thumb, webp };
 }
 
-/**
- * Local public URL’i üretir.
- * Örn: http://localhost:5019/uploads/{folder}/{filename}
- * (tenant yok)
- */
+/** Local public URL (tenant yok) */
 export function buildLocalPublicUrl(
   file: Express.Multer.File,
   folderKey: UploadFolderKey,
@@ -40,27 +36,58 @@ export function buildLocalPublicUrl(
   return `${baseUrl}/uploads/${folder}/${file.filename}`;
 }
 
-export function buildCloudinaryThumbUrl(publicId: string) {
+/** Cloudinary URL helper'ları — version-aware + delivery transforms */
+type CloudOpts = {
+  version?: number | string;
+  width?: number;
+  height?: number;
+  crop?: "fill" | "fit" | "scale" | "thumb";
+  gravity?: "auto" | "center" | "face";
+};
+
+export function buildCloudinaryMainUrl(publicId: string, opts: CloudOpts = {}) {
+  const { version } = opts;
   return cloudinary.url(publicId, {
-    transformation: [{ width: 300, crop: "scale" }],
-    format: process.env.CLOUDINARY_FORMAT || "webp",
-    secure: true,
+    version: version as any,
     resource_type: "image",
+    secure: true,
+    transformation: [{ fetch_format: "auto", quality: "auto" }],
   });
 }
 
-export function buildCloudinaryMainUrl(publicId: string) {
+export function buildCloudinaryThumbUrl(publicId: string, opts: CloudOpts = {}) {
+  const { version, width = 300, height, crop = "fill", gravity = "auto" } = opts;
   return cloudinary.url(publicId, {
-    secure: true,
+    version: version as any,
     resource_type: "image",
-    format: process.env.CLOUDINARY_FORMAT || "webp",
+    secure: true,
+    transformation: [
+      { width, ...(height ? { height } : {}), crop, gravity },
+      { fetch_format: "auto", quality: "auto" },
+    ],
   });
 }
 
-export function buildCloudinaryWebpUrl(publicId: string) {
+export function buildCloudinarySizedUrl(publicId: string, opts: CloudOpts) {
+  const { version, width, height, crop = "fill", gravity = "auto" } = opts;
   return cloudinary.url(publicId, {
-    secure: true,
+    version: version as any,
     resource_type: "image",
-    format: "webp",
+    secure: true,
+    transformation: [
+      { ...(width ? { width } : {}), ...(height ? { height } : {}), crop, gravity },
+      { fetch_format: "auto", quality: "auto" },
+    ],
+  });
+}
+
+/** Geriye dönük uyumluluk — mümkünse kullanma; f_auto yeterli. */
+export function buildCloudinaryWebpUrl(publicId: string, opts: CloudOpts = {}) {
+  const { version } = opts;
+  return cloudinary.url(publicId, {
+    version: version as any,
+    resource_type: "image",
+    secure: true,
+    transformation: [{ fetch_format: "webp", quality: "auto" }],
   });
 }

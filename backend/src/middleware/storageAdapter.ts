@@ -6,10 +6,17 @@ import path from "path";
 import fs from "fs";
 import slugify from "slugify";
 
-// ⬇️ sadece sabitler; tenant yok
-import { UPLOAD_FOLDERS, BASE_UPLOAD_DIR, type UploadFolderKey } from "./upload.constants";
+import {
+  UPLOAD_FOLDERS,
+  BASE_UPLOAD_DIR,
+  type UploadFolderKey,
+} from "./upload.constants";
 
-
+/**
+ * Not: Cloudinary'de asıl dönüştürme delivery aşamasında (f_auto, q_auto).
+ * Bu yüzden upload sırasında 'format' belirtmeyip orijinali saklıyoruz.
+ * Böylece version karmaşası ve format kilitlenmesi yaşamayız.
+ */
 export const storageAdapter = (provider: "local" | "cloudinary") => {
   if (provider === "cloudinary") {
     return new CloudinaryStorage({
@@ -26,12 +33,12 @@ export const storageAdapter = (provider: "local" | "cloudinary") => {
           file.mimetype.startsWith("image/") &&
           !file.originalname.toLowerCase().endsWith(".pdf");
 
-        // ➜ Tenant yok: {CLOUDINARY_FOLDER}/{folder}
         return {
-          folder: `${process.env.CLOUDINARY_FOLDER || "tt"}/${folder}`,
+          folder: `${process.env.CLOUDINARY_FOLDER || "uploads"}/${folder}`,
           public_id: `${safe}-${uid}`,
           resource_type: isImage ? "image" : "raw",
-          format: isImage ? (process.env.CLOUDINARY_FORMAT || "webp") : undefined,
+          // format: undefined  → orijinal formatı sakla (delivery'de f_auto,q_auto)
+          overwrite: false,
         };
       },
     });
@@ -43,7 +50,6 @@ export const storageAdapter = (provider: "local" | "cloudinary") => {
       const key: UploadFolderKey = (req as any)?.uploadType || "default";
       const folder = UPLOAD_FOLDERS[key] || UPLOAD_FOLDERS.default;
 
-      // ➜ Tenant yok: BASE_UPLOAD_DIR/{folder}
       const full = path.join(BASE_UPLOAD_DIR, folder);
       if (!fs.existsSync(full)) fs.mkdirSync(full, { recursive: true });
       cb(null, full);
