@@ -1,6 +1,8 @@
 // src/modules/admin/routes.ts
 import express from "express";
 
+import { cloudinary } from "@/server/cloudinary";
+
 // 🔐 Auth & CSRF
 import { requireAdmin } from "@/middleware/auth/requireAdmin";
 import { csrf } from "@/middleware/auth/csrf";
@@ -137,26 +139,21 @@ router.delete(
 );
 
 /* Basit diagnostic: /api/admin/recipes/diag  */
-router.get("/diag", (req, res) => {
-  const csrfCookieName = process.env.CSRF_COOKIE_NAME || "tt_csrf";
-  const hasCsrfCookie = !!req.cookies?.[csrfCookieName];
-
+router.get("/diag-cloud", (_req, res) => {
+  const cfg = cloudinary.config(); // cloud_name, api_key vs
   res.json({
-    ok: true,
-    now: new Date().toISOString(),
-    nodeEnv: process.env.NODE_ENV,
-    storageProvider: process.env.STORAGE_PROVIDER || "local",
-    cloudinary: {
-      cloudName: process.env.CLOUDINARY_CLOUD_NAME || null,
-      hasKey: !!process.env.CLOUDINARY_API_KEY,
-      hasSecret: !!process.env.CLOUDINARY_API_SECRET,
-      folder: process.env.CLOUDINARY_FOLDER || null,
+    STORAGE_PROVIDER: process.env.STORAGE_PROVIDER || null,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || null,
+    hasKey: !!process.env.CLOUDINARY_API_KEY,
+    hasSecret: !!process.env.CLOUDINARY_API_SECRET,
+    CLOUDINARY_FOLDER: process.env.CLOUDINARY_FOLDER || null,
+    cloudinaryConfigSeenBySDK: {
+      cloud_name: cfg.cloud_name || null,
+      api_key: cfg.api_key ? "present" : "missing",
+      secure: cfg.secure ?? null,
     },
-    csrf: {
-      cookieName: csrfCookieName,
-      hasCookie: hasCsrfCookie,
-      note: "GET isteklerinde token zorunlu değil; yazma methodlarında kontrol edilir.",
-    },
+    nodeEnv: process.env.NODE_ENV || null,
+    pid: process.pid,
   });
 });
 
