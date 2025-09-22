@@ -1,9 +1,10 @@
 "use client";
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { axiosBaseQuery } from "@/lib/rtk/axiosBaseQuery";
 import type { Recipe, RecipeImage, Translated } from "@/lib/recipes/types";
 import type { SupportedLocale } from "@/types/common";
-import { getApiBase, getLangHeaders, getClientCsrfToken } from "@/lib/http";
+import { getLangHeaders, getClientCsrfToken } from "@/lib/http";
 
 /* ---------- Public Request args ---------- */
 export type ListRecipesArgs = {
@@ -109,9 +110,6 @@ const normalizeCategoryKeyFE = (v: string) =>
     .replace(/^-|-$/g, "");
 const MAX_PUBLIC_LIST = Number(process.env.NEXT_PUBLIC_RECIPES_PUBLIC_LIST_MAX ?? 120);
 
-/** Client HER ZAMAN relatif base kullanır (örn: "/api/"). */
-const BASE = getApiBase().replace(/\/+$/, "") + "/";
-
 /** Backend bazen {success,data} zarflı döner; tek noktadan aç. */
 const unwrap = <T,>(resp: any): T =>
   resp && typeof resp === "object" && "data" in resp ? (resp.data as T) : (resp as T);
@@ -126,6 +124,11 @@ const jsonString = (v: unknown) => JSON.stringify(v ?? {});
 function buildRecipeFormData(input: AdminRecipeCommon, includeCsrf = true): FormData {
   const fd = new FormData();
 
+  // --- NEW: slug'lar
+  appendIf(fd, "slugCanonical", input.slugCanonical as any);
+  if (input.slug) fd.append("slug", JSON.stringify(input.slug));
+
+  // translated alanlar
   if (input.title)       fd.append("title", jsonString(input.title));
   if (input.description) fd.append("description", jsonString(input.description));
 
@@ -181,45 +184,10 @@ function buildRecipeFormData(input: AdminRecipeCommon, includeCsrf = true): Form
   return fd;
 }
 
-/* ---------- API Slice ---------- */
+/* ---------- API Slice (axios base) ---------- */
 export const recipesApi = createApi({
   reducerPath: "recipesApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE,
-    credentials: "include", // admin akışı için kalsın; public uçlarda tek tek 'omit' ediyoruz.
-    prepareHeaders: (headers, { endpoint, type }) => {
-      headers = headers || {};
-
-      // ---- CSRF sadece admin mutasyonlarında ----
-      const adminMutationsNeedingCsrf = new Set([
-        "adminCreateRecipe",
-        "adminUpdateRecipe",
-        "adminPatchStatus",
-        "adminDeleteRecipe",
-        "adminAddImages",
-        "adminRemoveImage",
-        "adminUpdateImageMeta",
-        "adminReorderImages",
-        "adminSetCoverImage",
-      ]);
-
-      const shouldAttachCsrf = type === "mutation" && adminMutationsNeedingCsrf.has(endpoint);
-
-      if (shouldAttachCsrf) {
-        const c = getClientCsrfToken();
-        if (c?.token) {
-          headers.set("x-csrf-token", c.token);
-          headers.set("X-CSRF-Token", c.token);
-          headers.set("x-xsrf-token", c.token);
-          headers.set("X-XSRF-TOKEN", c.token);
-          headers.set("csrf-token", c.token);
-        }
-        headers.set("X-Requested-With", "XMLHttpRequest");
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: axiosBaseQuery(),
   tagTypes: ["AdminRecipe", "AdminRecipeList"],
   endpoints: (builder) => ({
     /* ====== PUBLIC ====== */
@@ -238,8 +206,9 @@ export const recipesApi = createApi({
         if (fields) params.set("fields", fields);
         return {
           url: `recipes?${params.toString()}`,
+          method: "GET",
           headers: getLangHeaders(locale),
-          credentials: "omit", // ⬅️ cookie yok
+          withCredentials: false,
         };
       },
       transformResponse: (resp: PublicListResponse | any) => unwrap<PublicListResponse>(resp).data,
@@ -258,8 +227,9 @@ export const recipesApi = createApi({
         params.set("limit", String(safeLimit));
         return {
           url: `recipes/search?${params.toString()}`,
+          method: "GET",
           headers: getLangHeaders(locale),
-          credentials: "omit", // ⬅️
+          withCredentials: false,
         };
       },
       transformResponse: (resp: SuccessData<Partial<Recipe>[]> | any) => unwrap<Partial<Recipe>[]>(resp),
@@ -268,8 +238,9 @@ export const recipesApi = createApi({
     getRecipeBySlug: builder.query<Recipe, GetBySlugArgs>({
       query: ({ slug, locale }) => ({
         url: `recipes/${encodeURIComponent(slug)}`,
+        method: "GET",
         headers: getLangHeaders(locale),
-        credentials: "omit", // ⬅️
+        withCredentials: false,
       }),
       transformResponse: (resp: SuccessData<Recipe> | any) => unwrap<Recipe>(resp),
     }),
@@ -279,8 +250,8 @@ export const recipesApi = createApi({
         url: `recipes/generate`,
         method: "POST",
         headers: { ...getLangHeaders(locale), "Content-Type": "application/json" },
-        body,
-        credentials: "omit", // ⬅️
+        data: body,
+        withCredentials: false,
       }),
       transformResponse: (resp: SuccessData<Recipe> | any) => unwrap<Recipe>(resp),
     }),
@@ -290,8 +261,8 @@ export const recipesApi = createApi({
         url: `recipes/submit`,
         method: "POST",
         headers: { ...getLangHeaders(locale), "Content-Type": "application/json" },
-        body,
-        credentials: "omit", // ⬅️
+        data: body,
+        withCredentials: false,
       }),
       transformResponse: (resp: SuccessData<Recipe> | any) => unwrap<Recipe>(resp),
     }),
@@ -306,7 +277,7 @@ export const recipesApi = createApi({
         if (args?.status) params.set("status", args.status);
         if (args?.tag)    params.set("tag", args.tag);
         if (args?.category) params.set("category", normalizeCategoryKeyFE(args.category));
-        return { url: `admin/recipes?${params.toString()}` };
+        return { url: `admin/recipes?${params.toString()}`, method: "GET" };
       },
       transformResponse: (resp: any) => {
         const v = unwrap<any>(resp);
@@ -322,7 +293,7 @@ export const recipesApi = createApi({
     }),
 
     adminGetRecipe: builder.query<Recipe, string>({
-      query: (id) => ({ url: `admin/recipes/${encodeURIComponent(id)}` }),
+      query: (id) => ({ url: `admin/recipes/${encodeURIComponent(id)}`, method: "GET" }),
       transformResponse: (resp: any) => unwrap<Recipe>(resp),
       providesTags: (_r, _e, id) => [{ type: "AdminRecipe", id }],
     }),
@@ -330,7 +301,7 @@ export const recipesApi = createApi({
     adminCreateRecipe: builder.mutation<{ id: string }, AdminCreateArgs>({
       query: ({ data }) => {
         const fd = buildRecipeFormData(data, true);
-        return { url: `admin/recipes`, method: "POST", body: fd };
+        return { url: `admin/recipes`, method: "POST", data: fd };
       },
       transformResponse: (resp: any) => {
         const v = unwrap<any>(resp);
@@ -342,7 +313,7 @@ export const recipesApi = createApi({
     adminUpdateRecipe: builder.mutation<Recipe, AdminUpdateArgs>({
       query: ({ id, data }) => {
         const fd = buildRecipeFormData(data, true);
-        return { url: `admin/recipes/${encodeURIComponent(id)}`, method: "PUT", body: fd };
+        return { url: `admin/recipes/${encodeURIComponent(id)}`, method: "PUT", data: fd };
       },
       transformResponse: (resp: any) => unwrap<Recipe>(resp),
       invalidatesTags: (_r, _e, a) => [
@@ -352,9 +323,12 @@ export const recipesApi = createApi({
     }),
 
     adminPatchStatus: builder.mutation<{ id: string; isPublished: boolean; publishedAt: string | null }, AdminPatchStatusArgs>({
-      query: ({ id, isPublished }) => {
-        return { url: `admin/recipes/${encodeURIComponent(id)}/status`, method: "PATCH", headers: { "Content-Type": "application/json" }, body: { isPublished } };
-      },
+      query: ({ id, isPublished }) => ({
+        url: `admin/recipes/${encodeURIComponent(id)}/status`,
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        data: { isPublished },
+      }),
       transformResponse: (resp: any) => unwrap<{ id: string; isPublished: boolean; publishedAt: string | null }>(resp),
       invalidatesTags: (_r, _e, a) => [
         { type: "AdminRecipe", id: a.id },
@@ -374,7 +348,7 @@ export const recipesApi = createApi({
         for (const f of files) fd.append("images", f);
         const c = getClientCsrfToken();
         if (c?.token) fd.append("_csrf", c.token);
-        return { url: `admin/recipes/${encodeURIComponent(id)}/images`, method: "POST", body: fd };
+        return { url: `admin/recipes/${encodeURIComponent(id)}/images`, method: "POST", data: fd };
       },
       transformResponse: (resp: any) => unwrap<{ ok: true; added: RecipeImage[]; images: RecipeImage[] }>(resp),
       invalidatesTags: (_r, _e, a) => [{ type: "AdminRecipe", id: a.id }],
@@ -398,7 +372,7 @@ export const recipesApi = createApi({
         return {
           url: `admin/recipes/${encodeURIComponent(id)}/images/${encodeURIComponent(publicId)}`,
           method: "PATCH",
-          body: fd,
+          data: fd,
         };
       },
       transformResponse: (resp: any) => unwrap<{ ok: true; image: RecipeImage }>(resp),
@@ -411,7 +385,7 @@ export const recipesApi = createApi({
         fd.append("order", JSON.stringify(order));
         const c = getClientCsrfToken();
         if (c?.token) fd.append("_csrf", c.token);
-        return { url: `admin/recipes/${encodeURIComponent(id)}/images/reorder`, method: "PATCH", body: fd };
+        return { url: `admin/recipes/${encodeURIComponent(id)}/images/reorder`, method: "PATCH", data: fd };
       },
       transformResponse: (resp: any) => unwrap<{ ok: true; images: RecipeImage[] }>(resp),
       invalidatesTags: (_r, _e, a) => [{ type: "AdminRecipe", id: a.id }],
@@ -422,10 +396,13 @@ export const recipesApi = createApi({
         const c = getClientCsrfToken();
         const headers: Record<string, string> = {};
         if (c?.token) {
-          headers["x-csrf-token"] = c.token;
           headers["X-CSRF-Token"] = c.token;
         }
-        return { url: `admin/recipes/${encodeURIComponent(id)}/cover/${encodeURIComponent(publicId)}`, method: "PATCH", headers };
+        return {
+          url: `admin/recipes/${encodeURIComponent(id)}/cover/${encodeURIComponent(publicId)}`,
+          method: "PATCH",
+          headers,
+        };
       },
       transformResponse: (resp: any) => unwrap<{ ok: true; images: RecipeImage[] }>(resp),
       invalidatesTags: (_r, _e, a) => [{ type: "AdminRecipe", id: a.id }],

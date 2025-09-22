@@ -65,8 +65,10 @@ export function usePagedRecipes({
         if (selectedCat) url.searchParams.set("category", selectedCat);
 
         const res = await fetch(url.toString(), {
-          headers: getLangHeaders(locale),
-          signal: controller.signal,
+         headers: getLangHeaders(locale),
+         signal: controller.signal,
+        credentials: "omit",
+        cache: "no-store",
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 

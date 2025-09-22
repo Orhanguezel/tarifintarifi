@@ -1,6 +1,8 @@
+// src/features/recipes/components/detail/RecipeDetailView.tsx
 "use client";
 
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import type { Recipe as RecipeType } from "@/lib/recipes/types";
 import { tPick, buildJsonLd } from "./shared/utils";
@@ -8,7 +10,7 @@ import { Wrap, PageCard, Divider, ContentGrid, Article, Aside } from "./shared/p
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
 
 import TopBreadcrumbs from "./parts/TopBreadcrumbs";
-import Hero from "./parts/Hero";
+import Hero from "./parts/Hero";               // ⬅ Hero optimize edilmiştir (aşağıda)
 import Title from "./parts/Title";
 import MetaBadges from "./parts/MetaBadges";
 import Description from "./parts/Description";
@@ -16,14 +18,21 @@ import Cuisines from "./parts/Cuisines";
 import ReactionsBar from "./parts/ReactionsBar";
 import StatsRow from "./parts/StatsRow";
 
-import IngredientsCard from "./parts/cards/IngredientsCard";
-import StepsCard from "./parts/cards/StepsCard";
-import TipsCard from "./parts/cards/TipsCard";
-import CommentsCard from "./parts/cards/CommentsCard";
-import NutritionCard from "./parts/cards/NutritionCard";
-import TagsCard from "./parts/cards/TagsCard";
-import AllergenDietCard from "./parts/cards/AllergenDietCard";
-import RelatedListCard from "./parts/cards/RelatedListCard";
+// Ağır/etkileşimli kartları dinamik yükle → başlangıç JS ve LCP azalır
+const IngredientsCard = dynamic(() => import("./parts/cards/IngredientsCard"), { ssr: true });
+const StepsCard = dynamic(() => import("./parts/cards/StepsCard"), { ssr: true });
+const TipsCard = dynamic(() => import("./parts/cards/TipsCard"), { ssr: true });
+
+// Yorumlar ve ilişkili liste genelde daha ağır/etkileşimlidir:
+const CommentsCard = dynamic(() => import("./parts/cards/CommentsCard"), {
+  ssr: false, loading: () => null,
+});
+const NutritionCard = dynamic(() => import("./parts/cards/NutritionCard"), { ssr: true });
+const TagsCard = dynamic(() => import("./parts/cards/TagsCard"), { ssr: true });
+const AllergenDietCard = dynamic(() => import("./parts/cards/AllergenDietCard"), { ssr: true });
+const RelatedListCard = dynamic(() => import("./parts/cards/RelatedListCard"), {
+  ssr: false, loading: () => null,
+});
 
 /* helpers */
 const prettyFromKey = (tCats: ReturnType<typeof useTranslations>, key?: string | null) => {
@@ -56,7 +65,6 @@ export default function RecipeDetailView({ data, locale }: { data: RecipeType; l
      ? (locale as SupportedLocale)
       : "en";
 
-  // BE kategoriyi hangi isimle verirse (category/categorySlug/categoryKey) yakala
   const categoryKey =
     (data as any)?.category ??
     (data as any)?.categorySlug ??
@@ -115,6 +123,8 @@ export default function RecipeDetailView({ data, locale }: { data: RecipeType; l
           <Hero
             src={data.images[0].url}
             alt={tPick(data.images[0].alt as any, locale) || title}
+            // LCP adayı → yüksek öncelik
+            priority
           />
         )}
 
@@ -131,6 +141,7 @@ export default function RecipeDetailView({ data, locale }: { data: RecipeType; l
         {desc && <Description>{desc}</Description>}
         {!!cuisines.length && <Cuisines locale={safeLocale} cuisines={cuisines} />}
 
+        {/* Etkileşimli bar: küçük ama client → üstte kalabilir */}
         <ReactionsBar recipeId={recipeId} data={data} tCommon={tCommon} />
         <StatsRow data={data} />
 
@@ -141,6 +152,7 @@ export default function RecipeDetailView({ data, locale }: { data: RecipeType; l
             <IngredientsCard tRD={tRD} items={ingredients} />
             <StepsCard tRD={tRD} items={steps} />
             {!!tips.length && <TipsCard tRD={tRD} items={tips} />}
+            {/* Yorumlar: ağır/etkileşimli → sonradan yüklensin */}
             <CommentsCard recipeId={recipeId} />
           </Article>
 
@@ -150,6 +162,7 @@ export default function RecipeDetailView({ data, locale }: { data: RecipeType; l
             )}
             {!!data.tags?.length && <TagsCard tRD={tRD} tags={data.tags} locale={locale} />}
             <AllergenDietCard data={data} locale={locale} />
+            {/* Related list: genelde görsel + liste → dinamik yüklensin */}
             <RelatedListCard data={data} locale={safeLocale} />
           </Aside>
         </ContentGrid>

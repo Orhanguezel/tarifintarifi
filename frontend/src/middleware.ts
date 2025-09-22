@@ -1,13 +1,18 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
+import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
+import { KNOWN_RTL } from "./i18n/locale-helpers";
 
-const SUPPORTED = ["tr","en","fr","de","it","pt","ar","ru","zh","hi"] as const;
-const DEFAULT_LOCALE = "tr";
+const DEFAULT_LOCALE: SupportedLocale =
+  (process.env.NEXT_PUBLIC_DEFAULT_LOCALE as SupportedLocale) || "tr";
+
+const isSupported = (x?: string | null): x is SupportedLocale =>
+  !!x && (SUPPORTED_LOCALES as readonly string[]).includes(x as any);
 
 export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
-  // 1) Statik ve SEO yollarını net dışla
+  // 1) statik/seo yolları
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -17,33 +22,57 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/fonts") ||
     pathname === "/favicon.ico" ||
     pathname === "/robots.txt" ||
-    /^\/sitemap(\-\w+)?\.xml$/.test(pathname) // /sitemap.xml, /sitemap-index.xml, /sitemap-1.xml
+    /^\/sitemap(\-\w+)?\.xml$/.test(pathname)
   ) {
     return NextResponse.next();
   }
 
-  // 2) Zaten locale prefix varsa geç
-  const hasLocale = SUPPORTED.some(
+  // 2) prefix kontrolü
+  const hasLocalePrefix = SUPPORTED_LOCALES.some(
     (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`)
   );
-  if (hasLocale) return NextResponse.next();
 
-  // 3) Locale cookie -> yoksa DEFAULT
-  const cookieLocale = req.cookies.get("NEXT_LOCALE")?.value;
-  const locale = (SUPPORTED as readonly string[]).includes(cookieLocale || "")
-    ? (cookieLocale as typeof SUPPORTED[number])
-    : DEFAULT_LOCALE;
+  if (!hasLocalePrefix) {
+    // 3a) prefix yok → cookie ya da default ile redirect + cookie SET!
+    const cookieLocale = req.cookies.get("NEXT_LOCALE")?.value;
+    const locale: SupportedLocale = isSupported(cookieLocale) ? cookieLocale! : DEFAULT_LOCALE;
 
-  const url = req.nextUrl.clone();
-  url.pathname = `/${locale}${pathname}`;
-  url.search = search;
-  return NextResponse.redirect(url, 307);
+    const url = req.nextUrl.clone();
+    url.pathname = `/${locale}${pathname}`;
+    url.search = search;
+
+    const res = NextResponse.redirect(url, 307);
+    res.cookies.set("NEXT_LOCALE", locale, {
+      path: "/",
+      sameSite: "lax",
+      httpOnly: false,
+    });
+    return res;
+  }
+
+  // 3b) prefix var → locale/dir çıkar
+  const seg1 = (pathname.split("/")[1] || "").toLowerCase();
+  const locale: SupportedLocale = isSupported(seg1) ? (seg1 as SupportedLocale) : DEFAULT_LOCALE;
+  const dir = KNOWN_RTL.has(locale) ? "rtl" : "ltr";
+
+  // 4) istek header’larına enjekte et
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-locale", locale);
+  requestHeaders.set("x-dir", dir);
+
+  // 5) ve cookie’yi HER istekte taze tut
+  const res = NextResponse.next({ request: { headers: requestHeaders } });
+  res.cookies.set("NEXT_LOCALE", locale, {
+    path: "/",
+    sameSite: "lax",
+    httpOnly: false,
+  });
+
+  return res;
 }
 
 export const config = {
-  // Aynı dışlama mantığını matcher’da da uygula (performans)
   matcher: [
-    // her şeyi yakala fakat şu desenleri hariç tut
     "/((?!_next|api|assets|static|images|fonts|favicon.ico|robots.txt|sitemap\\.xml|sitemap-.*\\.xml).*)",
   ],
 };

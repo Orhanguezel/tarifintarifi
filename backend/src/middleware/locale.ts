@@ -1,3 +1,4 @@
+// src/middleware/locale.ts
 import type { Request, Response, NextFunction } from "express";
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type SupportedLocale } from "@/config/locales";
 import { tFactory } from "@/i18n";

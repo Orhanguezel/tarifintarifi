@@ -40,10 +40,23 @@ function setTranslated(
 ) {
   const base = (prev || {}) as Record<SupportedLocale, string>;
   const next = { ...base, [locale]: value };
-  Object.keys(next).forEach((k) => {
-    if (!next[k as SupportedLocale]) delete next[k as SupportedLocale];
+  (Object.keys(next) as SupportedLocale[]).forEach((k) => {
+    if (!next[k]) delete next[k];
   });
   return next;
+}
+
+// URL-safe slug üretimi
+function slugify(s: string): string {
+  return String(s || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 /* ================= component ================= */
@@ -67,6 +80,8 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
   // ---- temel state
   const [title, setTitle] = useState<Translated>(initial?.title ?? {});
   const [description, setDescription] = useState<Translated>(initial?.description ?? {});
+  const [slugCanonical, setSlugCanonical] = useState<string>(initial?.slugCanonical ?? "");
+  const [slug, setSlug] = useState<Translated>((initial?.slug as Translated) ?? {});
 
   const [category, setCategory] = useState<string>(initial?.category ?? "");
   const [servings, setServings] = useState<number | undefined>(initial?.servings);
@@ -125,13 +140,14 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
     () => existing.map((img) => img.publicId || img.url).filter(Boolean) as string[],
     [existing]
   );
-
   const removedKeys = useMemo(
     () => removedExisting.map((r) => r.publicId || r.url).filter(Boolean) as string[],
     [removedExisting]
   );
 
   const payloadBase: Partial<Recipe> = {
+    slugCanonical: slugCanonical || undefined,
+    slug: (slug && Object.keys(slug).length ? slug : undefined) as any,
     title,
     description,
     category: category || undefined,
@@ -189,15 +205,15 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
         onDone();
       }
     } catch (err: any) {
-  const msg =
-    err?.data?.message ||
-    err?.data?.error ||
-    err?.error ||
-    err?.message ||
-    "Kaydetme başarısız.";
-  console.error("Recipe save failed:", err);
-  alert(msg);
-}
+      const msg =
+        err?.data?.message ||
+        err?.data?.error ||
+        err?.error ||
+        err?.message ||
+        "Kaydetme başarısız.";
+      console.error("Recipe save failed:", err);
+      alert(msg);
+    }
   }
 
   async function togglePublish() {
@@ -207,15 +223,18 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
         setPublished(next);
         await patchStatus({ id: initial._id, isPublished: next }).unwrap();
       } catch (e: any) {
-  setPublished((v) => !v);
-  const msg = e?.data?.message || e?.data?.error || e?.message || "Yayın durumunu güncelleyemedik.";
-  alert(msg);
-}
+        setPublished((v) => !v);
+        const msg = e?.data?.message || e?.data?.error || e?.message || "Yayın durumunu güncelleyemedik.";
+        alert(msg);
+      }
     }
   }
 
-  /* ====== JSON Kombine (About benzeri) ====== */
-  const combinedJSONValue = useMemo(() => ({ title, description }), [title, description]);
+  /* ====== JSON Kombine (başlık + açıklama) ====== */
+  const combinedJSONValue = useMemo(
+    () => ({ title, description }),
+    [title, description]
+  );
   const onCombinedJSONChange = (v: any) => {
     const toTL = (val: any, lang: SupportedLocale): Translated =>
       val && typeof val === "object" && !Array.isArray(val)
@@ -227,6 +246,14 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
     setDescription(toTL(v?.description, uiLang));
   };
 
+  /* ====== slug yardımcıları ====== */
+  function autofillCurrentLocaleSlug() {
+    const base = (title as any)?.[uiLang] || "";
+    const s = slugify(base);
+    setSlug((prev) => setTranslated(prev as any, uiLang, s));
+  }
+
+  /* ---------- render ---------- */
   return (
     <Form onSubmit={handleSubmit} autoComplete="off" noValidate>
       {/* Düzen Modu */}
@@ -249,8 +276,43 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
         </ModeBtn>
       </ModeRow>
 
+      {/* ---- SLUGLAR ---- */}
+      <BlockTitle>Adresler (Slug)</BlockTitle>
+
+      <Label>Canonical Slug (dil bağımsız)</Label>
+      <Input
+        placeholder="ör. mercimek-corbasi"
+        value={slugCanonical || ""}
+        onChange={(e) => setSlugCanonical(slugify(e.target.value))}
+      />
+      <SmallRow>
+        <small>
+          Canonical slug boşsa arama motorları için dil bazlı slug’lar kullanılır.
+          Canonical her dilde aynı ürünü temsil eden “genel” slug’dır.
+        </small>
+      </SmallRow>
+
       {editMode === "simple" ? (
         <>
+          {/* SADECE GEÇERLİ DİLİN SLUG’U */}
+          <Label>Slug ({uiLang})</Label>
+          <Input
+            placeholder={`slug (${uiLang})`}
+            value={(slug as any)?.[uiLang] || ""}
+            onChange={(e) =>
+              setSlug((prev) => setTranslated(prev as any, uiLang, slugify(e.target.value)))
+            }
+          />
+          <ButtonsRow>
+            <BtnLight type="button" onClick={autofillCurrentLocaleSlug}>
+              Bu dil için otomatik slug
+            </BtnLight>
+            <BtnLight type="button" onClick={() => setEditMode("json")}>
+              Tüm dilleri düzenle (JSON)
+            </BtnLight>
+          </ButtonsRow>
+
+          {/* Başlık / açıklama – sadece aktif dil */}
           <Label>Başlık ({uiLang})</Label>
           <Input
             placeholder={`Başlık (${uiLang})`}
@@ -262,11 +324,23 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
           <Textarea
             placeholder={`Açıklama (${uiLang})`}
             value={(description as any)?.[uiLang] || ""}
-            onChange={(e) => setDescription((prev) => setTranslated(prev as any, uiLang, e.target.value))}
+            onChange={(e) =>
+              setDescription((prev) => setTranslated(prev as any, uiLang, e.target.value))
+            }
           />
         </>
       ) : (
         <>
+          {/* JSON MODU: TÜM DİL SLUG’LARI */}
+          <Label>Sluglar (JSON)</Label>
+          <JSONEditor
+            label=""
+            value={slug}
+            onChange={(v) => setSlug(v || {})}
+            placeholder={JSON.stringify({ tr: "menemen", en: "turkish-scrambled-eggs" }, null, 2)}
+          />
+
+          {/* Başlık + açıklama JSON */}
           <Label>Başlık + Açıklama (JSON)</Label>
           <JSONEditor
             label=""
@@ -280,7 +354,7 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
       <Grid2>
         <Field>
           <Label>Kategori</Label>
-          <Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="ör. main-course" />
+          <Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="ör. breakfast" />
         </Field>
         <Field>
           <Label>Sıra</Label>
@@ -435,7 +509,6 @@ export default function RecipeForm({ mode, initial, onDone, onCancel }: Props) {
         <BtnLight type="button" onClick={onCancel}>
           İptal
         </BtnLight>
-        {/* garanti tetikleme */}
         <Btn type="button" onClick={handleSubmit} disabled={saving} aria-busy={saving}>
           {mode === "create" ? "Oluştur" : "Kaydet"}
         </Btn>
@@ -455,6 +528,12 @@ const Label = styled.label`
   font-size: ${({ theme }) => theme.fontSizes.small};
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
+const SmallRow = styled.div`
+  margin: 4px 0 -2px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 12px;
+`;
+
 const Input = styled.input`
   padding: 10px 12px;
   border-radius: ${({ theme }) => theme.radii.md};
@@ -476,26 +555,17 @@ const Grid2 = styled.div`
   display: grid;
   gap: 12px;
   grid-template-columns: 1fr 1fr;
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-  }
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
 `;
 const Grid3 = styled.div`
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(4, 1fr);
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr 1fr;
-  }
+  @media (max-width: 900px) { grid-template-columns: 1fr 1fr; }
 `;
-const ToggleWrap = styled.div`
-  display: flex;
-  align-items: center;
-`;
+const ToggleWrap = styled.div`display: flex; align-items: center;`;
 const Check = styled.input.attrs({ type: "checkbox" })``;
-const Spacer = styled.span`
-  flex: 1;
-`;
+const Spacer = styled.span`flex: 1;`;
 const BlockTitle = styled.h3`
   font-size: ${({ theme }) => theme.fontSizes.md};
   margin: ${({ theme }) => theme.spacings.sm} 0;
@@ -506,6 +576,7 @@ const Actions = styled.div`
   justify-content: flex-end;
   margin-top: 8px;
 `;
+const ButtonsRow = styled(Actions)`justify-content: flex-start; margin-top: 8px;`;
 const Btn = styled.button`
   padding: 10px 14px;
   border-radius: ${({ theme }) => theme.radii.md};

@@ -11,7 +11,10 @@
     "prebuild": "npm run typecheck",
     "test:unit": "vitest run -c vitest.config.ts",
     "test:unit:ui": "vitest --ui -c vitest.config.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "perf:audit": "node perf-audit.mjs",
+    "perf:desktop": "FORM_FACTOR=desktop node perf-audit.mjs",
+    "perf:audit:prod": "node perf-audit-prod.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.5",
@@ -30,13 +33,17 @@
     "@playwright/test": "^1.55.0",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
-    "@types/node": "^24.5.1",
+    "@types/node": "^24.5.2",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
+    "@types/testing-library__jest-dom": "^5.14.9",
     "@vitejs/plugin-react": "^5.0.3",
+    "chrome-launcher": "^1.2.0",
+    "cli-table3": "^0.6.5",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.5",
     "jsdom": "^27.0.0",
+    "lighthouse": "^12.8.2",
     "typescript": "^5.9.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4"

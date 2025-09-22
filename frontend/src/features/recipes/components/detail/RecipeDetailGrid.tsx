@@ -1,4 +1,5 @@
-"use client";
+// src/features/recipes/components/detail/RecipeDetailGrid.tsx
+// ❌ "use client" YOK (Server Component)
 
 import styled from "styled-components";
 import type { Recipe } from "@/lib/recipes/types";
@@ -19,8 +20,13 @@ export default function RecipeGrid({
 }) {
   return (
     <Grid>
-      {items.map((r) => (
-        <RecipeCard key={(r as any)._id || r.slugCanonical} r={r} locale={locale} />
+      {items.map((r, i) => (
+        <RecipeCard
+          key={(r as any)._id || r.slugCanonical}
+          r={r}
+          locale={locale}
+          isPriority={i < 2} // fold altında kalıyorsa false yapabilirsin
+        />
       ))}
     </Grid>
   );

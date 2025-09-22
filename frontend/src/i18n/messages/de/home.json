@@ -1,4 +1,5 @@
 {
+    "title": "Startseite",
     "search": { "placeholder": "Rezepte suchen…", "button": "Suchen" },
     "hint": { "label": "Tipp:", "text": "Wähle eine Kategorie oder nutze die Suche." },
     "results": { "title": "Ergebnisse" },
@@ -18,5 +19,6 @@
     "sort.options.likes_desc":"❤️ Gefällt mir",
     "sort.options.comments_desc":"💬 Kommentare",
     "sort.options.rating_desc":"⭐ Bewertung",
-    "sort.label":"Sortieren nach"
+    "sort.label":"Sortieren nach",
+    "quick.selectPlaceholder":"Kategorie auswählen"
   }

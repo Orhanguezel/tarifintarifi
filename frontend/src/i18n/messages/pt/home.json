@@ -1,4 +1,5 @@
  {
+    "title": "Página Inicial",
     "search": { "placeholder": "Buscar receitas…", "button": "Buscar" },
     "hint": { "label": "Dica:", "text": "Escolha uma categoria ou use a busca." },
     "results": { "title": "Resultados" },
@@ -18,5 +19,6 @@
     "sort.options.likes_desc":"❤️ Curtidas",
     "sort.options.comments_desc":"💬 Comentários",
     "sort.options.rating_desc":"⭐ Avaliação",
-    "sort.label":"Ordenar por"
+    "sort.label":"Ordenar por",
+    "quick.selectPlaceholder":"Selecione uma categoria"
   }

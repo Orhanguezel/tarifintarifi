@@ -364,7 +364,7 @@ export default function HomeView({
   return (
     <Container>
       {/* Tek H1 */}
-      <HeroTitle>{pageH1}</HeroTitle>
+      <HeroTitle id="page-title">{pageH1}</HeroTitle>
 
       {showLocalSearch && (
         <>

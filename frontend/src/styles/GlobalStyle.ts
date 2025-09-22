@@ -6,6 +6,8 @@ export const GlobalStyle = createGlobalStyle`
   :root { color-scheme: light; }
   *, *::before, *::after { box-sizing: border-box; }
   html, body { height: 100%; }
+
+
   body {
     margin: 0;
     font-family: ${({theme}) => theme.fonts.body};
@@ -20,5 +22,6 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     transition: color ${({theme}) => theme.transition.normal};
   }
-  a:hover { color: ${({theme}) => theme.colors.linkHover}; }
+  a:hover { color: ${({theme}) => theme.colors.linkHover}; };
+  img.__next-img { max-width: 100%; height: auto; }
 `;

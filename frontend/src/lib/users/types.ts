@@ -1,3 +1,4 @@
+// src/lib/users/types.ts
 export type UserRole = "admin" | "editor" | "viewer";
 
 export interface Me {
@@ -9,7 +10,7 @@ export interface Me {
 export interface LoginResult {
   email: string;
   role: UserRole;
-  /** BE login response’unda dönüyorsun */
+  /** Opsiyonel: BE login response’unda dönüyorsun */
   at?: string;
   csrf?: string;
 }

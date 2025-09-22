@@ -1,5 +1,4 @@
 // src/layout/Navbar.tsx
-
 "use client";
 
 import { useMemo, useState } from "react";
@@ -9,18 +8,7 @@ import styled from "styled-components";
 import { useTranslations } from "next-intl";
 import type { SupportedLocale } from "@/types/common";
 import { useTopRecipeCategories } from "@/hooks/useTopRecipeCategories";
-
-/* -------- helpers -------- */
-// FE tarafında kategori normalize — BE validator ile uyumlu
-const normalizeCat = (v: string) =>
-  String(v || "")
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+import { getCategoryIcon } from "@/lib/recipes/categories";
 
 const titleCaseFromSlug = (slug: string) => {
   const s = String(slug || "").replace(/[_-]+/g, " ").trim();
@@ -31,19 +19,17 @@ type Props = { locale: SupportedLocale; showSearch?: boolean };
 
 export default function Navbar({ locale, showSearch = true }: Props) {
   const router = useRouter();
-
   const t = useTranslations("navbar");
   const tCats = useTranslations("categories");
 
-  // Arama
   const [q, setQ] = useState("");
 
-  // Top-5 kategori (reçetelerde en çok geçen)
+  // İlk 5 (içi dolu → çoktan aza) kategori
   const { top, loading } = useTopRecipeCategories(locale, 300, 5);
 
-  // Nav’da kullanılacak {key,label,href}
+  // {key,label,href,icon}
   const navCats = useMemo(() => {
-    const keys = top.map((c) => normalizeCat(c.key));
+    const keys = top.map((c) => c.key).filter(Boolean);
     return keys.map((key) => {
       let label = "";
       try {
@@ -51,16 +37,19 @@ export default function Navbar({ locale, showSearch = true }: Props) {
         if (tx) label = tx;
       } catch {}
       if (!label) label = titleCaseFromSlug(key);
-      // Ana sayfada render (HomeView URL paramına bakıyor)
-      const href = `/${locale}?cat=${encodeURIComponent(key)}`;
-      return { key, label, href };
+
+      return {
+        key,
+        label,
+        href: `/${locale}?cat=${encodeURIComponent(key)}`,
+      };
     });
   }, [top, locale, tCats]);
 
-  const navCatsDesktop = navCats.slice(0, 4); // sadece 4
-  const navCatsMobile = navCats.slice(0, 5);  // en fazla 5
+  // Desktop & Mobile ikisi de ilk 5’i gösterir (varsa kaç taneyse o kadar)
+  const navCatsDesktop = navCats.slice(0, 5);
+  const navCatsMobile = navCats.slice(0, 5);
 
-  // Arama submit
   const onSearch = (ev: React.FormEvent) => {
     ev.preventDefault();
     const raw = q.trim();
@@ -79,7 +68,7 @@ export default function Navbar({ locale, showSearch = true }: Props) {
             <span className="subtitle">{t("brand.subtitle")}</span>
           </Brand>
 
-          {/* desktop nav (top-5 içinden sadece 4’ü) */}
+          {/* desktop nav — max 5, sıralı */}
           <Nav aria-label={t("aria.mainMenu")}>
             {loading && navCatsDesktop.length === 0 ? (
               <SkeletonRow aria-hidden>
@@ -87,7 +76,9 @@ export default function Navbar({ locale, showSearch = true }: Props) {
               </SkeletonRow>
             ) : (
               navCatsDesktop.map((c) => (
-                <NavLink key={c.key} href={c.href}>{c.label}</NavLink>
+                <NavLink key={c.key} href={c.href}>
+                  {c.label}
+                </NavLink>
               ))
             )}
           </Nav>
@@ -105,7 +96,7 @@ export default function Navbar({ locale, showSearch = true }: Props) {
           </MobileHeaderActions>
         </HeaderInner>
 
-        {/* mobile horizontal categories — top 5 */}
+        {/* mobile horizontal categories — aynı ilk 5 */}
         <MobileCatsWrap>
           <MobileCatsInner aria-label={t("aria.categories")}>
             {loading && navCatsMobile.length === 0 ? (
@@ -116,7 +107,9 @@ export default function Navbar({ locale, showSearch = true }: Props) {
               </>
             ) : (
               navCatsMobile.map((c) => (
-                <Link key={c.key} href={c.href}>{c.label}</Link>
+                <Link key={c.key} href={c.href}>
+                  {c.label}
+                </Link>
               ))
             )}
           </MobileCatsInner>
@@ -180,6 +173,7 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(Link)`
+  display: inline-flex; align-items: center; gap: 6px;
   position: relative; font-size: ${({ theme }) => theme.fontSizes.sm}; color: ${({ theme }) => theme.colors.textLight};
   padding: 8px 10px; border-radius: ${({ theme }) => theme.radii.md}; text-decoration: none;
   transition: background ${({ theme }) => theme.transition.fast};
@@ -244,6 +238,7 @@ const MobileCatsInner = styled.nav`
   margin: 0 auto; padding: 8px 12px; display: flex; gap: 8px;
   overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin;
   a {
+    display: inline-flex; align-items: center; gap: 6px;
     white-space: nowrap; padding: 6px 10px; font-size: ${({ theme }) => theme.fontSizes.xs};
     border-radius: ${({ theme }) => theme.radii.pill};
     background: ${({ theme }) => theme.colors.inputBackgroundLight};

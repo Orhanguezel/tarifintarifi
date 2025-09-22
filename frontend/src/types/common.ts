@@ -1,4 +1,4 @@
-// src/types/recipes/common.ts
+// src/types/common.ts
 
 // 🌍 Recipes modülü için desteklenen 10 dil (tenant'a özel)
 export const SUPPORTED_LOCALES = [

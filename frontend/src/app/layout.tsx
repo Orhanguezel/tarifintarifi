@@ -1,23 +1,41 @@
-// layout.tsx
-import { headers } from "next/headers";
+// src/app/layout.tsx
+import { headers, cookies } from "next/headers";
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
+import { KNOWN_RTL } from "@/i18n/locale-helpers";
+import HtmlLangSync from "@/i18n/HtmlLangSync";
 
-const RTL_SET = new Set(["ar","fa","he","ur","ckb","ps","sd","ug","yi","dv"]);
 const isSupported = (x?: string | null): x is SupportedLocale =>
   !!x && (SUPPORTED_LOCALES as readonly string[]).includes(x as any);
 
+export const dynamic = "force-dynamic";
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const h = await headers();
+  const c = await cookies();
+
+  const fromCookie = c.get("NEXT_LOCALE")?.value || null;
   const fromHeader = h.get("x-locale");
   const fallback = (process.env.NEXT_PUBLIC_DEFAULT_LOCALE as SupportedLocale) || "tr";
-  const current: SupportedLocale = isSupported(fromHeader) ? fromHeader : fallback;
 
-  const dir = (h.get("x-dir") as "rtl" | "ltr") ?? (RTL_SET.has(current) ? "rtl" : "ltr");
+  const current: SupportedLocale =
+    (isSupported(fromCookie) && fromCookie) ||
+    (isSupported(fromHeader) && fromHeader) ||
+    fallback;
+
+  const fromDir = h.get("x-dir");
+  const dir: "rtl" | "ltr" =
+    fromDir === "rtl" || fromDir === "ltr"
+      ? (fromDir as "rtl" | "ltr")
+      : (KNOWN_RTL.has(current) ? "rtl" : "ltr");
 
   return (
     <html lang={current} dir={dir} suppressHydrationWarning>
-      <head />
-      <body suppressHydrationWarning>{children}</body>
+      {/* <head /> yok; Next metadata’yı otomatik enjekte eder */}
+      <body suppressHydrationWarning>
+        {/* SPA geçişlerinde <html lang/dir> senkron kalsın */}
+        <HtmlLangSync lang={current} dir={dir} />
+        {children}
+      </body>
     </html>
   );
 }

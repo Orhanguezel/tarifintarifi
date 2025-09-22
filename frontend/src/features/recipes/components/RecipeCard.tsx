@@ -1,6 +1,7 @@
 "use client";
 
-import styled, { css } from "styled-components";
+import Image from "next/image";
+import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Recipe, DietFlag, AllergenFlag } from "@/lib/recipes/types";
@@ -40,7 +41,7 @@ function resolveSlug(r: Recipe, locale: string): string {
   if (typeof raw === "string") return raw || r.slugCanonical || "";
   const loc = raw?.[locale];
   const en  = raw?.en || raw?.EN;
-  const first = Object.values(raw || {}).find((v) => typeof v === "string" && v.trim());
+  const first = Object.values(raw || {}).find((v) => typeof v === "string" && (v as string).trim());
   return (loc || en || (first as string) || r.slugCanonical || "").trim();
 }
 
@@ -50,7 +51,9 @@ function imageOf(r: Recipe): string | undefined {
 }
 
 /* ---------- component ---------- */
-export default function RecipeCard({ r, locale }: { r: Recipe; locale: string }) {
+export default function RecipeCard({
+  r, locale, isPriority = false,
+}: { r: Recipe; locale: string; isPriority?: boolean }) {
   const router = useRouter();
   const tc = useTranslations("common");
   const td = useTranslations("difficulty");
@@ -88,7 +91,24 @@ export default function RecipeCard({ r, locale }: { r: Recipe; locale: string })
       aria-disabled={!href}
       data-disabled={!href || undefined}
     >
-      <ImgBox $src={cover} aria-hidden>
+      <ImgWrap aria-hidden>
+        {cover ? (
+          <Image
+            src={cover}
+            alt={title}
+            width={800}              // oran: 16:9 -> 800x450 örnek
+            height={450}
+            sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+            // Sadece üstte görünen ilk/önemli kartlarda true yap:
+            priority={isPriority}
+            loading={isPriority ? "eager" : "lazy"}
+            decoding="async"
+            style={{ width: "100%", height: "auto", objectFit: "cover", display: "block" }}
+          />
+        ) : (
+          <NoImage />
+        )}
+
         <Badge>{(r.totalMinutes ?? 40)} {tc("unit.minutesShort")}</Badge>
 
         {!!flags.length && (
@@ -124,7 +144,7 @@ export default function RecipeCard({ r, locale }: { r: Recipe; locale: string })
             {moreCount > 0 && <MoreBlock>+{moreCount}</MoreBlock>}
           </AlrgStack>
         )}
-      </ImgBox>
+      </ImgWrap>
 
       <Body>
         <Title title={title}>{title}</Title>
@@ -146,14 +166,10 @@ export default function RecipeCard({ r, locale }: { r: Recipe; locale: string })
 
         <Actions>
           {href ? (
-            <Link
-              prefetch={false}
-              href={href}
-              aria-label={tc("actions.view")}
+            <Link prefetch={false} href={href} aria-label={tc("actions.view")}
               onClick={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
-              onKeyDown={(e) => e.stopPropagation()}
-            >
+              onKeyDown={(e) => e.stopPropagation()}>
               {tc("actions.view")}
             </Link>
           ) : (
@@ -181,14 +197,24 @@ const Card = styled.article`
   &[data-disabled="true"]{ cursor: default; }
 `;
 
-const ImgBox = styled.div<{ $src?: string }>`
-  position: relative; height: 140px;
+const ImgWrap = styled.div`
+ position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* opsiyonel: görsel gelmeden de sabit yükseklik */
+  overflow: hidden;
   background: linear-gradient(180deg,#eef2f7 0%,#e8eef7 100%);
-  ${({ $src }) => $src && css`
-    background-image: url(${$src});
-    background-size: cover;
-    background-position: center;
-  `}
+  border-top-left-radius: ${({ theme }) => theme.radii.lg};
+  border-top-right-radius: ${({ theme }) => theme.radii.lg};
+
+  /* “tüm sayfayı kapla” vakalarına karşı üst sınır (isteğe bağlı güvenlik ağı) */
+  max-height: 60vh;
+`;
+
+const NoImage = styled.div`
+  width: 100%;
+  /* 16:9 boş yer tutucu */
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(180deg,#eef2f7 0%,#e8eef7 100%);
 `;
 
 const FlagStack = styled.div`
