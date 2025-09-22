@@ -1,4 +1,4 @@
-// src/core/middleware/checkFileSizeMiddleware.ts
+// src/middleware/checkFileSizeMiddleware.ts
 import type { Request, Response, NextFunction } from "express";
 
 export const checkFileSizeMiddleware = (req: Request, res: Response, next: NextFunction) => {

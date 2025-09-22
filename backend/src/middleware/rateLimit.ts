@@ -1,3 +1,4 @@
+// src/middleware/rateLimit.ts
 import rateLimit from "express-rate-limit";
 
 export const apiRateLimiter = rateLimit({

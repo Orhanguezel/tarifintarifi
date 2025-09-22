@@ -1,6 +1,7 @@
+// src/middleware/uploadUtils.ts
 import path from "path";
 import sharp from "sharp";
-import { v2 as cloudinary } from "cloudinary";
+import { cloudinary } from "@/server/cloudinary";
 // ⬇️ sadece klasör sabitleri; tenant yok
 import { UPLOAD_FOLDERS, type UploadFolderKey } from "./upload.constants";
 

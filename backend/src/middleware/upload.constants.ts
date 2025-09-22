@@ -1,4 +1,4 @@
-// src/core/middleware/upload.constants.ts
+// src/middleware/upload.constants.ts
 
 /** Upload klasör anahtarları (tek kaynak) */
 export type UploadFolderKey = "recipe" | "files" | "default";

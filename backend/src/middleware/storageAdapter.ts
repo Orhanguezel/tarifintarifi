@@ -1,5 +1,6 @@
+// src/middleware/storageAdapter.ts
 import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
+import { cloudinary } from "@/server/cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import path from "path";
 import fs from "fs";
@@ -8,21 +9,14 @@ import slugify from "slugify";
 // ⬇️ sadece sabitler; tenant yok
 import { UPLOAD_FOLDERS, BASE_UPLOAD_DIR, type UploadFolderKey } from "./upload.constants";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key:    process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 export const storageAdapter = (provider: "local" | "cloudinary") => {
   if (provider === "cloudinary") {
     return new CloudinaryStorage({
       cloudinary,
       params: async (_req, file) => {
-        const folderKey = ((file as any).fieldname && "images") ? ( "default" as UploadFolderKey ) : "default";
-        // uploadType middleware’i varsa req.uploadType okunur; yoksa default
         const reqAny = _req as any;
-        const key: UploadFolderKey = reqAny?.uploadType || folderKey;
+        const key: UploadFolderKey = reqAny?.uploadType || "default";
         const folder = UPLOAD_FOLDERS[key] || UPLOAD_FOLDERS.default;
 
         const base = file.originalname.replace(/\.[^/.]+$/, "");

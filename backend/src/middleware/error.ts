@@ -1,3 +1,4 @@
+// src/middleware/error.ts
 import type { Request, Response, NextFunction } from "express";
 
 export function notFound(req: Request, res: Response) {
