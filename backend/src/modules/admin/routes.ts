@@ -136,4 +136,37 @@ router.delete(
   adminRemoveRecipeImage
 );
 
+/* Basit diagnostic: /api/admin/recipes/diag  */
+router.get("/diag", (req, res) => {
+  const csrfCookieName = process.env.CSRF_COOKIE_NAME || "tt_csrf";
+  const hasCsrfCookie = !!req.cookies?.[csrfCookieName];
+
+  res.json({
+    ok: true,
+    now: new Date().toISOString(),
+    nodeEnv: process.env.NODE_ENV,
+    storageProvider: process.env.STORAGE_PROVIDER || "local",
+    cloudinary: {
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME || null,
+      hasKey: !!process.env.CLOUDINARY_API_KEY,
+      hasSecret: !!process.env.CLOUDINARY_API_SECRET,
+      folder: process.env.CLOUDINARY_FOLDER || null,
+    },
+    csrf: {
+      cookieName: csrfCookieName,
+      hasCookie: hasCsrfCookie,
+      note: "GET isteklerinde token zorunlu değil; yazma methodlarında kontrol edilir.",
+    },
+  });
+});
+
+/* Sağlık kontrolü: /api/admin/recipes/ping */
+router.get("/ping", (_req, res) => {
+  res.json({ ok: true, pong: true, ts: Date.now() });
+});
+
+
+
+
+
 export default router;
