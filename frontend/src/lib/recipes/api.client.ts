@@ -301,7 +301,10 @@ export const recipesApi = createApi({
     adminCreateRecipe: builder.mutation<{ id: string }, AdminCreateArgs>({
       query: ({ data }) => {
         const fd = buildRecipeFormData(data, true);
-        return { url: `admin/recipes`, method: "POST", data: fd };
+        const c = getClientCsrfToken();
+      const headers: Record<string, string> = {};
+       if (c?.token) headers["X-CSRF-Token"] = c.token;
+       return { url: `admin/recipes`, method: "POST", data: fd, headers };
       },
       transformResponse: (resp: any) => {
         const v = unwrap<any>(resp);
@@ -313,7 +316,10 @@ export const recipesApi = createApi({
     adminUpdateRecipe: builder.mutation<Recipe, AdminUpdateArgs>({
       query: ({ id, data }) => {
         const fd = buildRecipeFormData(data, true);
-        return { url: `admin/recipes/${encodeURIComponent(id)}`, method: "PUT", data: fd };
+        const c = getClientCsrfToken();
+        const headers: Record<string, string> = {};
+        if (c?.token) headers["X-CSRF-Token"] = c.token;
+        return { url: `admin/recipes/${encodeURIComponent(id)}`, method: "PUT", data: fd, headers };
       },
       transformResponse: (resp: any) => unwrap<Recipe>(resp),
       invalidatesTags: (_r, _e, a) => [
@@ -346,9 +352,11 @@ export const recipesApi = createApi({
       query: ({ id, files }) => {
         const fd = new FormData();
         for (const f of files) fd.append("images", f);
-        const c = getClientCsrfToken();
-        if (c?.token) fd.append("_csrf", c.token);
-        return { url: `admin/recipes/${encodeURIComponent(id)}/images`, method: "POST", data: fd };
+       const c = getClientCsrfToken();
+       if (c?.token) fd.append("_csrf", c.token); // body’de kalsın
+       const headers: Record<string, string> = {};
+       if (c?.token) headers["X-CSRF-Token"] = c.token; // header’a da koy
+       return { url: `admin/recipes/${encodeURIComponent(id)}/images`, method: "POST", data: fd, headers };
       },
       transformResponse: (resp: any) => unwrap<{ ok: true; added: RecipeImage[]; images: RecipeImage[] }>(resp),
       invalidatesTags: (_r, _e, a) => [{ type: "AdminRecipe", id: a.id }],
