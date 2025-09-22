@@ -1,5 +1,3 @@
-// src/lib/recipes/categories.ts
-
 /** Model/AI tarafıyla hizalı kategori anahtarları */
 export const AI_CATEGORY_KEYS = [
   "breakfast","soup","salad","appetizer","snack","sandwich-wrap","main-course","side-dish",
@@ -14,7 +12,6 @@ const KEY_SET: ReadonlySet<string> = new Set<string>([...AI_CATEGORY_KEYS]);
 
 /** Küçük normalize: lower, diacritics sil, boşluk->- , ascii dışı temizle */
 function normalizeBasic(v: string): string {
-  // Bazı ortamlarda String.prototype.normalize olmayabilir; guard ekleyelim
   const lower = String(v ?? "").toLowerCase();
   const normalized = typeof lower.normalize === "function" ? lower.normalize("NFKD") : lower;
   return normalized
@@ -48,7 +45,7 @@ const ALIASES: Record<string, AICategoryKey> = {
   lamb: "meat",
   poultry: "chicken",
   "pastry-shop": "pastry",
-  cakees: "cake", // olası yazım hatası
+  cakees: "cake",
   biscuit: "cookies",
   biscuites: "cookies",
   "pudding-dessert": "pudding",

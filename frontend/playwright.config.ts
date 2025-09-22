@@ -1,4 +1,6 @@
 // playwright.config.ts
+/// <reference types="node" />
+
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = Number(process.env.PORT || 3001);

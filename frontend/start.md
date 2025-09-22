@@ -10,6 +10,16 @@ bun run dev
 
 
 
+TEST_LOCALE=de RECIPE_TEST_PATH=/de/recipes/xxx npm run test:e2e
+
+lighthous test.. 
+crom 
+bun run perf:audit
+# veya
+CHROME_PATH=/usr/bin/google-chrome bun run perf:audit
+# Chromium ise: CHROME_PATH=$(which chromium-browser)  # dağıtıma göre değişir
+
+
 
 
 #frontend  prod

@@ -1,18 +1,19 @@
+// src/lib/users/api.client.ts
 "use client";
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getApiBase, getLangHeaders } from "@/lib/http";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { axiosBaseQuery } from "@/lib/rtk/axiosBaseQuery";
+import { getLangHeaders } from "@/lib/http";
 import type { Me, LoginResult, RegisterResult, ChangePasswordPayload } from "./types";
 
-/** Client, HER ZAMAN relatif base kullanır (örn: "/api"). */
-const BASE = getApiBase().replace(/\/+$/, "") + "/";
-
+/**
+ * Bu slice axios tabanlı baseQuery kullanır.
+ * - CSRF/dil/credentials otomatik gelir (src/lib/api.ts interceptors)
+ * - İstersen endpoint özelinde header ekleyebilirsin (örn. locale override)
+ */
 export const usersApi = createApi({
   reducerPath: "usersApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE,                 // örn: "/api/"
-    credentials: "include",        // httpOnly cookie için gerekli
-  }),
+  baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
     register: builder.mutation<
       RegisterResult,
@@ -22,7 +23,8 @@ export const usersApi = createApi({
         url: "users/register",
         method: "POST",
         headers: { ...getLangHeaders(locale), "Content-Type": "application/json" },
-        body: { email, password, role },
+        data: { email, password, role },
+        // Gerekirse CSRF’i kapat: csrfDisabled: true
       }),
     }),
 
@@ -31,14 +33,17 @@ export const usersApi = createApi({
         url: "users/login",
         method: "POST",
         headers: { ...getLangHeaders(locale), "Content-Type": "application/json" },
-        body: { email, password },
+        data: { email, password },
+        // Login'de CSRF’i kapatmak istiyorsan:
+        // csrfDisabled: true,
       }),
     }),
 
     me: builder.query<Me, { locale?: string } | void>({
       query: (args) => ({
         url: "users/me",
-        headers: getLangHeaders(args?.locale || "tr"),
+        method: "GET",
+        headers: args?.locale ? getLangHeaders(args.locale) : undefined,
       }),
     }),
 
@@ -46,22 +51,24 @@ export const usersApi = createApi({
       { ok: true },
       { payload: ChangePasswordPayload; locale?: string; csrf?: string; bearer?: string }
     >({
-      query: ({ payload, locale = "tr", csrf, bearer }) => {
-        const headers: Record<string, string> = {
+      query: ({ payload, locale = "tr", csrf, bearer }) => ({
+        url: "users/change-password",
+        method: "POST",
+        headers: {
           ...getLangHeaders(locale),
           "Content-Type": "application/json",
-        };
-        if (csrf) headers["X-CSRF-Token"] = csrf;
-        if (bearer) headers["Authorization"] = `Bearer ${bearer}`;
-        return { url: "users/change-password", method: "POST", headers, body: payload };
-      },
+          ...(csrf ? { "X-CSRF-Token": csrf } : {}),
+          ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}),
+        },
+        data: payload,
+      }),
     }),
 
     refresh: builder.mutation<{ ok: true }, { locale?: string } | void>({
       query: (args) => ({
         url: "users/refresh",
         method: "POST",
-        headers: getLangHeaders(args?.locale || "tr"),
+        headers: args?.locale ? getLangHeaders(args.locale) : undefined,
       }),
     }),
 
@@ -69,7 +76,7 @@ export const usersApi = createApi({
       query: (args) => ({
         url: "users/logout",
         method: "POST",
-        headers: getLangHeaders(args?.locale || "tr"),
+        headers: args?.locale ? getLangHeaders(args.locale) : undefined,
       }),
     }),
   }),
@@ -84,4 +91,5 @@ export const {
   useLogoutMutation,
 } = usersApi;
 
+// Eğer ayrı bir isimle kullanacaksan:
 export const useRegisterAdminMutation = usersApi.useRegisterMutation;

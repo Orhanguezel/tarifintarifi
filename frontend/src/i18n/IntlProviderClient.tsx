@@ -1,3 +1,5 @@
+// src/i18n/IntlProviderClient.tsx
+
 "use client";
 
 import * as React from "react";

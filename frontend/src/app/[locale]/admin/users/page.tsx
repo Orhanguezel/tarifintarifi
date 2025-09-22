@@ -103,7 +103,9 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
       </ButtonPrimary>
 
       {isSuccess && <SuccessText>Şifre güncellendi.</SuccessText>}
-      {error && <ErrorText>Güncellenemedi. Bilgileri kontrol edin.</ErrorText>}
+      {Boolean(error) && (
+  <ErrorText>{(error as any)?.data?.error || "Şifre güncellenemedi."}</ErrorText>
+)}
     </Form>
   );
 }

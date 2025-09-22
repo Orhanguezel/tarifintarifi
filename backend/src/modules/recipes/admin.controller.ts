@@ -35,7 +35,6 @@ import { SUPPORTED_LOCALES } from "@/config/locales";
 /* ================ shared error helper ================ */
 const sendSaveError = (res: Response, err: any, fallback = "SAVE_FAILED") => {
   const msg = err?.message || err?.toString?.() || String(err);
-  // Şema/Tip hatalarını 422, diğerlerini 400 dön
   const code =
     err?.name === "ValidationError" || err?.name === "CastError" ? 422 : 400;
   return res.status(code).json({
@@ -93,6 +92,30 @@ const ensureStringArray = (v: unknown): string[] | undefined => {
   if (typeof parsed === "string")
     return parsed.split(",").map((s) => s.trim()).filter(Boolean);
   return undefined;
+};
+
+/* --- URL-safe slugify (server-side) --- */
+const slugify = (s: string): string =>
+  String(s || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+
+/* slug objesini güvenle parse + temizle */
+const ensureSlugMap = (v: unknown): TranslatedLabel | undefined => {
+  const obj = parseIfJson<Record<string, string>>(v);
+  if (!obj || typeof obj !== "object") return undefined;
+  const out: Record<string, string> = {};
+  for (const [k, val] of Object.entries(obj)) {
+    const clean = slugify(String(val || ""));
+    if (clean) out[k] = clean;
+  }
+  return Object.keys(out).length ? (out as TranslatedLabel) : undefined;
 };
 
 const DIET_FLAGS = [
@@ -233,6 +256,14 @@ async function toRecipeImageFromFile(
 function buildRecipeBodyFromForm(b: any): Partial<IRecipe> {
   const out: Partial<IRecipe> = {};
 
+  // NEW: slug'lar
+  if (typeof b.slugCanonical === "string" && b.slugCanonical.trim() !== "") {
+    out.slugCanonical = slugify(b.slugCanonical);
+  }
+  const slugTL = ensureSlugMap(b.slug);
+  if (slugTL) out.slug = slugTL;
+
+  // mevcut alanlar
   out.title = ensureTL(b.title);
   out.description = ensureTL(b.description);
 
@@ -379,8 +410,12 @@ export async function update(req: Request, res: Response) {
     const body = req.body || {};
     const patch = buildRecipeBodyFromForm(body);
 
-    if (patch.title) doc.title = mergeTL(doc.title, patch.title)!;
+    if (patch.title)       doc.title = mergeTL(doc.title, patch.title)!;
     if (patch.description) doc.description = mergeTL(doc.description, patch.description)!;
+
+    // NEW: slug ve slugCanonical
+    if (patch.slug)               doc.slug = mergeTL(doc.slug, patch.slug)!;
+    if (patch.slugCanonical !== undefined) doc.slugCanonical = patch.slugCanonical;
 
     const assignKeys: (keyof IRecipe)[] = [
       "category",
@@ -532,7 +567,6 @@ export async function remove(req: Request, res: Response) {
       }
     } catch (e) {
       console.error("[recipes.remove] media delete error:", e);
-      // medya silme hatası kritik değil, devam edelim
     }
 
     await doc.deleteOne();
@@ -642,7 +676,6 @@ export async function updateImageMeta(req: Request, res: Response) {
     if (altTL) image.alt = altTL;
     if (typeof source === "string") image.source = source.trim() || undefined;
 
-    // (alt/source) nested field – images array zaten işaretlenecek
     doc.markModified("images");
     await doc.save();
     return res.json({ ok: true, image });

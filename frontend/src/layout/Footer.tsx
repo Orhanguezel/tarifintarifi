@@ -7,20 +7,7 @@ import styled from "styled-components";
 import { useTranslations } from "next-intl";
 import type { SupportedLocale } from "@/types/common";
 import { useTopRecipeCategories } from "@/hooks/useTopRecipeCategories";
-
-// ✅ Statik import (public/ altında olmalı)
-import logoPng from "@/../public/logo.png"; // <= public/logo.png
-
-/* ---- helpers ---- */
-const normalizeCat = (v: string) =>
-  String(v || "")
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+import logoPng from "@/../public/logo.png";
 
 const titleCaseFromSlug = (slug: string) => {
   const s = String(slug || "").replace(/[_-]+/g, " ").trim();
@@ -33,25 +20,30 @@ export default function Footer({ locale = "tr" as SupportedLocale }: { locale?: 
   const base = `/${locale}`;
   const year = new Date().getFullYear();
 
+  // ilk 5, çoktan aza; hook normalize edilmiş keys döner
   const { top, loading } = useTopRecipeCategories(locale, 300, 5);
 
-  const footerCats = (top || []).map((c) => {
-    const key = normalizeCat(c.key);
-    let label = "";
-    try { label = tCats(`dynamic.${key}`) as string; } catch {}
-    if (!label) label = titleCaseFromSlug(key);
-    return { key, label, href: `/${locale}?cat=${encodeURIComponent(key)}` };
-  });
+  // yeniden normalize ETME — hook’tan gelen key zaten AI_CATEGORY_KEYS formatında
+  const footerCats = (top ?? [])
+    .slice(0, 5)
+    .map(({ key }) => {
+      let label = "";
+      try {
+        const tx = tCats(`dynamic.${key}`) as string;
+        if (tx) label = tx;
+      } catch {}
+      if (!label) label = titleCaseFromSlug(key);
+      return { key, label, href: `/${locale}?cat=${encodeURIComponent(key)}` };
+    });
 
   // ---- Logo kaynakları ----
-  const LOGO_PRIMARY: StaticImageData = logoPng;       // import’tan geliyor
-  const LOGO_FALLBACK = "/og-recipe-default.jpg";      // public/og-recipe-default.jpg
+  const LOGO_PRIMARY: StaticImageData = logoPng;
+  const LOGO_FALLBACK = "/og-recipe-default.jpg";
   const alt = (() => {
     try { return (t("brand.logoAlt") as string) || (t("brand.name") as string); }
     catch { return "Logo"; }
   })();
 
-  // onError’da src değiştirmek yerine state ile switch
   const [broken, setBroken] = React.useState(false);
 
   return (
@@ -62,19 +54,18 @@ export default function Footer({ locale = "tr" as SupportedLocale }: { locale?: 
             <LogoBox>
               <Link href={base} aria-label={t("brand.name") as string}>
                 <LogoPicture>
-  <Image
-    src={broken ? LOGO_FALLBACK : LOGO_PRIMARY}
-    alt={alt}
-    width={140}
-    height={40}
-    priority
-    unoptimized                // ← _next/image kullanmaz, direkt /logo.png döner
-    sizes="140px"
-    style={{ objectFit: "contain" }}
-    onError={() => setBroken(true)}
-  />
-</LogoPicture>
-
+                  <Image
+                    src={broken ? LOGO_FALLBACK : LOGO_PRIMARY}
+                    alt={alt}
+                    width={140}
+                    height={40}
+                    priority
+                    unoptimized
+                    sizes="140px"
+                    style={{ objectFit: "contain" }}
+                    onError={() => setBroken(true)}
+                  />
+                </LogoPicture>
               </Link>
             </LogoBox>
             <Title>{t("brand.name")}</Title>
@@ -126,6 +117,8 @@ export default function Footer({ locale = "tr" as SupportedLocale }: { locale?: 
   );
 }
 
+/* ===== styled ===== */
+
 const Foot = styled.footer`
   margin-top: 40px;
   background: ${({ theme }) => theme.colors.footerBackground};
@@ -156,15 +149,14 @@ const LogoPicture = styled.span`
   display: inline-flex;
   width: 140px;
   height: 40px;
-  align-items: center;          /* ortala */
+  align-items: center;
   justify-content: flex-start;
   img { filter: none; }
 `;
 
-
 const Muted = styled.p`
   margin: 0;
-  color: rgba(255, 255, 255, 0.88); /* ↑ kontrast */
+  color: rgba(255, 255, 255, 0.88);
   line-height: 1.6;
 `;
 
@@ -176,7 +168,7 @@ const List = styled.ul`
   li + li { margin-top: 8px; }
 
   a {
-    color: rgba(255, 255, 255, 0.96); /* ↑ kontrast */
+    color: rgba(255, 255, 255, 0.96);
     text-decoration: none;
     &:hover { text-decoration: underline; }
 
@@ -194,28 +186,25 @@ const Copy = styled.div`
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.80); /* ↑ kontrast */
+  color: rgba(255, 255, 255, 0.80);
   text-align: center;
 `;
 
 const DesignLink = styled.a`
   display: inline-block;
   margin-top: 6px;
-
-  color: rgba(255, 255, 255, 0.90);   /* ↑ kontrast */
+  color: rgba(255, 255, 255, 0.90);
   font-size: ${({ theme }) => theme.fontSizes.small};
   font-style: italic;
   text-align: center;
-  text-decoration: underline;         /* altı çizgili baştan */
+  text-decoration: underline;
   transition: opacity ${({ theme }) => theme.transition.fast};
 
   @media (max-width: 600px) {
     margin-bottom: 44px;
   }
 
-  &:hover {
-    opacity: 1;
-  }
+  &:hover { opacity: 1; }
   &:focus-visible {
     outline: 2px solid rgba(255,255,255,0.95);
     outline-offset: 2px;

@@ -1,4 +1,5 @@
 {
+    "title": "Home",
     "search": { "placeholder": "Search recipes…", "button": "Search" },
     "hint": { "label": "Hint:", "text": "Pick a category or use the search box." },
     "results": { "title": "Results" },
@@ -19,5 +20,6 @@
     "sort.options.likes_desc":"❤️ Likes",
     "sort.options.comments_desc":"💬 Comments",
     "sort.options.rating_desc":"⭐ Rating",
-    "sort.label":"Sort by"
+    "sort.label":"Sort by",
+    "quick.selectPlaceholder":"Select a category"
 }

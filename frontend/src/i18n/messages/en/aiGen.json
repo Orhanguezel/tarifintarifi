@@ -1,57 +1,57 @@
 {
   "aiGen": {
-    "head": { "title": "AI ile Tarif Oluştur" },
+    "head": { "title": "Create a Recipe with AI" },
     "prompt": {
-      "label": "İstek (prompt)",
-      "placeholder": "Ne istediğini kısa ama net yaz: \"4 kişilik, Türk mutfağı; fırınsız; 25 dk; tavuk yok; detaylı 8–12 adım.\""
+      "label": "Request (prompt)",
+      "placeholder": "Write what you want briefly but clearly: \"For 4 people, Turkish cuisine; no oven; 25 min; no chicken; detailed 8–12 steps.\""
     },
     "samples": {
-      "s1": "Akşam yemeği için 4 kişilik, Türk mutfağından; et içermeyen ama proteinli; fırın yok; 30 dakikanın altında; detaylı 8–12 adım.",
-      "s2": "Glütensiz atıştırmalık; fırınsız; ekonomik; 20 dk; içinde nohut olsun; adımları net yaz.",
-      "s3": "Kahvaltı için; vejetaryen; tavada; az malzemeyle; 15 dk; peynirli seçenek; 8–12 adım lütfen."
+      "s1": "For dinner, 4 servings from Turkish cuisine; no meat but high in protein; no oven; under 30 minutes; detailed 8–12 steps.",
+      "s2": "Gluten-free snack; no oven; budget-friendly; 20 min; must include chickpeas; write clear steps.",
+      "s3": "For breakfast; vegetarian; stovetop/pan; few ingredients; 15 min; with a cheesy option; please 8–12 steps."
     },
     "chips": {
-      "detail812": "detaylı 8–12 adım",
-      "quick15": "15 dakikada hazır",
-      "noOven": "fırınsız",
-      "onePot": "tek tencerede",
-      "fewIngredients": "az malzemeli",
-      "notSpicy": "acı değil",
-      "budget": "ekonomik",
-      "glutenFree": "glütensiz"
+      "detail812": "detailed 8–12 steps",
+      "quick15": "ready in 15 minutes",
+      "noOven": "no oven",
+      "onePot": "one-pot",
+      "fewIngredients": "few ingredients",
+      "notSpicy": "not spicy",
+      "budget": "budget-friendly",
+      "glutenFree": "gluten-free"
     },
-    "advanced": { "title": "Gelişmiş Seçenekler" },
+    "advanced": { "title": "Advanced Options" },
     "fields": {
       "cuisine": {
-        "label": "Mutfak",
-        "placeholder": "örn: Turkish, Italian",
-        "help": "İsteğe bağlı; boş bırakabilirsiniz."
+        "label": "Cuisine",
+        "placeholder": "e.g., Turkish, Italian",
+        "help": "Optional; you can leave it empty."
       },
-      "servings": { "label": "Porsiyon", "placeholder": "4" },
-      "maxMinutes": { "label": "En fazla süre (dk)", "placeholder": "25" }
+      "servings": { "servings": "Servings", "label": "Servings", "placeholder": "4" },
+      "maxMinutes": { "maxMinutes": "Max time (min)", "label": "Max time (min)", "placeholder": "25" }
     },
     "checks": {
-      "aria": "Diyet kısıtları",
-      "vegetarian": "Vejetaryen",
+      "aria": "Diet restrictions",
+      "vegetarian": "Vegetarian",
       "vegan": "Vegan",
-      "glutenFree": "Glütensiz",
-      "lactoseFree": "Laktozsuz"
+      "glutenFree": "Gluten-free",
+      "lactoseFree": "Lactose-free"
     },
     "include": {
-      "labelSimple": "Olmasını istediklerin",
-      "placeholderSimple": "örn: nohut, yoğurt",
-      "helpSimple": "Virgül/Enter ile ekleyin."
+      "labelSimple": "Things to include",
+      "placeholderSimple": "e.g., chickpeas, yogurt",
+      "helpSimple": "Add with comma/Enter."
     },
     "exclude": {
-      "labelSimple": "Olmamasını istediklerin",
-      "placeholderSimple": "örn: tavuk, mantar",
-      "helpSimple": "Virgül/Enter ile ekleyin."
+      "labelSimple": "Things to exclude",
+      "placeholderSimple": "e.g., chicken, mushrooms",
+      "helpSimple": "Add with comma/Enter."
     },
     "buttons": {
-      "fillExample": "Örnekle Doldur",
-      "generate": { "loading": "Oluşturuluyor…", "default": "Tarif Oluştur" }
+      "fillExample": "Use Example",
+      "generate": { "loading": "Generating…", "default": "Generate Recipe" }
     },
-    "error": { "generic": "Bir şeyler ters gitti. Tekrar deneyin." },
-    "success": { "created": "Oluşturuldu: {title}", "viewLink": "Tarife git" }
+    "error": { "generic": "Something went wrong. Please try again." },
+    "success": { "created": "Created: {title}", "viewLink": "Go to recipe" }
   }
 }

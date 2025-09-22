@@ -1,4 +1,5 @@
 {
+    "title": "Ana Sayfa",
     "search": { "placeholder": "Tarif ara…", "button": "Ara" },
     "hint": { "label": "İpucu:", "text": "Kategori seçebilir veya arama çubuğunu kullanabilirsiniz." },
     "results": { "title": "Arama Sonuçları" },
@@ -18,5 +19,6 @@
     "sort.options.likes_desc":"❤️ Beğeni",
     "sort.options.comments_desc":"💬 Yorum",
     "sort.options.rating_desc":"⭐ Puan",
-    "sort.label":"Sırala"
+    "sort.label":"Sırala",
+    "quick.selectPlaceholder":"Kategori seçin"
   }
