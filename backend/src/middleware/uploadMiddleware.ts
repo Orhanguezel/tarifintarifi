@@ -1,4 +1,4 @@
-// src/core/middleware/uploadMiddleware.ts
+// src/middleware/uploadMiddleware.ts
 import multer, { FileFilterCallback } from "multer";
 import path from "path";
 import express from "express";

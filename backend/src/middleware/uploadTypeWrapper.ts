@@ -1,4 +1,4 @@
-// src/core/middleware/uploadTypeWrapper.ts
+// src/middleware/uploadTypeWrapper.ts
 import type { UploadFolderKey } from "./upload.constants";
 import type { Request, Response, NextFunction } from "express";
 
