@@ -2,7 +2,6 @@
 import type { UploadFolderKey } from "./upload.constants";
 import type { Request, Response, NextFunction } from "express";
 
-
 export const uploadSizeLimits: Record<UploadFolderKey, number> = {
   recipe: 30 * 1024 * 1024,
   files:  50 * 1024 * 1024,
@@ -11,8 +10,8 @@ export const uploadSizeLimits: Record<UploadFolderKey, number> = {
 
 export const uploadTypeWrapper = (type: UploadFolderKey) => {
   return (req: Request, _res: Response, next: NextFunction) => {
-    req.uploadType = type;
-    req.uploadSizeLimit = uploadSizeLimits[type] || uploadSizeLimits.default;
+    (req as any).uploadType = type;
+    (req as any).uploadSizeLimit = uploadSizeLimits[type] || uploadSizeLimits.default;
     next();
   };
 };

@@ -19,6 +19,7 @@ import {
   shouldProcessImage,
   makeThumbAndWebp,
   buildLocalPublicUrl,
+  // ⬇️ versiyon-aware + delivery-side transform
   buildCloudinaryMainUrl,
   buildCloudinaryThumbUrl,
   buildCloudinaryWebpUrl,
@@ -189,6 +190,15 @@ const ensureTips = (v: unknown): IRecipeTip[] | undefined => {
   return out.length ? out : undefined;
 };
 
+/* ===== Cloudinary yardımcıları ===== */
+
+/** Cloudinary upload'tan dönen URL'den /v123/ versiyon numarasını çıkar */
+function extractVersionFromUrl(u?: string): number | undefined {
+  if (!u) return undefined;
+  const m = u.match(/\/v(\d+)\//);
+  return m ? Number(m[1]) : undefined;
+}
+
 /** req.files için güvenli normalleştirici (array/fields/single) */
 function getFilesFromRequest(req: Request): Express.Multer.File[] {
   const anyReq = req as any;
@@ -216,7 +226,7 @@ function getFilesFromRequest(req: Request): Express.Multer.File[] {
   return [];
 }
 
-/** file -> IRecipeImage (local/cloudinary) */
+/** file -> IRecipeImage (local/cloudinary), versiyon-aware URL üretimi */
 async function toRecipeImageFromFile(
   req: Request,
   f: Express.Multer.File
@@ -224,20 +234,38 @@ async function toRecipeImageFromFile(
   const provider = (process.env.STORAGE_PROVIDER || "local") as "local" | "cloudinary";
 
   if (provider === "cloudinary") {
+    // multer-storage-cloudinary: path (tam URL), filename/public_id (publicId), bazen version
+    const uploadedUrl = (f as any).path as string | undefined;
     const publicId = (f as any).filename || (f as any).public_id;
-    const url = (f as any).path || (publicId ? buildCloudinaryMainUrl(publicId) : "");
-    const thumbnail = publicId ? buildCloudinaryThumbUrl(publicId) : url;
-    const webp = publicId ? buildCloudinaryWebpUrl(publicId) : undefined;
+    const version =
+      (f as any).version ??
+      extractVersionFromUrl(uploadedUrl);
+
+    // URL'leri delivery tarafında, f_auto/q_auto + (varsa) version ile üret
+    const url = publicId
+      ? buildCloudinaryMainUrl(publicId, { version })
+      : (uploadedUrl || "");
+
+    const thumbnail = publicId
+      ? buildCloudinaryThumbUrl(publicId, { version, width: 300 })
+      : url;
+
+    // Şema geriye dönük uyum için webp alanını da dolduralım (zorunlu değil)
+    const webp = publicId
+      ? buildCloudinaryWebpUrl(publicId, { version })
+      : undefined;
+
     return { url, thumbnail, webp, publicId };
   }
 
+  // LOCAL
   const url = buildLocalPublicUrl(f, "recipe", req);
   let thumbUrl = url;
   let webpUrl: string | undefined = undefined;
 
   if (shouldProcessImage()) {
     try {
-      const res = await makeThumbAndWebp(f.path);
+      const res = await makeThumbAndWebp((f as any).path);
       if (res) {
         const ext = path.extname(url);
         const base = url.slice(0, -ext.length);
