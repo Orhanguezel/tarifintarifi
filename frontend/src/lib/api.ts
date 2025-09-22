@@ -20,9 +20,11 @@ const CSRF_COOKIE =
 /** Dili belirle (localStorage > navigator > 'tr') */
 function getLang(): string {
   if (typeof window === "undefined") return "tr";
-  const s = localStorage.getItem("lang");
-  if (s) return s;
-  const nav = navigator.language || (navigator as any).userLanguage || "tr";
+  try {
+    const s = localStorage.getItem("lang");
+    if (s) return s;
+  } catch {/* no-op */}
+  const nav = (typeof navigator !== "undefined" && (navigator.language || (navigator as any).userLanguage)) || "tr";
   return String(nav).split("-")[0] || "tr";
 }
 
@@ -33,11 +35,17 @@ function readCookie(name: string): string {
   return m ? decodeURIComponent(m[1]) : "";
 }
 
-/** CSRF cookie'sini üretmek için opsiyonel "ısıtma" (GET) */
+/** CSRF cookie'sini üretmek için opsiyonel "ısıtma" (GET)
+ *  Admin tarafında CSRF middleware /api/admin/recipes altında,
+ *  bu yüzden önce orayı deniyoruz; sonra genel fallback’ler.
+ */
 async function ensureCsrfCookie(): Promise<void> {
   const base = API_BASE_URL.replace(/\/+$/, "");
-  // Önce /csrf varsa onu dene; yoksa /ping gibi herhangi bir GET
-  const tryUrls = [`${base}/csrf`, `${base}/ping`];
+  const tryUrls = [
+    `${base}/admin/recipes/csrf`,
+    `${base}/csrf`,
+    `${base}/ping`,
+  ];
   for (const u of tryUrls) {
     try {
       await fetch(u, { credentials: "include", method: "GET" });
@@ -61,7 +69,7 @@ export const setApiKey = (key: string) => {
 };
 
 /** ====== Request Interceptor ====== */
-API.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+API.interceptors.request.use((config: InternalAxiosRequestConfig & { csrfDisabled?: boolean }) => {
   config.headers = config.headers ?? {};
 
   // Dil başlıkları
@@ -92,7 +100,7 @@ API.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 API.interceptors.response.use(
   (r) => r,
   async (err: AxiosError<any>) => {
-    const cfg = (err.config || {}) as AxiosRequestConfig;
+    const cfg = (err.config || {}) as (AxiosRequestConfig & { __retriedOnce?: boolean; csrfDisabled?: boolean });
     const status = err.response?.status;
 
     // --- 403 CSRF: tek seferlik otomatik düzeltme dene ---
@@ -107,7 +115,6 @@ API.interceptors.response.use(
     }
 
     // --- 401 UNAUTHORIZED: refresh → retry (opsiyonel) ---
-    // Eğer refresh uçun varsa aşağıyı aç:
     // if (status === 401 && !cfg.__retriedOnce) {
     //   try {
     //     await API.post("/users/refresh"); // same-origin, cookie ile

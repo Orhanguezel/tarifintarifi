@@ -19,6 +19,13 @@ import {
  */
 export const storageAdapter = (provider: "local" | "cloudinary") => {
   if (provider === "cloudinary") {
+  const c = cloudinary.config();
+  if (!c?.cloud_name) {
+    throw new Error(
+      "[upload] Cloudinary missing config (cloud_name). " +
+      "Set CLOUDINARY_CLOUD_NAME / API_KEY / API_SECRET on the server process."
+    );
+  }
     return new CloudinaryStorage({
       cloudinary,
       params: async (_req, file) => {
