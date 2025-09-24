@@ -1,7 +1,16 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "Receitas fáceis e confiáveis", "logoAlt": "Logotipo do tarifintarifi.com" },
-    "sections": { "categories": "Categorias", "help": "Ajuda" },
-    "links": { "about": "Sobre", "contact": "Contato", "privacy": "Privacidade", "terms": "Termos de uso" },
-    "copyright": "© {year} {brand}. Todos os direitos reservados.",
-    "design": { "label": "Design por GuezelWebDesign", "aria": "Design por GuezelWebDesign (abre em nova guia)" }
-  }
+  "brand": { "name": "ensotek.de", "logoAlt": "Logotipo Ensotek", "tagline": "Soluções e serviços industriais" },
+  "sections": { "site": "Site", "help": "Ajuda", "legal": "Legal" },
+  "links": {
+    "about": "Sobre",
+    "contact": "Contato",
+    "privacy": "Privacidade",
+    "terms": "Termos",
+    "products": "Produtos",
+    "references": "Referências",
+    "library": "Biblioteca",
+    "news": "Notícias"
+  },
+  "copyright": "© {year} {brand}. Todos os direitos reservados.",
+  "design": { "aria": "Aberto por guezelwebdesign.com", "label": "Design: GUEZEL Webdesign" }
+}

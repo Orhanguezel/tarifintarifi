@@ -1,137 +1,143 @@
 // src/layout/Navbar.tsx
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Image, { type StaticImageData } from "next/image";
 import styled from "styled-components";
 import { useTranslations } from "next-intl";
 import type { SupportedLocale } from "@/types/common";
-import { useTopRecipeCategories } from "@/hooks/useTopRecipeCategories";
-import { getCategoryIcon } from "@/lib/recipes/categories";
-
-const titleCaseFromSlug = (slug: string) => {
-  const s = String(slug || "").replace(/[_-]+/g, " ").trim();
-  return s ? s[0].toUpperCase() + s.slice(1) : slug;
-};
+import logoPng from "@/../public/logo.png";
 
 type Props = { locale: SupportedLocale; showSearch?: boolean };
 
+function tSafe(ns: ReturnType<typeof useTranslations>, key: string, fallback: string) {
+  try {
+    const v = ns(key);
+    return typeof v === "string" ? v : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export default function Navbar({ locale, showSearch = true }: Props) {
-  const router = useRouter();
-  const t = useTranslations("navbar");
-  const tCats = useTranslations("categories");
+  const tNav = useTranslations("navbar");
+  const tCommon = useTranslations("common");
 
+  const SITE_NAME = (process.env.NEXT_PUBLIC_SITE_NAME || "ensotek.de").trim();
+
+  // Menü — deterministik ve tekrar kullanılabilir
+  const items = [
+    { href: `/${locale}/about`, key: "about", label: tSafe(tNav, "links.about", "About") },
+    { href: `/${locale}/products`, key: "products", label: tSafe(tNav, "links.products", "Products") },
+    { href: `/${locale}/spareparts`, key: "spareparts", label: tSafe(tNav, "links.spareparts", "Spare Parts") },
+    { href: `/${locale}/references`, key: "references", label: tSafe(tNav, "links.references", "References") },
+    { href: `/${locale}/library`, key: "library", label: tSafe(tNav, "links.library", "Library") },
+    { href: `/${locale}/news`, key: "news", label: tSafe(tNav, "links.news", "News") },
+    { href: `/${locale}/contact`, key: "contact", label: tSafe(tNav, "links.contact", "Contact") },
+  ];
+
+  // Arama (basit q/hl → ana sayfa)
   const [q, setQ] = useState("");
-
-  // İlk 5 (içi dolu → çoktan aza) kategori
-  const { top, loading } = useTopRecipeCategories(locale, 300, 5);
-
-  // {key,label,href,icon}
-  const navCats = useMemo(() => {
-    const keys = top.map((c) => c.key).filter(Boolean);
-    return keys.map((key) => {
-      let label = "";
-      try {
-        const tx = tCats(`dynamic.${key}`);
-        if (tx) label = tx;
-      } catch {}
-      if (!label) label = titleCaseFromSlug(key);
-
-      return {
-        key,
-        label,
-        href: `/${locale}?cat=${encodeURIComponent(key)}`,
-      };
-    });
-  }, [top, locale, tCats]);
-
-  // Desktop & Mobile ikisi de ilk 5’i gösterir (varsa kaç taneyse o kadar)
-  const navCatsDesktop = navCats.slice(0, 5);
-  const navCatsMobile = navCats.slice(0, 5);
-
   const onSearch = (ev: React.FormEvent) => {
     ev.preventDefault();
     const raw = q.trim();
     if (!raw) return;
     const enc = encodeURIComponent(raw);
-    router.push(`/${locale}?q=${enc}&hl=${enc}`);
+    window.location.href = `/${locale}?q=${enc}&hl=${enc}`;
   };
+
+  // Logo fallback
+  const LOGO_PRIMARY: StaticImageData = logoPng;
+  const LOGO_FALLBACK = "/og.jpg";
+  const [broken, setBroken] = useState(false);
+  const logoAlt =
+    tSafe(tNav, "brand.logoAlt", SITE_NAME) || SITE_NAME;
 
   return (
     <>
       <HeaderWrap>
         <HeaderInner>
-          {/* brand */}
-          <Brand href={`/${locale}`}>
-            <span className="title">tarifintarifi.com</span>
-            <span className="subtitle">{t("brand.subtitle")}</span>
+          {/* Brand (logo + isim) */}
+          <Brand href={`/${locale}`} aria-label={SITE_NAME}>
+            <LogoBox>
+              <LogoPicture>
+                <Image
+                  src={broken ? LOGO_FALLBACK : LOGO_PRIMARY}
+                  alt={logoAlt}
+                  width={132}
+                  height={36}
+                  priority
+                  unoptimized
+                  sizes="132px"
+                  style={{ objectFit: "contain" }}
+                  onError={() => setBroken(true)}
+                />
+              </LogoPicture>
+            </LogoBox>
+            <div className="brand-text">
+              <span className="title">{SITE_NAME}</span>
+              <span className="subtitle">
+                {tSafe(tNav, "brand.subtitle", "Industrial Solutions")}
+              </span>
+            </div>
           </Brand>
 
-          {/* desktop nav — max 5, sıralı */}
-          <Nav aria-label={t("aria.mainMenu")}>
-            {loading && navCatsDesktop.length === 0 ? (
-              <SkeletonRow aria-hidden>
-                <i /><i /><i /><i /><i />
-              </SkeletonRow>
-            ) : (
-              navCatsDesktop.map((c) => (
-                <NavLink key={c.key} href={c.href}>
-                  {c.label}
-                </NavLink>
-              ))
-            )}
+          {/* Desktop nav */}
+          <Nav aria-label={tSafe(tNav, "aria.mainMenu", "Main menu")}>
+            {items.map((it) => (
+              <NavLink key={it.key} href={it.href}>
+                {it.label}
+              </NavLink>
+            ))}
           </Nav>
 
-          {/* desktop actions */}
+          {/* Desktop actions (örnek 2 CTA) */}
           <Actions>
-            <Btn href={`/${locale}/ai/recipe`} variant="primary">{t("actions.ai")}</Btn>
-            <Btn href={`/${locale}/recipes/submit`} variant="secondary">{t("actions.submit")}</Btn>
+            <Btn href={`/${locale}/contact`} variant="primary">
+              {tSafe(tCommon, "cta.contact", "Contact")}
+            </Btn>
+            <Btn href={`/${locale}/about`} variant="secondary">
+              {tSafe(tCommon, "cta.learnMore", "Learn More")}
+            </Btn>
           </Actions>
 
-          {/* mobile tiny actions */}
+          {/* Mobile küçük ikonlar */}
           <MobileHeaderActions>
-            <IconBtn href={`/${locale}/ai/recipe`} aria-label={t("actions.aiShort")} $variant="primary">🧠</IconBtn>
-            <IconBtn href={`/${locale}/recipes/submit`} aria-label={t("actions.submitShort")} $variant="secondary">🍽️</IconBtn>
+            <IconBtn href={`/${locale}/contact`} aria-label={tSafe(tCommon, "cta.contact", "Contact")} $variant="primary">✉️</IconBtn>
+            <IconBtn href={`/${locale}/about`} aria-label={tSafe(tCommon, "cta.learnMore", "Learn More")} $variant="secondary">ℹ️</IconBtn>
           </MobileHeaderActions>
         </HeaderInner>
 
-        {/* mobile horizontal categories — aynı ilk 5 */}
+        {/* Mobile yatay menü (scrollable) */}
         <MobileCatsWrap>
-          <MobileCatsInner aria-label={t("aria.categories")}>
-            {loading && navCatsMobile.length === 0 ? (
-              <>
-                <a style={{ pointerEvents: "none" }}>•••</a>
-                <a style={{ pointerEvents: "none" }}>•••</a>
-                <a style={{ pointerEvents: "none" }}>•••</a>
-              </>
-            ) : (
-              navCatsMobile.map((c) => (
-                <Link key={c.key} href={c.href}>
-                  {c.label}
-                </Link>
-              ))
-            )}
+          <MobileCatsInner aria-label={tSafe(tNav, "aria.secondaryMenu", "Secondary menu")}>
+            {items.map((it) => (
+              <Link key={it.key} href={it.href}>
+                {it.label}
+              </Link>
+            ))}
           </MobileCatsInner>
         </MobileCatsWrap>
       </HeaderWrap>
 
-      {/* search (optional) */}
+      {/* Opsiyonel arama */}
       {showSearch && (
         <>
           <SearchWrap>
-            <SearchInner onSubmit={onSearch} role="search">
+            <SearchInner onSubmit={onSearch} role="search" aria-label={tSafe(tNav, "search.aria", "Site search")}>
               <input
-                placeholder={t("search.placeholder")}
+                placeholder={tSafe(tNav, "search.placeholder", "Search…")}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                aria-label={t("search.aria")}
+                aria-label={tSafe(tNav, "search.aria", "Site search")}
               />
-              <button type="submit">{t("search.button")}</button>
+              <button type="submit">{tSafe(tNav, "search.button", "Search")}</button>
             </SearchInner>
           </SearchWrap>
           <Tip>
-            <strong>{t("tip.label")}</strong> {t("tip.text")}
+            <strong>{tSafe(tNav, "tip.label", "Tip:")}</strong>{" "}
+            {tSafe(tNav, "tip.text", "Use keywords relevant to products or services.")}
           </Tip>
         </>
       )}
@@ -160,11 +166,33 @@ const HeaderInner = styled.div`
 `;
 
 const Brand = styled(Link)`
-  display: inline-flex; flex-direction: column; gap: 2px; text-decoration: none;
-  .title { color: ${({ theme }) => theme.colors.primary}; font-family: ${({ theme }) => theme.fonts.heading};
-    font-weight: ${({ theme }) => theme.fontWeights.bold}; font-size: ${({ theme }) => theme.fontSizes.lg}; line-height: 1.1; }
-  .subtitle { color: ${({ theme }) => theme.colors.textSecondary}; font-size: ${({ theme }) => theme.fontSizes.xs};
-    font-weight: ${({ theme }) => theme.fontWeights.regular}; }
+  display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+
+  .brand-text {
+    display: inline-flex; flex-direction: column; gap: 2px;
+  }
+  .title {
+    color: ${({ theme }) => theme.colors.primary};
+    font-family: ${({ theme }) => theme.fonts.heading};
+    font-weight: ${({ theme }) => theme.fontWeights.bold};
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+    line-height: 1.1;
+  }
+  .subtitle {
+    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: ${({ theme }) => theme.fontSizes.xs};
+    font-weight: ${({ theme }) => theme.fontWeights.regular};
+  }
+`;
+
+const LogoBox = styled.span` display: inline-flex; `;
+const LogoPicture = styled.span`
+  display: inline-flex;
+  width: 132px;
+  height: 36px;
+  align-items: center;
+  justify-content: flex-start;
+  img { filter: none; }
 `;
 
 const Nav = styled.nav`
@@ -173,20 +201,13 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(Link)`
-  display: inline-flex; align-items: center; gap: 6px;
-  position: relative; font-size: ${({ theme }) => theme.fontSizes.sm}; color: ${({ theme }) => theme.colors.textLight};
-  padding: 8px 10px; border-radius: ${({ theme }) => theme.radii.md}; text-decoration: none;
-  transition: background ${({ theme }) => theme.transition.fast};
+  display: inline-flex; align-items: center;
+  position: relative; font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textLight};
+  padding: 8px 10px; border-radius: ${({ theme }) => theme.radii.md};
+  text-decoration: none; transition: background ${({ theme }) => theme.transition.fast};
   &:hover { background: ${({ theme }) => theme.colors.hoverBackground}; }
   &:focus-visible { outline: none; box-shadow: ${({ theme }) => theme.colors.shadowHighlight}; }
-`;
-
-const SkeletonRow = styled.div`
-  display: inline-flex; gap: 14px;
-  i { display: inline-block; width: 64px; height: 14px; border-radius: 6px;
-    background: linear-gradient(90deg, rgba(0,0,0,.06), rgba(0,0,0,.12), rgba(0,0,0,.06));
-    animation: shine 1.2s linear infinite; background-size: 200% 100%; }
-  @keyframes shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 `;
 
 const Actions = styled.div`
@@ -195,11 +216,17 @@ const Actions = styled.div`
 `;
 
 const Btn = styled(Link)<{ variant?: "primary" | "secondary" }>`
-  --bg: ${({ theme, variant }) => variant === "secondary" ? theme.buttons.secondary.background : theme.buttons.primary.background};
-  --bgHover: ${({ theme, variant }) => variant === "secondary" ? theme.buttons.secondary.backgroundHover : theme.buttons.primary.backgroundHover};
+  --bg: ${({ theme, variant }) => variant === "secondary"
+    ? theme.buttons.secondary.background
+    : theme.buttons.primary.background};
+  --bgHover: ${({ theme, variant }) => variant === "secondary"
+    ? theme.buttons.secondary.backgroundHover
+    : theme.buttons.primary.backgroundHover};
   --text: #fff;
-  padding: 8px 12px; border-radius: ${({ theme }) => theme.radii.md}; font-weight: ${({ theme }) => theme.fontWeights.semiBold};
-  text-decoration: none; border: 1px solid transparent; background: var(--bg); color: var(--text);
+  padding: 8px 12px; border-radius: ${({ theme }) => theme.radii.md};
+  font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  text-decoration: none; border: 1px solid transparent;
+  background: var(--bg); color: var(--text);
   box-shadow: ${({ theme }) => theme.shadows.button};
   transition: background ${({ theme }) => theme.transition.fast}, color ${({ theme }) => theme.transition.fast};
   &:hover { background: var(--bgHover); color: var(--text); }
@@ -208,19 +235,26 @@ const Btn = styled(Link)<{ variant?: "primary" | "secondary" }>`
 
 const MobileHeaderActions = styled.div`
   display: none;
-  ${({ theme }) => theme.media.mobile} { display: inline-flex; gap: ${({ theme }) => theme.spacings.sm}; justify-content: flex-end; }
+  ${({ theme }) => theme.media.mobile} {
+    display: inline-flex; gap: ${({ theme }) => theme.spacings.sm}; justify-content: flex-end;
+  }
 `;
 
 const IconBtn = styled(Link)<{ $variant?: "primary" | "secondary" }>`
   width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
   border-radius: ${({ theme }) => theme.radii.lg};
-  border: 1px solid ${({ theme, $variant }) => ($variant === "secondary" ? "transparent" : theme.colors.borderBright)};
-  background: ${({ theme, $variant }) => ($variant === "secondary" ? theme.colors.secondary : theme.colors.inputBackgroundLight)};
-  color: ${({ theme, $variant }) => ($variant === "secondary" ? "#fff" : theme.colors.text)};
+  border: 1px solid ${({ theme, $variant }) =>
+    $variant === "secondary" ? "transparent" : theme.colors.borderBright};
+  background: ${({ theme, $variant }) =>
+    $variant === "secondary" ? theme.colors.secondary : theme.colors.inputBackgroundLight};
+  color: ${({ theme, $variant }) =>
+    $variant === "secondary" ? "#fff" : theme.colors.text};
   text-decoration: none; font-size: 18px; transition: background ${({ theme }) => theme.transition.fast};
   &:hover {
-    background: ${({ theme, $variant }) => ($variant === "secondary" ? theme.colors.secondaryHover : theme.colors.inputBackgroundFocus)};
-    color: ${({ theme, $variant }) => ($variant === "secondary" ? "#fff" : theme.colors.text)};
+    background: ${({ theme, $variant }) =>
+      $variant === "secondary" ? theme.colors.secondaryHover : theme.colors.inputBackgroundFocus};
+    color: ${({ theme, $variant }) =>
+      $variant === "secondary" ? "#fff" : theme.colors.text};
   }
   &:focus-visible { outline: none; box-shadow: ${({ theme }) => theme.colors.shadowHighlight}; }
 `;
@@ -228,7 +262,8 @@ const IconBtn = styled(Link)<{ $variant?: "primary" | "secondary" }>`
 const MobileCatsWrap = styled.div`
   display: none;
   ${({ theme }) => theme.media.mobile} {
-    display: block; background: ${({ theme }) => theme.colors.cardBackground};
+    display: block;
+    background: ${({ theme }) => theme.colors.cardBackground};
     border-bottom: 1px solid ${({ theme }) => theme.colors.borderBright};
   }
 `;
@@ -238,7 +273,7 @@ const MobileCatsInner = styled.nav`
   margin: 0 auto; padding: 8px 12px; display: flex; gap: 8px;
   overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin;
   a {
-    display: inline-flex; align-items: center; gap: 6px;
+    display: inline-flex; align-items: center;
     white-space: nowrap; padding: 6px 10px; font-size: ${({ theme }) => theme.fontSizes.xs};
     border-radius: ${({ theme }) => theme.radii.pill};
     background: ${({ theme }) => theme.colors.inputBackgroundLight};
@@ -264,7 +299,7 @@ const SearchInner = styled.form`
     background: ${({ theme }) => theme.colors.inputBackground};
     color: ${({ theme }) => theme.colors.text}; outline: none;
     transition: border-color ${({ theme }) => theme.transition.fast};
-    &::placeholder { color: ${({ theme }) => theme.colors.placeholder }; }
+    &::placeholder { color: ${({ theme }) => theme.colors.placeholder}; }
     &:focus {
       border-color: ${({ theme }) => theme.colors.inputBorderFocus};
       box-shadow: ${({ theme }) => theme.colors.shadowHighlight};

@@ -1,2 +1,7 @@
-{ "unit": { "minutesShort": "min", "kcal": "kcal", "servings": "porzioni" },
-    "actions": { "view": "Vedi" },"notFound": "Non trovato" }
+{
+  "cta": {
+    "learnMore": "Scopri di più",
+    "contact": "Contattaci",
+    "viewAll": "Vedi tutto"
+  }
+}

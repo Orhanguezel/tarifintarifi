@@ -1,0 +1,27 @@
+{
+  "title": "Gestión de clientes",
+  "customerList": "Clientes",
+  "addNew": "Agregar nuevo",
+  "editAddresses": "Gestionar direcciones",
+  "delete": "Eliminar",
+  "deleteConfirm": "¿Está seguro de que desea eliminar este cliente?",
+  "notFound": "Registro de cliente no encontrado.",
+  "customerInfo": "Información del cliente",
+  "companyName": "Nombre de la empresa",
+  "contactName": "Persona de contacto",
+  "email": "Correo electrónico",
+  "phone": "Teléfono",
+  "isActive": "Activo",
+  "active": "Activo",
+  "inactive": "Inactivo",
+  "notes": "Notas",
+  "address": "Dirección",
+  "addressPhone": "Teléfono de la dirección",
+  "addresses": {
+    "title": "Direcciones"
+  },
+  "save": "Guardar",
+  "validation": {
+    "requiredFields": "Por favor complete todos los campos obligatorios."
+  }
+}

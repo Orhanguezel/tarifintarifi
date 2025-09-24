@@ -1,0 +1,64 @@
+{
+  "contact": {
+    "title": "Contacto",
+    "desc": "Escríbenos para dudas y colaboraciones.",
+    "email": "Correo electrónico",
+    "address": "Dirección",
+    "addressText": "Estambul, Turquía"
+  },
+  "privacy": {
+    "title": "Política de privacidad",
+    "intro": "Nos importa tu privacidad. Este texto explica qué datos recopilamos y cómo los usamos.",
+    "sections": {
+      "dataWeCollect": {
+        "title": "Datos que recopilamos",
+        "items": {
+          "usage": "Datos de uso (vistas de página, términos de búsqueda).",
+          "cookies": "Cookies y tecnologías similares.",
+          "optional": "Información compartida voluntariamente (formularios de contacto, etc.)."
+        }
+      },
+      "howWeUse": {
+        "title": "Cómo usamos los datos",
+        "text": "Para mejorar el servicio, garantizar la seguridad y permitir la personalización."
+      },
+      "rights": {
+        "title": "Tus derechos",
+        "text": "Puedes ejercer tus derechos de acceso, rectificación y eliminación de datos."
+      }
+    },
+    "lastUpdated": "Última actualización: {date}"
+  },
+  "terms": {
+    "title": "Términos de uso",
+    "intro": "Al usar nuestro sitio, aceptas los siguientes términos.",
+    "sections": {
+      "use": {
+        "title": "Uso del servicio",
+        "text": "Te comprometes a utilizar el servicio legalmente y sin abuso."
+      },
+      "content": {
+        "title": "Contenido y derechos de autor",
+        "text": "El contenido es informativo; se respetan los derechos de autor."
+      },
+      "limitation": {
+        "title": "Limitación de responsabilidad",
+        "text": "El servicio se proporciona “tal cual”; no somos responsables de daños indirectos."
+      }
+    },
+    "lastUpdated": "Última actualización: {date}"
+  },
+  "about": {
+    "title": "Sobre nosotros",
+    "intro": "ensotek.com ofrece soluciones industriales y servicios técnicos en varios idiomas.",
+    "mission": {
+      "title": "Nuestra misión",
+      "text": "Brindar soluciones confiables y soporte rápido a nuestros socios."
+    },
+    "team": {
+      "title": "Equipo",
+      "text": "Un equipo apasionado de ingenieros y desarrolladores."
+    },
+    "lastUpdated": "Última actualización: {date}"
+  }
+}

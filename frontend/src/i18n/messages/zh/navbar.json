@@ -1,16 +1,28 @@
 {
-    "brand": { "subtitle": "简单、可靠的菜谱" },
-    "aria": { "mainMenu": "主菜单", "categories": "分类" },
-    "actions": {
-      "ai": "AI 菜谱",
-      "submit": "提交菜谱",
-      "aiShort": "AI",
-      "submitShort": "提交"
-    },
-    "search": {
-      "placeholder": "搜索菜谱...",
-      "aria": "站内搜索",
-      "button": "搜索"
-    },
-    "tip": { "label": "提示：", "text": "使用分类快捷方式可更快浏览。" }
+  "brand": {
+    "subtitle": "工业解决方案",
+    "logoAlt": "Ensotek 标志"
+  },
+  "links": {
+    "about": "关于我们",
+    "products": "产品",
+    "spareparts": "备件",
+    "references": "案例",
+    "library": "资料库",
+    "news": "新闻",
+    "contact": "联系"
+  },
+  "aria": {
+    "mainMenu": "主菜单",
+    "secondaryMenu": "移动菜单"
+  },
+  "search": {
+    "placeholder": "搜索…",
+    "aria": "站内搜索",
+    "button": "搜索"
+  },
+  "tip": {
+    "label": "提示：",
+    "text": "尝试与产品或服务相关的关键词。"
   }
+}

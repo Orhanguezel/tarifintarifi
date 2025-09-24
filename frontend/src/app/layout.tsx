@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 import { headers, cookies } from "next/headers";
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
 import { KNOWN_RTL } from "@/i18n/locale-helpers";
@@ -30,9 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang={current} dir={dir} suppressHydrationWarning>
-      {/* <head /> yok; Next metadata’yı otomatik enjekte eder */}
       <body suppressHydrationWarning>
-        {/* SPA geçişlerinde <html lang/dir> senkron kalsın */}
         <HtmlLangSync lang={current} dir={dir} />
         {children}
       </body>

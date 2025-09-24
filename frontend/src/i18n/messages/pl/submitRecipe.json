@@ -1,0 +1,75 @@
+{
+  "submitRecipe": {
+    "head": {
+      "title": "Tarif Gönder",
+      "subtitle": "Kendi tarifini paylaş ve binlerce kişiye ilham ver."
+    },
+    "fields": {
+      "title": {
+        "label": "Tarif Başlığı",
+        "placeholder": "Örn: Fırınsız Domatesli Biberli Bulgur",
+        "help": "En az 3 karakter olmalı."
+      },
+      "servings": {
+        "label": "Porsiyon",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "Toplam Süre (dk)",
+        "placeholder": "25"
+      },
+      "calories": {
+        "label": "Kalori (kcal)",
+        "placeholder": "380"
+      },
+      "description": {
+        "label": "Açıklama",
+        "placeholder": "Tarif hakkında kısa bir açıklama yazın."
+      },
+      "ingredients": {
+        "label": "Malzemeler (satır satır)",
+        "placeholder": "Her malzemeyi ayrı bir satıra yazın.",
+        "help": "Örn: 1 su bardağı bulgur"
+      },
+      "steps": {
+        "label": "Adımlar (satır satır)",
+        "placeholder": "Her adımı ayrı bir satıra yazın.",
+        "help": "8–12 adım önerilir."
+      },
+      "cuisines": {
+        "label": "Mutfak",
+        "placeholder": "örn: Turkish, Italian",
+        "help": "Virgül/Enter ile ekleyip çip olarak biriktirin."
+      },
+      "tags": {
+        "label": "Etiketler",
+        "placeholder": "örn: fırınsız, az malzemeli"
+      }
+    },
+    "buttons": {
+      "fillExample": "Örnekle Doldur",
+      "submit": {
+        "loading": "Gönderiliyor…",
+        "default": "Tarifi Gönder"
+      }
+    },
+    "notes": {
+      "error": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+      "success": "Kaydedildi: {title}",
+      "viewRecipe": "Tarife git"
+    },
+     "tips": {
+      "title": "Püf Noktaları (satır başı)",
+      "placeholder": "Örn: Yoğurdu kesilmemesi için ılıtın.\nNane yağını en son ekleyin."
+    },
+    "nutrition": {
+      "title": "Besin Değerleri (1 porsiyon)",
+      "calories": "Kalori (kcal)",
+      "protein": "Protein (g)",
+      "carbs": "Karbonhidrat (g)",
+      "fat": "Yağ (g)",
+      "fiber": "Lif (g)",
+      "sodium": "Sodyum (mg)"
+    }
+  }
+}

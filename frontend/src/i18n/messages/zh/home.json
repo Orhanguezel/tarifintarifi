@@ -1,24 +1,31 @@
 {
-    "title": "首页",
-    "search": { "placeholder": "搜索菜谱…", "button": "搜索" },
-    "hint": { "label": "提示：", "text": "选择一个分类或使用搜索框。" },
-    "results": { "title": "搜索结果" },
-    "loading": "加载中…",
-    "empty": "未找到结果。",
-    "pagination": { "aria": "分页", "prev": "上一页", "next": "下一页" },
-    "popular": { "title": "热门菜谱" },
-    "all": { "title": "全部菜谱" },
-    "quick": { "title": "快速分类" }, "clear": "清除",
-    "hero": {
-        "h1": "找到数千个菜谱"
+  "hero": {
+    "h1": "Ensotek — 工业解决方案",
+    "lead": "消防安全、工业设施与备件方案。"
+  },
+  "sections": {
+    "services": { "title": "我们的服务" },
+    "news": {
+      "title": "最新资讯",
+      "placeholder": "新闻与公告即将发布。"
+    }
+  },
+  "cards": {
+    "services": {
+      "title": "工程与项目",
+      "desc": "火灾探测、灭火与维护服务。"
     },
-    "sort.options.date_desc":"📅 新 → 旧",
-    "sort.options.date_asc":"📅 旧 → 新",
-    "sort.options.name_asc":"🔤 A → Z",
-    "sort.options.name_desc":"🔤 Z → A",
-    "sort.options.likes_desc":"❤️ 赞",
-    "sort.options.comments_desc":"💬 评论",
-    "sort.options.rating_desc":"⭐ 评分",
-    "sort.label":"排序方式",
-    "quick.selectPlaceholder":"选择分类"
+    "products": {
+      "title": "产品",
+      "desc": "工业设备与组件。"
+    },
+    "spareparts": {
+      "title": "备件",
+      "desc": "提供原厂及兼容备件。"
+    },
+    "references": {
+      "title": "案例",
+      "desc": "已完成项目示例。"
+    }
   }
+}

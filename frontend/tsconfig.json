@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "plugins": [{ "name": "next" }],
-    "types": ["vitest/globals", "node"]
+    "types": ["vitest/globals", "node"],
   },
   "include": [
     "next-env.d.ts",

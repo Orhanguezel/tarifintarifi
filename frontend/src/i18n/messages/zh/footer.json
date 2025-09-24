@@ -1,7 +1,16 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "简单、可靠的菜谱","logoAlt": "tarifintarifi.com 徽标" },
-    "sections": { "categories": "分类", "help": "帮助" },
-    "links": { "about": "关于我们", "contact": "联系我们", "privacy": "隐私政策", "terms": "使用条款" },
-    "copyright": "© {year} {brand}. 保留所有权利。",
-    "design": { "label": "由 GuezelWebDesign 设计", "aria": "由 GuezelWebDesign 设计（在新标签页打开）" }
-  }
+  "brand": { "name": "ensotek.de", "logoAlt": "Ensotek 标志", "tagline": "工业解决方案与服务" },
+  "sections": { "site": "网站", "help": "帮助", "legal": "法律" },
+  "links": {
+    "about": "关于我们",
+    "contact": "联系",
+    "privacy": "隐私",
+    "terms": "条款",
+    "products": "产品",
+    "references": "案例",
+    "library": "资料库",
+    "news": "新闻"
+  },
+  "copyright": "© {year} {brand}。保留所有权利。",
+  "design": { "aria": "由 guezelwebdesign.com 提供", "label": "设计：GUEZEL Webdesign" }
+}

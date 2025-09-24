@@ -9,6 +9,18 @@ bun run build
 bun run dev
 
 
+export NEXT_PUBLIC_API_URL=http://localhost:5019/api
+export NEXT_PUBLIC_SITE_URL=https://ensotek.de
+export TEST_LOCALE=tr
+export TEST_LOCALES_CSV=tr,en,de
+export CANONICAL_HOST=ensotek.de
+
+npm run test:e2e
+
+clear
+npm run test:e2e
+
+
 
 TEST_LOCALE=de RECIPE_TEST_PATH=/de/recipes/xxx npm run test:e2e
 
@@ -44,7 +56,7 @@ bun run analyze
 
 which bun         # yolunu gör (ör: /usr/bin/bun)
 PORT=3012 NODE_ENV=production \
-pm2 start "$(which bun)" --name tarifintarifi-frontend -- run start
+pm2 start "$(which bun)" --name ensotek-frontend -- run start
 
 
 #PM2 kalıcı başlatma

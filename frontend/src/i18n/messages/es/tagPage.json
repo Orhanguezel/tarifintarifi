@@ -1,0 +1,7 @@
+{
+    "count": "{count} tarif",
+    "empty": "Bu etiketle tarif bulunamadı.",
+    "pagination": { "aria": "Sayfalama" },
+    "seoDesc": "'{tag}' etiketiyle işaretlenmiş tarifler.",
+    "error": { "title": "Etiket sayfası yüklenemedi", "desc": "Şu anda bu etiket için içerik getirilemedi." }
+  }

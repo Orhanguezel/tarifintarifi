@@ -1,4 +1,4 @@
-# TarifinTarifi — Kurulum & Yayına Alma Rehberi
+# ensotek — Kurulum & Yayına Alma Rehberi
 
 Bu dosya; **backend** (API) ve **frontend** (Next.js) projelerini yerelde ve prod ortamında çalıştırmak için ihtiyacınız olan her şeyi içerir. Komutlar **Bun** + **PM2** akışına göre yazıldı (Node/NPM ile de çalışır).
 
@@ -71,8 +71,8 @@ DEFAULT_LOCALE=tr
 BASE_URL=http://localhost:5035
 
 # 🌐 CORS / Frontend
-CORS_ORIGIN=http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001,https://www.tarifintarifi.com,https://tarifintarifi.com
-FRONTEND_URL=https://www.tarifintarifi.com
+CORS_ORIGIN=http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001,https://www.ensotek.com,https://ensotek.com
+FRONTEND_URL=https://www.ensotek.com
 
 # 🌐 MongoDB
 MONGO_URI=mongodb://tarif_user:<PASSWORD>@localhost:27019/tariftarif?authSource=tariftarif
@@ -118,9 +118,9 @@ CAPTCHA_BYPASS_TOKEN=dev-bypass-123
 # 🌍 i18n & Site
 NEXT_PUBLIC_SUPPORTED_LOCALES=tr,en,fr,de,it,pt,ar,ru,zh,hi
 NEXT_PUBLIC_DEFAULT_LOCALE=tr
-NEXT_PUBLIC_SITE_NAME=tarifintarifi.com
-NEXT_PUBLIC_SITE_URL=https://www.tarifintarifi.com
-NEXT_PUBLIC_CONTACT_EMAIL=support@tarifintarifi.com
+NEXT_PUBLIC_SITE_NAME=ensotek.com
+NEXT_PUBLIC_SITE_URL=https://www.ensotek.com
+NEXT_PUBLIC_CONTACT_EMAIL=support@ensotek.com
 
 # API & Proxy (Next.js)
 BACKEND_ORIGIN=http://127.0.0.1:5035
@@ -137,7 +137,7 @@ NEXT_PUBLIC_CAPTCHA_BYPASS_TOKEN=dev-bypass-123
 NEXT_PUBLIC_API_KEY=<PUBLIC_KEY>
 ```
 
-> **Önemli:** Prod’da reCAPTCHA **true** olacak; domain listesinde `www.tarifintarifi.com`, `tarifintarifi.com`, `127.0.0.1`, `localhost` bulunmalı.
+> **Önemli:** Prod’da reCAPTCHA **true** olacak; domain listesinde `www.ensotek.com`, `ensotek.com`, `127.0.0.1`, `localhost` bulunmalı.
 
 ---
 
@@ -231,7 +231,7 @@ bun run analyze  # (opsiyonel bundle analizi)
 which bun        # ör: /usr/bin/bun
 
 PORT=3012 NODE_ENV=production \
-pm2 start "$(which bun)" --name tarifintarifi-frontend -- run start
+pm2 start "$(which bun)" --name ensotek-frontend -- run start
 
 pm2 save
 ```
@@ -307,7 +307,7 @@ pm2 save
 
   * FE: `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` (domain kısıtlı).
   * BE: `RECAPTCHA_ENTERPRISE_API_KEY` (GCP API anahtarı).
-* **Domain listesi**: konsolda `www.tarifintarifi.com`, `tarifintarifi.com`, `127.0.0.1`, `localhost` ekli olmalı.
+* **Domain listesi**: konsolda `www.ensotek.com`, `ensotek.com`, `127.0.0.1`, `localhost` ekli olmalı.
 * **Dil**: Frontend, sayfa yereline göre `hl=<locale>` ile script’i yükler.
 * **Bypass**:
 

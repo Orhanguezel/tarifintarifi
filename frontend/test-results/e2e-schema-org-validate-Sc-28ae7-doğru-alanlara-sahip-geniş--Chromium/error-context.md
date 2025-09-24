@@ -1,0 +1,162 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "ensotek.com" [ref=e5] [cursor=pointer]:
+        - /url: /tr
+        - img "Ensotek logosu" [ref=e8] [cursor=pointer]
+        - generic [ref=e9] [cursor=pointer]:
+          - generic [ref=e10] [cursor=pointer]: ensotek.com
+          - generic [ref=e11] [cursor=pointer]: Endüstriyel Çözümler
+      - navigation "Ana menü" [ref=e12]:
+        - link "Hakkımızda" [ref=e13] [cursor=pointer]:
+          - /url: /tr/about
+        - link "Ürünler" [ref=e14] [cursor=pointer]:
+          - /url: /tr/products
+        - link "Yedek Parça" [ref=e15] [cursor=pointer]:
+          - /url: /tr/spareparts
+        - link "Referanslar" [ref=e16] [cursor=pointer]:
+          - /url: /tr/references
+        - link "Kütüphane" [ref=e17] [cursor=pointer]:
+          - /url: /tr/library
+        - link "Haberler" [ref=e18] [cursor=pointer]:
+          - /url: /tr/news
+        - link "İletişim" [ref=e19] [cursor=pointer]:
+          - /url: /tr/contact
+      - generic [ref=e20]:
+        - link "İletişime Geç" [ref=e21] [cursor=pointer]:
+          - /url: /tr/contact
+        - link "Daha Fazla Bilgi" [ref=e22] [cursor=pointer]:
+          - /url: /tr/about
+      - generic [ref=e23]:
+        - link "İletişime Geç" [ref=e24] [cursor=pointer]:
+          - /url: /tr/contact
+          - text: ✉️
+        - link "Daha Fazla Bilgi" [ref=e25] [cursor=pointer]:
+          - /url: /tr/about
+          - text: ℹ️
+    - navigation "Mobil menü" [ref=e27]:
+      - link "Hakkımızda" [ref=e28] [cursor=pointer]:
+        - /url: /tr/about
+      - link "Ürünler" [ref=e29] [cursor=pointer]:
+        - /url: /tr/products
+      - link "Yedek Parça" [ref=e30] [cursor=pointer]:
+        - /url: /tr/spareparts
+      - link "Referanslar" [ref=e31] [cursor=pointer]:
+        - /url: /tr/references
+      - link "Kütüphane" [ref=e32] [cursor=pointer]:
+        - /url: /tr/library
+      - link "Haberler" [ref=e33] [cursor=pointer]:
+        - /url: /tr/news
+      - link "İletişim" [ref=e34] [cursor=pointer]:
+        - /url: /tr/contact
+  - search "Site içi arama" [ref=e36]:
+    - textbox "Site içi arama" [ref=e37]
+    - button "Ara" [ref=e38]
+  - generic [ref=e39]:
+    - strong [ref=e40]: "İpucu:"
+    - text: Ürün veya hizmetlerle ilgili anahtar kelimeler deneyin.
+  - main [ref=e41]:
+    - generic [ref=e42]:
+      - heading "Ensotek — endüstriyel çözümler" [level=1] [ref=e43]
+      - paragraph [ref=e44]: Yangın güvenliği, endüstriyel tesisler ve yedek parça çözümleri.
+      - generic [ref=e45]:
+        - link "Daha Fazla Bilgi" [ref=e46] [cursor=pointer]:
+          - /url: /tr/about
+        - link "İletişime Geç" [ref=e47] [cursor=pointer]:
+          - /url: /tr/contact
+    - generic [ref=e48]:
+      - heading "Hizmetlerimiz" [level=2] [ref=e49]
+      - generic [ref=e50]:
+        - link "Mühendislik & Proje Yangın algılama, söndürme ve bakım hizmetleri." [ref=e51] [cursor=pointer]:
+          - /url: /tr/services
+          - heading "Mühendislik & Proje" [level=3] [ref=e52] [cursor=pointer]
+          - paragraph [ref=e53] [cursor=pointer]: Yangın algılama, söndürme ve bakım hizmetleri.
+        - link "Ürünler Endüstriyel ekipman ve bileşenler." [ref=e54] [cursor=pointer]:
+          - /url: /tr/products
+          - heading "Ürünler" [level=3] [ref=e55] [cursor=pointer]
+          - paragraph [ref=e56] [cursor=pointer]: Endüstriyel ekipman ve bileşenler.
+        - link "Yedek Parça Orijinal ve uyumlu yedek parça tedariki." [ref=e57] [cursor=pointer]:
+          - /url: /tr/spare-parts
+          - heading "Yedek Parça" [level=3] [ref=e58] [cursor=pointer]
+          - paragraph [ref=e59] [cursor=pointer]: Orijinal ve uyumlu yedek parça tedariki.
+        - link "Referanslar Tamamlanan projelerimizden örnekler." [ref=e60] [cursor=pointer]:
+          - /url: /tr/references
+          - heading "Referanslar" [level=3] [ref=e61] [cursor=pointer]
+          - paragraph [ref=e62] [cursor=pointer]: Tamamlanan projelerimizden örnekler.
+    - generic [ref=e63]:
+      - heading "Güncel Haberler" [level=2] [ref=e64]
+      - paragraph [ref=e65]: Yakında buraya haber ve duyurular eklenecek.
+      - link "Tümünü Gör" [ref=e66] [cursor=pointer]:
+        - /url: /tr/news
+  - contentinfo [ref=e67]:
+    - generic [ref=e68]:
+      - generic [ref=e69]:
+        - generic [ref=e70]:
+          - link "Ensotek" [ref=e72] [cursor=pointer]:
+            - /url: /tr
+            - img "Ensotek logosu" [ref=e74] [cursor=pointer]
+          - heading "Ensotek" [level=4] [ref=e75]
+          - paragraph [ref=e76]: Endüstriyel Çözümler ve Hizmetler
+        - navigation "Site" [ref=e77]:
+          - heading "Site" [level=4] [ref=e78]
+          - list [ref=e79]:
+            - listitem [ref=e80]:
+              - link "Hakkımızda" [ref=e81] [cursor=pointer]:
+                - /url: /tr/about
+            - listitem [ref=e82]:
+              - link "Ürünler" [ref=e83] [cursor=pointer]:
+                - /url: /tr/products
+            - listitem [ref=e84]:
+              - link "Referanslar" [ref=e85] [cursor=pointer]:
+                - /url: /tr/references
+            - listitem [ref=e86]:
+              - link "Kütüphane" [ref=e87] [cursor=pointer]:
+                - /url: /tr/library
+            - listitem [ref=e88]:
+              - link "Haberler" [ref=e89] [cursor=pointer]:
+                - /url: /tr/news
+            - listitem [ref=e90]:
+              - link "İletişim" [ref=e91] [cursor=pointer]:
+                - /url: /tr/contact
+        - navigation "Yasal" [ref=e92]:
+          - heading "Yasal" [level=4] [ref=e93]
+          - list [ref=e94]:
+            - listitem [ref=e95]:
+              - link "Gizlilik" [ref=e96] [cursor=pointer]:
+                - /url: /tr/privacy
+            - listitem [ref=e97]:
+              - link "Şartlar" [ref=e98] [cursor=pointer]:
+                - /url: /tr/terms
+          - heading "Yardım" [level=4] [ref=e99]
+          - list [ref=e100]:
+            - listitem [ref=e101]:
+              - link "İletişim" [ref=e102] [cursor=pointer]:
+                - /url: /tr/contact
+            - listitem [ref=e103]:
+              - link "Hakkımızda" [ref=e104] [cursor=pointer]:
+                - /url: /tr/about
+      - navigation "Social" [ref=e105]:
+        - list [ref=e106]:
+          - listitem [ref=e107]:
+            - link "Facebook" [ref=e108] [cursor=pointer]:
+              - /url: https://facebook.com/Ensotek
+          - listitem [ref=e109]:
+            - link "Instagram" [ref=e110] [cursor=pointer]:
+              - /url: https://instagram.com/ensotek_tr
+          - listitem [ref=e111]:
+            - link "X" [ref=e112] [cursor=pointer]:
+              - /url: https://x.com/Ensotek_Cooling
+          - listitem [ref=e113]:
+            - link "LinkedIn" [ref=e114] [cursor=pointer]:
+              - /url: https://linkedin.com/company/ensotek-su-so-utma-kuleleri-ltd-ti-
+          - listitem [ref=e115]:
+            - link "YouTube" [ref=e116] [cursor=pointer]:
+              - /url: https://youtube.com/channel/UCX22ErWzyT4wDqDRGN9zYmg
+      - generic [ref=e117]: footer.copyright
+      - link "guezelwebdesign.com tarafından tasarlandı" [ref=e118] [cursor=pointer]:
+        - /url: https://www.guezelwebdesign.com
+        - text: "Tasarım: GUEZEL Webdesign"
+```

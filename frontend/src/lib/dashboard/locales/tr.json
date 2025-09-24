@@ -1,0 +1,53 @@
+{
+  "tabs": {
+    "modules": "Modüller",
+    "stats": "İstatistikler",
+    "users": "Kullanıcılar",
+    "revenue": "Gelir",
+    "feedbacks": "Geri Bildirimler",
+    "analytics": "Analizler"
+  },
+  "noData": "Hiç veri bulunamadı.",
+  "loading": "Yükleniyor...",
+  "reset": "Filtreleri Temizle",
+  "selectProject": "Proje Seç",
+  "chooseProject": "Proje seçiniz...",
+  "selectModule": "Modül Seç",
+  "allModules": "Tümü",
+  "eventType": "Event Tipi",
+  "allEvents": "Tümü",
+  "analytics": {
+    "title": "Log Analizi ve Etkinlik Trendleri",
+    "dailyTrends": "Günlük Event Trendleri",
+    "moduleDistribution": "Modül Bazlı Yoğunluk",
+    "geoMap": "Coğrafi Dağılım",
+    "logTable": "Log Detayları",
+    "noGeoData": "Konum verisi içeren kayıt yok.",
+    "events": "Etkinlik Sayısı",
+    "module": "Modül",
+    "date": "Tarih",
+    "total": "Toplam",
+    "dateRange": "Tarih Aralığı",
+    "datePlaceholder": "Tarih aralığı seçiniz",
+    "moduleFilter": "Modül",
+    "eventTypeFilter": "Etkinlik Türü",
+    "all": "Tümü"
+  },
+  "table": {
+    "timestamp": "Zaman",
+    "module": "Modül",
+    "eventType": "Olay Türü",
+    "user": "Kullanıcı",
+    "location": "Konum"
+  },
+  "users": "Toplam Kullanıcı",
+  "revenue": "Toplam Gelir",
+  "feedbacks": "Geri Bildirimler",
+  "stats": {
+    "users": "Kullanıcılar",
+    "products": "Ürünler",
+    "orders": "Siparişler",
+    "revenue": "Toplam Gelir",
+    "analytics": "Analizler"
+  }
+}

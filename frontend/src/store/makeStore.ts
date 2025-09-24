@@ -5,7 +5,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 // 🔧 Client slice'ı buradan al
-import { recipesApi } from "@/lib/recipes/api.client";
 import { commentsApi } from "@/lib/comments/api";
 import { reactionsApi } from "@/lib/reactions/api";
 import { usersApi } from "@/lib/users/api.client";
@@ -13,7 +12,6 @@ import { usersApi } from "@/lib/users/api.client";
 export function makeStore() {
   const store = configureStore({
     reducer: {
-      [recipesApi.reducerPath]: recipesApi.reducer,
       [commentsApi.reducerPath]: commentsApi.reducer,
       [reactionsApi.reducerPath]: reactionsApi.reducer,
       [usersApi.reducerPath]: usersApi.reducer,
@@ -24,7 +22,6 @@ export function makeStore() {
         serializableCheck: false,
         immutableCheck: false,
       }).concat(
-        recipesApi.middleware,
         commentsApi.middleware,
         reactionsApi.middleware,
         usersApi.middleware

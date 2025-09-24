@@ -1,5 +1,6 @@
+// app/[locale]/(public)/page.tsx
+
 import type { Metadata } from "next";
-import type { Recipe } from "@/lib/recipes/types";
 import HomeView from "./(home)/HomeView";
 import { type SupportedLocale } from "@/types/common";
 import { getTranslations } from "next-intl/server";
@@ -10,6 +11,8 @@ import {
   SITE_URL,
   languageAlternates
 } from "@/i18n/locale-helpers";
+import SeoCookieSnapshot from "@/features/seo/SeoCookieSnapshot";
+
 
 export const revalidate = 60;
 
@@ -22,9 +25,8 @@ export async function generateMetadata(
   const { locale: raw } = await params;
   const locale: SupportedLocale = isSupportedLocale(raw) ? raw : DEFAULT_LOCALE;
 
-  // çeviri ile başlık + açıklama
   let title = SITE_NAME;
-  let description = "Pratik ve güvenilir yemek tarifleri.";
+  let description = "Ensotek – endüstriyel çözümler ve teknik hizmetler.";
   try {
     const t = await getTranslations({ locale, namespace: "seo" });
     title = t("homeTitle", { site: SITE_NAME }) || title;
@@ -32,12 +34,12 @@ export async function generateMetadata(
   } catch {}
 
   const PATH = `/${locale}/`;
-  const ogImage = `${SITE_URL}/og.jpg`;
+  const ogImage = `${SITE_URL}/og.webp`; 
 
   return {
     metadataBase: new URL(SITE_URL),
-    title,                               // ← sayfa başlığı
-    description,                         // ← snippet
+    title,
+    description,
     alternates: {
       canonical: PATH,
       languages: languageAlternates(DEFAULT_LOCALE)
@@ -68,27 +70,13 @@ export default async function Home(props: {
   const { locale } = await props.params;
   const sp = await props.searchParams;
 
+  // İleride pagination gerekirse hazır dursun:
   const page = Math.max(1, parseInt(String(sp.page ?? "1"), 10) || 1);
-  const limit = 12;
+  void page;
+
   const loc: SupportedLocale = isSupportedLocale(locale) ? locale : DEFAULT_LOCALE;
 
-  const origin = (process.env.BACKEND_ORIGIN || "http://localhost:5034").replace(/\/$/, "");
-  let items: Recipe[] = [];
-
-  try {
-    const res = await fetch(`${origin}/api/recipes?limit=${limit}&page=${page}`, {
-      headers: { "Accept-Language": loc, "x-lang": loc },
-      next: { revalidate }
-    });
-    if (res.ok) {
-      const j = await res.json();
-      items = Array.isArray(j?.data) ? j.data : [];
-    } else {
-      console.warn(`[home] fetch not ok: ${res.status}`);
-    }
-  } catch (e: any) {
-    console.warn(`[home] fetch failed during build/ISR: ${e?.message || e}`);
-  }
-
-  return <HomeView items={items} locale={loc} />;
+  // Backend endpoint hazır olduğunda buraya fetch eklenebilir (RTK Query veya RSC fetch).
+   <SeoCookieSnapshot tenant="ensotek" pageKey="home" locale={loc} />
+  return <HomeView locale={loc} />;
 }

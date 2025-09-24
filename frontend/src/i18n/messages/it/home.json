@@ -1,24 +1,31 @@
 {
-    "title": "Pagina iniziale",
-    "search": { "placeholder": "Cerca ricette…", "button": "Cerca" },
-    "hint": { "label": "Suggerimento:", "text": "Scegli una categoria o usa la ricerca." },
-    "results": { "title": "Risultati" },
-    "loading": "Caricamento…",
-    "empty": "Nessun risultato trovato.",
-    "pagination": { "aria": "Paginazione", "prev": "Precedente", "next": "Successivo" },
-    "popular": { "title": "Ricette popolari" },
-    "all": { "title": "Tutte le ricette" },
-    "quick": { "title": "Categorie rapide" }, "clear": "Pulisci",
-    "hero": {
-        "h1": "Trova migliaia di ricette"
+  "hero": {
+    "h1": "Ensotek — soluzioni industriali",
+    "lead": "Sicurezza antincendio, impianti industriali e ricambi."
+  },
+  "sections": {
+    "services": { "title": "I nostri servizi" },
+    "news": {
+      "title": "Notizie",
+      "placeholder": "Novità e comunicazioni saranno disponibili a breve."
+    }
+  },
+  "cards": {
+    "services": {
+      "title": "Ingegneria & Progetti",
+      "desc": "Rilevazione incendi, spegnimento e manutenzione."
     },
-    "sort.options.date_desc":"📅 Nuove → Vecchie",
-    "sort.options.date_asc":"📅 Vecchie → Nuove",
-    "sort.options.name_asc":"🔤 A → Z",
-    "sort.options.name_desc":"🔤 Z → A",
-    "sort.options.likes_desc":"❤️ Mi piace",
-    "sort.options.comments_desc":"💬 Commenti",
-    "sort.options.rating_desc":"⭐ Valutazione",
-    "sort.label":"Ordina per",
-    "quick.selectPlaceholder":"Seleziona una categoria"
+    "products": {
+      "title": "Prodotti",
+      "desc": "Attrezzature e componenti industriali."
+    },
+    "spareparts": {
+      "title": "Ricambi",
+      "desc": "Fornitura di ricambi originali e compatibili."
+    },
+    "references": {
+      "title": "Referenze",
+      "desc": "Esempi dei nostri progetti completati."
+    }
   }
+}

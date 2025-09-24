@@ -1,4 +1,3 @@
-// src/app/[locale]/(public)/layout.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMessages, setRequestLocale } from "next-intl/server";
@@ -12,10 +11,7 @@ import GAView from "@/features/analytics/GAView";
 import SiteJsonLd from "@/features/seo/SiteJsonLd";
 import HtmlLangSync from "@/i18n/HtmlLangSync";
 
-import {
-  SUPPORTED_LOCALES,
-  type SupportedLocale
-} from "@/types/common";
+import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
 import {
   DEFAULT_LOCALE,
   SITE_NAME,
@@ -46,7 +42,6 @@ export async function generateMetadata(
 
   return {
     metadataBase: new URL(SITE_URL),
-    // Yalnızca şablon + nötr default; sayfalar kendi title’ını verir.
     title: {
       template: `%s • ${SITE_NAME}`,
       default: SITE_NAME
@@ -84,9 +79,9 @@ export default async function LocaleLayout(props: {
   return (
     <>
       <GAScripts />
-      <Providers locale={current}>
+      {/* Providers: locale prop'unu opsiyonel bırakıyoruz; tema/analytics etkilenmez */}
+      <Providers>
         <IntlProviderClient locale={current} messages={messages}>
-          {/* İç sarmal <div>’de de dir veriyoruz; ayrıca lang/dir’i client’ta senkronluyoruz */}
           <div dir={dir}>
             <HtmlLangSync lang={current} dir={dir} />
             <SiteJsonLd locale={current} />

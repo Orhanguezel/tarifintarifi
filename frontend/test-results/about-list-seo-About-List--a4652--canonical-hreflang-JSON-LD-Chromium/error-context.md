@@ -1,0 +1,116 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "ensotek.com" [ref=e5] [cursor=pointer]:
+          - /url: /tr
+          - img "Ensotek logosu" [ref=e8] [cursor=pointer]
+          - generic [ref=e9] [cursor=pointer]:
+            - generic [ref=e10] [cursor=pointer]: ensotek.com
+            - generic [ref=e11] [cursor=pointer]: Endüstriyel Çözümler
+        - navigation "Ana menü" [ref=e12]:
+          - link "Hakkımızda" [ref=e13] [cursor=pointer]:
+            - /url: /tr/about
+          - link "Ürünler" [ref=e14] [cursor=pointer]:
+            - /url: /tr/products
+          - link "Yedek Parça" [ref=e15] [cursor=pointer]:
+            - /url: /tr/spareparts
+          - link "Referanslar" [ref=e16] [cursor=pointer]:
+            - /url: /tr/references
+          - link "Kütüphane" [ref=e17] [cursor=pointer]:
+            - /url: /tr/library
+          - link "Haberler" [ref=e18] [cursor=pointer]:
+            - /url: /tr/news
+          - link "İletişim" [ref=e19] [cursor=pointer]:
+            - /url: /tr/contact
+        - generic [ref=e20]:
+          - link "İletişime Geç" [ref=e21] [cursor=pointer]:
+            - /url: /tr/contact
+          - link "Daha Fazla Bilgi" [ref=e22] [cursor=pointer]:
+            - /url: /tr/about
+    - search "Site içi arama" [ref=e24]:
+      - textbox "Site içi arama" [ref=e25]
+      - button "Ara" [ref=e26] [cursor=pointer]
+    - generic [ref=e27]:
+      - strong [ref=e28]: "İpucu:"
+      - text: Ürün veya hizmetlerle ilgili anahtar kelimeler deneyin.
+    - main [ref=e29]:
+      - generic [ref=e30]:
+        - heading "pages.about.title" [level=1] [ref=e31]
+        - paragraph [ref=e32]: pages.about.intro
+      - paragraph [ref=e33]: pages.about.body
+    - contentinfo [ref=e34]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - link "Ensotek" [ref=e39] [cursor=pointer]:
+              - /url: /tr
+              - img "Ensotek logosu" [ref=e41] [cursor=pointer]
+            - heading "Ensotek" [level=4] [ref=e42]
+            - paragraph [ref=e43]: Endüstriyel Çözümler ve Hizmetler
+          - navigation "Site" [ref=e44]:
+            - heading "Site" [level=4] [ref=e45]
+            - list [ref=e46]:
+              - listitem [ref=e47]:
+                - link "Hakkımızda" [ref=e48] [cursor=pointer]:
+                  - /url: /tr/about
+              - listitem [ref=e49]:
+                - link "Ürünler" [ref=e50] [cursor=pointer]:
+                  - /url: /tr/products
+              - listitem [ref=e51]:
+                - link "Referanslar" [ref=e52] [cursor=pointer]:
+                  - /url: /tr/references
+              - listitem [ref=e53]:
+                - link "Kütüphane" [ref=e54] [cursor=pointer]:
+                  - /url: /tr/library
+              - listitem [ref=e55]:
+                - link "Haberler" [ref=e56] [cursor=pointer]:
+                  - /url: /tr/news
+              - listitem [ref=e57]:
+                - link "İletişim" [ref=e58] [cursor=pointer]:
+                  - /url: /tr/contact
+          - navigation "Yasal" [ref=e59]:
+            - heading "Yasal" [level=4] [ref=e60]
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Gizlilik" [ref=e63] [cursor=pointer]:
+                  - /url: /tr/privacy
+              - listitem [ref=e64]:
+                - link "Şartlar" [ref=e65] [cursor=pointer]:
+                  - /url: /tr/terms
+            - heading "Yardım" [level=4] [ref=e66]
+            - list [ref=e67]:
+              - listitem [ref=e68]:
+                - link "İletişim" [ref=e69] [cursor=pointer]:
+                  - /url: /tr/contact
+              - listitem [ref=e70]:
+                - link "Hakkımızda" [ref=e71] [cursor=pointer]:
+                  - /url: /tr/about
+        - navigation "Social" [ref=e72]:
+          - list [ref=e73]:
+            - listitem [ref=e74]:
+              - link "Facebook" [ref=e75] [cursor=pointer]:
+                - /url: https://facebook.com/Ensotek
+            - listitem [ref=e76]:
+              - link "Instagram" [ref=e77] [cursor=pointer]:
+                - /url: https://instagram.com/ensotek_tr
+            - listitem [ref=e78]:
+              - link "X" [ref=e79] [cursor=pointer]:
+                - /url: https://x.com/Ensotek_Cooling
+            - listitem [ref=e80]:
+              - link "LinkedIn" [ref=e81] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ensotek-su-so-utma-kuleleri-ltd-ti-
+            - listitem [ref=e82]:
+              - link "YouTube" [ref=e83] [cursor=pointer]:
+                - /url: https://youtube.com/channel/UCX22ErWzyT4wDqDRGN9zYmg
+        - generic [ref=e84]: footer.copyright
+        - link "guezelwebdesign.com tarafından tasarlandı" [ref=e85] [cursor=pointer]:
+          - /url: https://www.guezelwebdesign.com
+          - text: "Tasarım: GUEZEL Webdesign"
+  - button "Open Next.js Dev Tools" [ref=e91] [cursor=pointer]:
+    - img [ref=e92] [cursor=pointer]
+  - alert [ref=e95]
+```

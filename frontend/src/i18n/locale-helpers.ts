@@ -1,14 +1,12 @@
-// src/i18n/locale-helpers.ts
-
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
 
-export const KNOWN_RTL = new Set(["ar","fa","he","ur","ckb","ps","sd","ug","yi","dv"]);
+export const KNOWN_RTL = new Set(["ar", "fa", "he", "ur", "ckb", "ps", "sd", "ug", "yi", "dv"]);
 
 export const DEFAULT_LOCALE: SupportedLocale =
   (process.env.NEXT_PUBLIC_DEFAULT_LOCALE as SupportedLocale) || "tr";
 
-export const SITE_NAME = (process.env.NEXT_PUBLIC_SITE_NAME || "tarifintarifi.com").trim();
-export const SITE_URL  = (process.env.NEXT_PUBLIC_SITE_URL  || "http://localhost:3001").replace(/\/+$/, "");
+export const SITE_NAME = (process.env.NEXT_PUBLIC_SITE_NAME || "ensotek.com").trim();
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001").replace(/\/+$/, "");
 
 export const isSupportedLocale = (x: unknown): x is SupportedLocale =>
   typeof x === "string" && (SUPPORTED_LOCALES as readonly string[]).includes(x as any);

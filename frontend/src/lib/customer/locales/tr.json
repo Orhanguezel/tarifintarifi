@@ -1,0 +1,27 @@
+{
+  "title": "Müşteri Yönetimi",
+  "customerList": "Müşteriler",
+  "addNew": "Yeni Ekle",
+  "editAddresses": "Adresleri Yönet",
+  "delete": "Sil",
+  "deleteConfirm": "Bu müşteriyi silmek istediğinizden emin misiniz?",
+  "notFound": "Müşteri kaydı bulunamadı.",
+  "customerInfo": "Müşteri Bilgileri",
+  "companyName": "Firma Adı",
+  "contactName": "Yetkili Kişi",
+  "email": "E-Posta",
+  "phone": "Telefon",
+  "isActive": "Aktif",
+  "active": "Aktif",
+  "inactive": "Pasif",
+  "notes": "Notlar",
+  "address": "Adres",
+  "addressPhone": "Adres Telefonu",
+  "addresses": {
+    "title": "Adresler"
+  },
+  "save": "Kaydet",
+  "validation": {
+    "requiredFields": "Lütfen tüm zorunlu alanları doldurun."
+  }
+}

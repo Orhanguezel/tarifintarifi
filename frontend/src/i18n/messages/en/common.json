@@ -1,5 +1,7 @@
 {
-  "unit": { "minutesShort": "min", "kcal": "kcal", "servings": "servings" },
-    "actions": { "view": "View" },
-  "notFound": "Not found"
+  "cta": {
+    "learnMore": "Learn More",
+    "contact": "Contact",
+    "viewAll": "View All"
+  }
 }

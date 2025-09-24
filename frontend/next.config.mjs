@@ -57,13 +57,16 @@ const nextConfig = {
   // Görsel izinleri (Cloudinary + alan adların + backend origin)
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "res.cloudinary.com" },
-      { protocol: "https", hostname: "**.tarifintarifi.com" },
-      { protocol: "https", hostname: "tarifintarifi.com" },
-      { protocol: "http", hostname: "localhost" },   // dev
-      { protocol: "http", hostname: "127.0.0.1" },   // dev
+      { protocol: "https", hostname: "via.placeholder.com", pathname: "/**" },
+      { protocol: "https", hostname: "res.cloudinary.com", pathname: "/**" },
+      { protocol: "https", hostname: "i.imgur.com", pathname: "/**" },
+      { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
+      { protocol: "https", hostname: "**.ensotek.com", pathname: "/**" },
+      { protocol: "https", hostname: "ensotek.com", pathname: "/**" },
+      { protocol: "http", hostname: "localhost", pathname: "/**" },   // dev
+      { protocol: "http", hostname: "127.0.0.1", pathname: "/**" },   // dev
       // backend origin’i de ekle (örn. http://localhost:5035)
-      { protocol: backendProto, hostname: backendHost },
+      { protocol: backendProto, hostname: backendHost, pathname: "/**" },
     ],
     // dangerouslyAllowSVG: true, // gerekirse aç
   },

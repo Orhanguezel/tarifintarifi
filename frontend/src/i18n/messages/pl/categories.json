@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "dynamic": {
+      "breakfast": "Kahvaltı",
+      "soup": "Çorba",
+      "salad": "Salata",
+      "appetizer": "Meze",
+      "snack": "Atıştırmalık",
+      "sandwich-wrap": "Sandviç & Dürüm",
+      "main-course": "Ana Yemek",
+      "side-dish": "Yan Yemek",
+      "pasta": "Makarna",
+      "rice-pilaf": "Pilav",
+      "legumes": "Bakliyat",
+      "stew": "Sulu Yemek",
+      "grill-bbq": "Izgara & BBQ",
+      "roast-bake": "Fırında",
+      "seafood": "Deniz Ürünleri",
+      "meat": "Et Yemekleri",
+      "chicken": "Tavuk Yemekleri",
+      "pastry": "Hamur İşi",
+      "bread": "Ekmek",
+      "pizza": "Pizza",
+      "dessert": "Tatlı",
+      "cake": "Kek",
+      "cookies": "Kurabiye",
+      "pudding": "Muhallebi & Puding",
+      "sauce-dip": "Sos & Dip",
+      "drink": "İçecek",
+      "hot-drink": "Sıcak İçecek",
+      "cold-drink": "Soğuk İçecek",
+      "tea": "Çay",
+      "coffee": "Kahve",
+      "smoothie": "Smoothie",
+      "juice": "Meyve Suyu"
+    }
+  }
+}

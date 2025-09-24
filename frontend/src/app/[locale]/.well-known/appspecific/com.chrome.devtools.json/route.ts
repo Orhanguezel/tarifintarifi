@@ -9,7 +9,7 @@ export async function GET() {
   const payload = {
     // örnek/placeholder — kendi içeriğinizle değiştirin
     ok: true,
-    name: "tarifintarifi devtools",
+    name: "ensotek devtools",
   };
   return NextResponse.json(payload, {
     headers: { "Cache-Control": "public, max-age=3600" },

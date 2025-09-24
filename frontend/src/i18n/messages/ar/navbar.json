@@ -1,16 +1,28 @@
 {
-    "brand": { "subtitle": "وصفات سهلة وموثوقة" },
-    "aria": { "mainMenu": "القائمة الرئيسية", "categories": "الفئات" },
-    "actions": {
-      "ai": "وصفة بالذكاء الاصطناعي",
-      "submit": "أرسل وصفة",
-      "aiShort": "ذكاء اصطناعي",
-      "submitShort": "إرسال"
-    },
-    "search": {
-      "placeholder": "ابحث عن الوصفات...",
-      "aria": "بحث في الموقع",
-      "button": "بحث"
-    },
-    "tip": { "label": "نصيحة:", "text": "استخدم اختصارات الفئات للتصفح أسرع." }
+  "brand": {
+    "subtitle": "حلول صناعية",
+    "logoAlt": "شعار Ensotek"
+  },
+  "links": {
+    "about": "من نحن",
+    "products": "المنتجات",
+    "spareparts": "قطع الغيار",
+    "references": "المرجعيات",
+    "library": "المكتبة",
+    "news": "الأخبار",
+    "contact": "اتصال"
+  },
+  "aria": {
+    "mainMenu": "القائمة الرئيسية",
+    "secondaryMenu": "قائمة الجوال"
+  },
+  "search": {
+    "placeholder": "ابحث…",
+    "aria": "بحث الموقع",
+    "button": "بحث"
+  },
+  "tip": {
+    "label": "نصيحة:",
+    "text": "جرّب كلمات مفتاحية متعلقة بالمنتجات أو الخدمات."
   }
+}

@@ -1,2 +1,7 @@
-{ "unit": { "minutesShort": "мин", "kcal": "ккал", "servings": "порций" },
-    "actions": { "view": "Открыть" }, "notFound": "Не найдено"  }
+{
+  "cta": {
+    "learnMore": "Узнать больше",
+    "contact": "Связаться",
+    "viewAll": "Показать все"
+  }
+}
