@@ -1,38 +1,61 @@
-// src/features/seo/SiteJsonLd.tsx
 import React from "react";
 import type { SupportedLocale } from "@/types/common";
+import { siteUrlBase, absoluteUrl, compact } from "./utils";
 
 export default function SiteJsonLd({ locale }: { locale: SupportedLocale }) {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://tarifintarifi.com").replace(/\/+$/,"");
-  const name = (process.env.NEXT_PUBLIC_SITE_NAME || "tarifintarifi.com").trim();
-  const logo = `${base}/logo.png`;
+  const base = siteUrlBase();
+  const name = (process.env.NEXT_PUBLIC_SITE_NAME || "ensotek.de").trim();
+  const logo = absoluteUrl("/logo.png");
 
-  const sameAsRaw = (process.env.NEXT_PUBLIC_ORG_SAMEAS || "").split(",").map(s => s.trim()).filter(Boolean);
+  // Şirket açıklaması (TEST Organization.description>10 bekliyor)
+  const orgDescription =
+    (process.env.NEXT_PUBLIC_ORG_DESCRIPTION ||
+      "Ensotek – Industrial solutions & services.").trim();
+
+  const rawSameAs = (process.env.NEXT_PUBLIC_ORG_SAMEAS || "")
+    .split(",")
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  // sadece http/https ile başlayanları al
+  const sameAs = rawSameAs.filter(u => /^https?:\/\//i.test(u));
+
+  const contactPoint = compact({
+    "@type": "ContactPoint",
+    telephone: (process.env.NEXT_PUBLIC_ORG_CONTACT_TELEPHONE || "").trim() || undefined,
+    contactType: (process.env.NEXT_PUBLIC_ORG_CONTACT_TYPE || "customer support").trim(),
+    areaServed: (process.env.NEXT_PUBLIC_ORG_CONTACT_AREA || "").trim() || undefined,
+    availableLanguage: (process.env.NEXT_PUBLIC_ORG_CONTACT_LANGS || locale)
+      .split(",").map(s => s.trim()),
+  });
+  if (!contactPoint.telephone) delete (contactPoint as any).telephone;
 
   const data = [
-    {
+    compact({
       "@context": "https://schema.org",
       "@type": "WebSite",
       "@id": `${base}#website`,
       url: `${base}/`,
       name,
       inLanguage: locale,
-      publisher: { "@id": `${base}#organization` }, // ↔ Organization’a referans
-      potentialAction: {
+      publisher: { "@id": `${base}#organization` },
+      potentialAction: compact({
         "@type": "SearchAction",
         target: `${base}/${locale}?q={search_term_string}`,
-        "query-input": "required name=search_term_string"
-      }
-    },
-    {
+        "query-input": "required name=search_term_string",
+      }),
+    }),
+    compact({
       "@context": "https://schema.org",
       "@type": "Organization",
       "@id": `${base}#organization`,
       url: `${base}/`,
       name,
+      description: orgDescription,          // ⇐ eklendi
       logo: { "@type": "ImageObject", url: logo },
-      ...(sameAsRaw.length ? { sameAs: sameAsRaw } : {})
-    }
+      ...(sameAs.length ? { sameAs } : {}),
+      ...(Object.keys(contactPoint).length ? { contactPoint: [contactPoint] } : {}),
+    }),
   ];
 
   return (

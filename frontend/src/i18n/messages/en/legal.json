@@ -1,44 +1,64 @@
 {
-    "common": { "lastUpdated": "Last updated: {date}" },
-    "about": {
-      "title": "About Us",
-      "intro": "tarifintarifi.com is a cooking platform offering practical, trustworthy recipes in multiple languages.",
-      "mission": { "title": "Our Mission", "text": "Make recipes clear for all levels with smart search and curation." },
-      "team": { "title": "Team", "text": "A small, passionate team of food lovers and developers." },
-      "lastUpdated": "Last updated: {date}"
-    },
-    "contact": {
-      "title": "Contact",
-      "desc": "For questions and partnerships, drop us a line.",
-      "email": "Email",
-      "address": "Address",
-      "addressText": "Istanbul, Türkiye"
-    },
-    "privacy": {
-      "title": "Privacy Policy",
-      "intro": "We care about your privacy. This page explains what we collect and how we use it.",
-      "sections": {
-        "dataWeCollect": {
-          "title": "Data We Collect",
-          "items": {
-            "usage": "Usage data (page views, search terms).",
-            "cookies": "Cookies and similar technologies.",
-            "optional": "Voluntary info you submit (contact forms, etc.)."
-          }
-        },
-        "howWeUse": { "title": "How We Use Data", "text": "To improve the service, ensure security, and personalize content." },
-        "rights": { "title": "Your Rights", "text": "You may request access, correction, and deletion of your data." }
+  "contact": {
+    "title": "Contact",
+    "desc": "Write to us for questions and partnerships.",
+    "email": "Email",
+    "address": "Address",
+    "addressText": "Istanbul, Turkey"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "We care about your privacy. This text explains which data we collect and how we use it.",
+    "sections": {
+      "dataWeCollect": {
+        "title": "Data We Collect",
+        "items": {
+          "usage": "Usage data (page views, search terms).",
+          "cookies": "Cookies and similar technologies.",
+          "optional": "Information voluntarily shared (contact forms, etc.)."
+        }
       },
-      "lastUpdated": "Last updated: {date}"
-    },
-    "terms": {
-      "title": "Terms of Use",
-      "intro": "By using our site, you agree to the terms below.",
-      "sections": {
-        "use": { "title": "Use of Service", "text": "Use the service lawfully and without abuse." },
-        "content": { "title": "Content & Copyright", "text": "Content is for information; copyrights are respected." },
-        "limitation": { "title": "Limitation of Liability", "text": "Service is provided “as is”; we’re not liable for indirect damages." }
+      "howWeUse": {
+        "title": "How We Use Data",
+        "text": "To improve the service, ensure security and enable personalization."
       },
-      "lastUpdated": "Last updated: {date}"
-    }
+      "rights": {
+        "title": "Your Rights",
+        "text": "You can exercise your rights to access, correct and delete your data."
+      }
+    },
+    "lastUpdated": "Last updated: {date}"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "intro": "By using our site, you agree to the terms below.",
+    "sections": {
+      "use": {
+        "title": "Use of the Service",
+        "text": "You agree to use the service lawfully and without abuse."
+      },
+      "content": {
+        "title": "Content and Copyright",
+        "text": "Content is for information purposes; copyright is respected."
+      },
+      "limitation": {
+        "title": "Limitation of Liability",
+        "text": "The service is provided “as is”; we are not responsible for indirect damages."
+      }
+    },
+    "lastUpdated": "Last updated: {date}"
+  },
+  "about": {
+    "title": "About Us",
+    "intro": "ensotek.com is a platform that offers industrial solutions and technical services in multiple languages.",
+    "mission": {
+      "title": "Our Mission",
+      "text": "To deliver reliable solutions and fast support to our partners."
+    },
+    "team": {
+      "title": "Team",
+      "text": "A passionate team of engineers and developers."
+    },
+    "lastUpdated": "Last updated: {date}"
   }
+}

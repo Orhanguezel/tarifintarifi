@@ -1,11 +1,11 @@
 # tariftarif# tarifteyiz
-# TarifinTarifi · Açık Kaynak Tarif Platformu
+# ensotek · Açık Kaynak Tarif Platformu
 
 Çok dilli, SEO-dostu ve hızlı bir **tarif keşif & paylaşım** platformu.
 Frontend **Next.js (App Router, SSR)**, backend **Node.js + MongoDB**, paket yöneticisi **Bun**, süreç yönetimi **PM2** ile gelir.
 Yorumlarda spam koruması için **reCAPTCHA Enterprise** kullanır.
 
-> Canlı örnek: **tarifintarifi.com** (örnek adres — kendi domain’inizle barındırın)
+> Canlı örnek: **ensotek.com** (örnek adres — kendi domain’inizle barındırın)
 
 ---
 
@@ -51,8 +51,8 @@ Yorumlarda spam koruması için **reCAPTCHA Enterprise** kullanır.
 ### 1) Depoyu klonla
 
 ```bash
-git clone https://github.com/kazatlet/tarifintarifi.git
-cd tarifintarifi
+git clone https://github.com/kazatlet/ensotek.git
+cd ensotek
 ```
 
 ### 2) .env dosyaları
@@ -106,7 +106,7 @@ CAPTCHA_BYPASS_TOKEN=dev-bypass-123
 # i18n & Site
 NEXT_PUBLIC_SUPPORTED_LOCALES=tr,en,fr,de,it,pt,ar,ru,zh,hi
 NEXT_PUBLIC_DEFAULT_LOCALE=tr
-NEXT_PUBLIC_SITE_NAME=tarifintarifi.com
+NEXT_PUBLIC_SITE_NAME=ensotek.com
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_CONTACT_EMAIL=support@example.com
 
@@ -206,7 +206,7 @@ Tarayıcı ──> Next.js (frontend)
 ## 🔐 reCAPTCHA Enterprise
 
 * **Site Key** (frontend) ve **Server API Key** (backend) **farklıdır**.
-* GCP Key’de domain listenizi (örn. `www.tarifintarifi.com`, `tarifintarifi.com`, `localhost`) eklemeyi unutmayın.
+* GCP Key’de domain listenizi (örn. `www.ensotek.com`, `ensotek.com`, `localhost`) eklemeyi unutmayın.
 * Dev’de `NEXT_PUBLIC_ENABLE_RECAPTCHA=false` ile kapatabilirsiniz.
 * Google’ın görünürlük/politika gerekliliklerine uyun (gizlilik metni, kullanım şartları).
 

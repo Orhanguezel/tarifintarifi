@@ -1,0 +1,27 @@
+{
+  "title": "Zarządzanie klientami",
+  "customerList": "Klienci",
+  "addNew": "Dodaj nowego",
+  "editAddresses": "Zarządzaj adresami",
+  "delete": "Usuń",
+  "deleteConfirm": "Czy na pewno chcesz usunąć tego klienta?",
+  "notFound": "Nie znaleziono rekordu klienta.",
+  "customerInfo": "Informacje o kliencie",
+  "companyName": "Nazwa firmy",
+  "contactName": "Osoba kontaktowa",
+  "email": "E-mail",
+  "phone": "Telefon",
+  "isActive": "Aktywny",
+  "active": "Aktywny",
+  "inactive": "Nieaktywny",
+  "notes": "Notatki",
+  "address": "Adres",
+  "addressPhone": "Telefon adresowy",
+  "addresses": {
+    "title": "Adresy"
+  },
+  "save": "Zapisz",
+  "validation": {
+    "requiredFields": "Proszę wypełnić wszystkie wymagane pola."
+  }
+}

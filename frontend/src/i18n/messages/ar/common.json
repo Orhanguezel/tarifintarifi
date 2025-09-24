@@ -1,2 +1,7 @@
-{ "unit": { "minutesShort": "د", "kcal": "كيلو كالوري", "servings": "حصص" },
-    "actions": { "view": "عرض" },"notFound": "غير موجود"  }
+{
+  "cta": {
+    "learnMore": "اعرف المزيد",
+    "contact": "اتصل بنا",
+    "viewAll": "عرض الكل"
+  }
+}

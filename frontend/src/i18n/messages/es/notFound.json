@@ -1,0 +1,6 @@
+{
+    "title": "Sayfa bulunamadı",
+    "desc": "Aradığınız sayfa taşınmış veya hiç var olmamış olabilir.",
+    "actions": { "home": "Ana sayfa", "browse": "Tariflere göz at" },
+    "note": "Kısa süre içinde ana sayfaya yönlendirileceksiniz."
+  }

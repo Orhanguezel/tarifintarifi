@@ -1,4 +1,3 @@
-// src/lib/rtk/axiosBaseQuery.ts
 "use client";
 
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
@@ -11,7 +10,6 @@ type Args = {
   data?: any;
   params?: any;
   headers?: AxiosRequestConfig["headers"];
-  /** Login/Register gibi uçlarda CSRF kapatmak istersen */
   csrfDisabled?: boolean;
 };
 
@@ -19,14 +17,7 @@ export const axiosBaseQuery =
   (): BaseQueryFn<Args, unknown, unknown> =>
   async ({ url, method = "GET", data, params, headers, csrfDisabled }) => {
     try {
-      const res = await API.request({
-        url,
-        method,
-        data,
-        params,
-        headers,
-        csrfDisabled,
-      });
+      const res = await API.request({ url, method, data, params, headers, csrfDisabled });
       return { data: res.data };
     } catch (e) {
       const err = e as AxiosError<any>;

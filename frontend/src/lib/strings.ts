@@ -1,26 +1,29 @@
 // src/lib/strings.ts
-export function toSlugSafe(v?: string) {
-  const lower = String(v ?? "").toLowerCase();
-  const n = typeof (lower as any).normalize === "function" ? lower.normalize("NFKD") : lower;
-  return n
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
+/** Küçük yardımcılar: güvenli string/URL/locale işlemleri */
 
-export function prettyFromSlug(k: string) {
-  const s = String(k || "").replace(/[_-]+/g, " ").trim();
-  return s ? s[0].toUpperCase() + s.slice(1) : k;
-}
+export const toStr = (v: unknown) => (v == null ? "" : String(v));
 
-export function decodeQueryValue(v?: string) {
-  if (!v) return "";
-  const s = String(v).replace(/\+/g, " "); // '+' => space
-  try {
-    return decodeURIComponent(s);
-  } catch {
-    return s; // zaten decode edilemiyorsa raw halini kullan
-  }
-}
+/** Başa / ekler */
+export const ensureLeadingSlash = (s: string) => (s.startsWith("/") ? s : `/${s}`);
+
+/** Sondaki /’ları temizler (root hariç) */
+export const stripTrailingSlash = (s: string) => s.replace(/(?<!^)\/+$/g, "");
+
+/** Trim + tek boşlukla birleştir */
+export const squish = (s: string) => toStr(s).replace(/\s+/g, " ").trim();
+
+/** Güvenli split (boşları at) */
+export const safeSplit = (s: string, sep: RegExp | string) =>
+  toStr(s).split(sep).map((x) => x.trim()).filter(Boolean);
+
+/** Locale doğrulama (de|en|tr) */
+export type Locale = "de" | "en" | "tr";
+export const isLocale = (x: string): x is Locale => /^(de|en|tr)$/.test(x);
+
+/** Cookie-value decode (kusurlu escape’a toleranslı) */
+export const safeDecode = (s: string) => {
+  try { return decodeURIComponent(s); } catch { return s; }
+};
+
+
+

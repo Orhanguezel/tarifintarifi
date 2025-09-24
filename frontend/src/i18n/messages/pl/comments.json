@@ -1,0 +1,17 @@
+{
+  "title": "Yorumlar",
+  "add": "Yorum ekle",
+  "name": "Ad",
+  "nameShort": "Adın",
+  "email": "E-posta",
+  "emailShort": "E-posta",
+  "text": "Yorumunuz",
+  "placeholder": "Tarifle ilgili deneyimini yaz...",
+  "submit": "Gönder",
+  "submitLong": "Yorumu Gönder",
+  "sending": "Gönderiliyor…",
+  "sentOk": "Gönderildi",
+  "sentErr": "Bir hata oluştu",
+  "guest": "Misafir",
+  "emptyPrompt": "İlk yorumu sen yaz!"
+}

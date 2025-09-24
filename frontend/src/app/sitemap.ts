@@ -1,34 +1,34 @@
-// app/sitemap.ts
 import type { MetadataRoute } from "next";
 
-// ❌ export const revalidate = 60 * 60;
-export const revalidate = 3600; // ✅ literal sayı olmalı
+export const revalidate = 3600;
 
 const LOCALES = (process.env.NEXT_PUBLIC_SUPPORTED_LOCALES || "tr,en,fr,de,it,pt,ar,ru,zh,hi")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
 
-const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.tarifintarifi.com").replace(/\/+$/,"");
+const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.ensotek.de").replace(/\/+$/, "");
 
-// API tabanı (önce backend origin, yoksa public url)
 const API_BASE = (() => {
-  const be = (process.env.BACKEND_ORIGIN || "").replace(/\/+$/,"");
+  const be = (process.env.BACKEND_ORIGIN || "").replace(/\/+$/, "");
   if (be) return `${be}/api`;
-  const pub = (process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || "").replace(/\/+$/,"");
-  return pub || "";
+  const pubA = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/+$/, "");
+  if (pubA) return pubA;
+  const pubB = (process.env.NEXT_PUBLIC_API_BASE || process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(/\/+$/, "");
+  return pubB || "";
 })();
 
 function langAlt(pathFactory: (l: string) => string) {
   const map: Record<string, string> = {};
-  for (const l of LOCALES) map[l] = `${SITE}/${pathFactory(l).replace(/^\/+/,"")}`;
+  for (const l of LOCALES) map[l] = `${SITE}/${pathFactory(l).replace(/^\/+/, "")}`;
+  map["x-default"] = `${SITE}/${(process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "tr")}/`;
   return map;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
-  // Kök yerelleştirilmiş sayfalar + hreflang
+  // Locale’li ana sayfalar
   const homeAlt = langAlt((l) => `/${l}`);
   for (const l of LOCALES) {
     entries.push({
@@ -39,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  // (İsteğe bağlı) mevcut "recipes" içeriklerini dahil et
   if (API_BASE) {
     try {
       const r = await fetch(
@@ -61,9 +62,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           });
 
           for (const l of LOCALES) {
-            const url = alt[l];
             entries.push({
-              url,
+              url: alt[l],
               lastModified: new Date(last),
               changeFrequency: "weekly",
               priority: 0.7,
@@ -73,7 +73,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
       }
     } catch {
-      // API erişilemezse sadece ana sayfalar kalsın
+      // API kapalıysa yalnızca ana sayfalar kalsın
     }
   }
 

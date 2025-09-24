@@ -1,10 +1,10 @@
 {
-  "nav": { "home": "Accueil" },
-
+  "nav": {
+    "home": "Accueil"
+  },
   "recipes": {
     "latest": "Dernières recettes ajoutées"
   },
-
   "comments": {
     "title": "Commentaires",
     "add": "Ajouter un commentaire",
@@ -16,13 +16,11 @@
     "guest": "Invité",
     "emptyPrompt": "Soyez le premier à commenter !"
   },
-
   "difficulty": {
     "easy": "Facile",
     "medium": "Moyen",
     "hard": "Difficile"
   },
-
   "common": {
     "actions": {
       "view": "Voir →"
@@ -42,7 +40,6 @@
     },
     "note": "Si vous avez saisi une URL, vérifiez l’orthographe et réessayez."
   },
-
   "home": {
     "search": {
       "placeholder": "Petit-déjeuner",
@@ -59,7 +56,9 @@
     "popular": {
       "title": "Recettes populaires"
     },
-    "results": { "title": "Résultats" },
+    "results": {
+      "title": "Résultats"
+    },
     "all": {
       "title": "Toutes les recettes"
     },
@@ -74,7 +73,6 @@
       "fetch": "Impossible de charger la liste."
     }
   },
-
   "category": {
     "count": "{count} recettes",
     "empty": "Il n’y a pas encore de recettes dans cette catégorie.",
@@ -82,7 +80,6 @@
       "aria": "Pagination"
     }
   },
-
   "categoryPage": {
     "notFound": {
       "title": "Catégorie introuvable",
@@ -93,7 +90,6 @@
       "desc": "Échec du chargement des recettes."
     }
   },
-
   "navbar": {
     "brand": {
       "subtitle": "Le plus grand site de recettes"
@@ -118,10 +114,9 @@
       "text": "Saisissez un ingrédient (ex. maïs) ou une cuisine (ex. italienne) pour une recherche rapide."
     }
   },
-
   "footer": {
     "brand": {
-      "name": "tarifintarifi.com",
+      "name": "ensotek.com",
       "tagline": "Le bon endroit pour des recettes délicieuses et pratiques."
     },
     "sections": {
@@ -136,7 +131,6 @@
     },
     "copyright": "© {year} {brand} • Tous droits réservés"
   },
-
   "recipeDetail": {
     "print": "Imprimer",
     "meta": {
@@ -178,7 +172,6 @@
       "sodium": "Sodium"
     }
   },
-
   "categories": {
     "soup": "Soupe",
     "breakfast": "Petit-déjeuner",
@@ -189,9 +182,10 @@
     "snack": "Snack",
     "drink": "Boisson"
   },
-
   "aiGen": {
-    "head": { "title": "🤖 Créer une recette avec l’IA" },
+    "head": {
+      "title": "🤖 Créer une recette avec l’IA"
+    },
     "fields": {
       "lang": "Langue de sortie",
       "cuisine": {
@@ -240,13 +234,14 @@
         "default": "Générer"
       }
     },
-    "error": { "generic": "Une erreur est survenue lors de la génération." },
+    "error": {
+      "generic": "Une erreur est survenue lors de la génération."
+    },
     "success": {
       "created": "Recette créée : {title}",
       "viewLink": "voir la recette"
     }
   },
-
   "submitRecipe": {
     "head": {
       "title": "🍽️ Envoyer une recette",
@@ -258,11 +253,26 @@
         "placeholder": "Ex. Boulgour aux légumes sans four",
         "help": "Au moins 3 caractères."
       },
-      "category": { "label": "Catégorie", "optional": "(Facultatif)" },
-      "servings": { "label": "Portions (personnes)", "placeholder": "4" },
-      "totalMinutes": { "label": "Temps total (min)", "placeholder": "30" },
-      "calories": { "label": "Calories (kcal)", "placeholder": "350" },
-      "description": { "label": "Description", "placeholder": "Brève description de la recette…" },
+      "category": {
+        "label": "Catégorie",
+        "optional": "(Facultatif)"
+      },
+      "servings": {
+        "label": "Portions (personnes)",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "Temps total (min)",
+        "placeholder": "30"
+      },
+      "calories": {
+        "label": "Calories (kcal)",
+        "placeholder": "350"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Brève description de la recette…"
+      },
       "ingredients": {
         "label": "Ingrédients * (un par ligne)",
         "placeholder": "Ex. :\n2 tomates\n1 poivron vert\n1 c. à s. d’huile d’olive",
@@ -278,7 +288,10 @@
         "placeholder": "turkish, italian… (Entrée/virgule pour ajouter)",
         "help": "Ajoutez une par une. Ex. turkish"
       },
-      "tags": { "label": "Tags", "placeholder": "vegan, rapide, sans four…" }
+      "tags": {
+        "label": "Tags",
+        "placeholder": "vegan, rapide, sans four…"
+      }
     },
     "images": {
       "title": "Images (Facultatif)",
@@ -291,7 +304,10 @@
     },
     "buttons": {
       "fillExample": "⚙ Remplir un exemple",
-      "submit": { "loading": "Envoi…", "default": "Envoyer" }
+      "submit": {
+        "loading": "Envoi…",
+        "default": "Envoyer"
+      }
     },
     "notes": {
       "error": "Erreur lors de l’envoi.",
@@ -300,12 +316,20 @@
     }
   },
   "legal": {
-    "common": { "lastUpdated": "Dernière mise à jour : {date}" },
+    "common": {
+      "lastUpdated": "Dernière mise à jour : {date}"
+    },
     "about": {
       "title": "À propos de nous",
-      "intro": "tarifintarifi.com est une plateforme culinaire proposant des recettes pratiques et fiables en plusieurs langues.",
-      "mission": { "title": "Notre mission", "text": "Rendre les recettes claires pour tous les niveaux grâce à une recherche intelligente et une curation soignée." },
-      "team": { "title": "Équipe", "text": "Une petite équipe passionnée composée d’amoureux de la cuisine et de développeurs." },
+      "intro": "ensotek.com est une plateforme culinaire proposant des recettes pratiques et fiables en plusieurs langues.",
+      "mission": {
+        "title": "Notre mission",
+        "text": "Rendre les recettes claires pour tous les niveaux grâce à une recherche intelligente et une curation soignée."
+      },
+      "team": {
+        "title": "Équipe",
+        "text": "Une petite équipe passionnée composée d’amoureux de la cuisine et de développeurs."
+      },
       "lastUpdated": "Dernière mise à jour : {date}"
     },
     "contact": {
@@ -327,8 +351,14 @@
             "optional": "Informations fournies volontairement (formulaires de contact, etc.)."
           }
         },
-        "howWeUse": { "title": "Comment nous utilisons les données", "text": "Pour améliorer le service, assurer la sécurité et personnaliser le contenu." },
-        "rights": { "title": "Vos droits", "text": "Vous pouvez demander l’accès, la rectification et la suppression de vos données." }
+        "howWeUse": {
+          "title": "Comment nous utilisons les données",
+          "text": "Pour améliorer le service, assurer la sécurité et personnaliser le contenu."
+        },
+        "rights": {
+          "title": "Vos droits",
+          "text": "Vous pouvez demander l’accès, la rectification et la suppression de vos données."
+        }
       },
       "lastUpdated": "Dernière mise à jour : {date}"
     },
@@ -336,15 +366,24 @@
       "title": "Conditions d’utilisation",
       "intro": "En utilisant notre site, vous acceptez les conditions ci-dessous.",
       "sections": {
-        "use": { "title": "Utilisation du service", "text": "Utilisez le service légalement et sans abus." },
-        "content": { "title": "Contenu et droits d’auteur", "text": "Le contenu est informatif ; les droits d’auteur sont respectés." },
-        "limitation": { "title": "Limitation de responsabilité", "text": "Le service est fourni « tel quel » ; nous ne sommes pas responsables des dommages indirects." }
+        "use": {
+          "title": "Utilisation du service",
+          "text": "Utilisez le service légalement et sans abus."
+        },
+        "content": {
+          "title": "Contenu et droits d’auteur",
+          "text": "Le contenu est informatif ; les droits d’auteur sont respectés."
+        },
+        "limitation": {
+          "title": "Limitation de responsabilité",
+          "text": "Le service est fourni « tel quel » ; nous ne sommes pas responsables des dommages indirects."
+        }
       },
       "lastUpdated": "Dernière mise à jour : {date}"
     }
   },
   "seo": {
-    "homeTitle": "TarifinTarifi – Recettes pratiques et fiables",
+    "homeTitle": "ensotek – Recettes pratiques et fiables",
     "homeDesc": "Des recettes pratiques et fiables en plusieurs langues. Parcourez par catégorie ou recherchez par ingrédient.",
     "ogAlt": "{site} - Image de couverture"
   }

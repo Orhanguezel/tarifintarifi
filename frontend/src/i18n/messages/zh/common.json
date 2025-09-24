@@ -1,2 +1,7 @@
-{  "unit": { "minutesShort": "分钟", "kcal": "千卡", "servings": "份" },
-    "actions": { "view": "查看" },"notFound": "未找到" }
+{
+  "cta": {
+    "learnMore": "了解更多",
+    "contact": "联系",
+    "viewAll": "查看全部"
+  }
+}

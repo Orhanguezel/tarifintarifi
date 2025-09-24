@@ -1,38 +1,44 @@
-// app/[locale]/(legal)/contact/page.tsx
+// app/[locale]/(public)/contact/page.tsx
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { basicMeta } from "@/features/page/seo";
+import { SectionScaffold } from "@/features/page/PageFactory";
+import { isSupportedLocale, DEFAULT_LOCALE } from "@/i18n/locale-helpers";
 import type { SupportedLocale } from "@/types/common";
 
 export const revalidate = 86400;
+type Params = Promise<{ locale: string }>;
+const CONTACT_EMAIL = (process.env.NEXT_PUBLIC_CONTACT_EMAIL || process.env.CONTACT_EMAIL || "support@ensotek.com").trim();
 
-type Params = { locale: SupportedLocale };
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { locale: raw } = await params;
+  const locale: SupportedLocale = isSupportedLocale(raw) ? raw : DEFAULT_LOCALE;
+  const t = await getTranslations({ locale, namespace: "pages.contact" });
+  return basicMeta({
+    locale, path: `/${locale}/contact`,
+    title: t("title", { default: "Contact" }),
+    description: t("desc", { default: "Get in touch with us." })
+  });
+}
 
-// .env'den e-posta oku (+ güvenli fallback)
-const CONTACT_EMAIL =
-  (process.env.NEXT_PUBLIC_CONTACT_EMAIL || process.env.CONTACT_EMAIL || "hello@tarifintarifi.com").trim();
-
-export default async function ContactPage({
-  params,
-}: {
-  params: Promise<Params>;
-}) {
-  const { locale } = await params; // ⬅️ önemli
-  const t = await getTranslations({ locale, namespace: "legal.contact" });
+export default async function ContactPage({ params }: { params: Params }) {
+  const { locale: raw } = await params;
+  const locale: SupportedLocale = isSupportedLocale(raw) ? raw : DEFAULT_LOCALE;
+  const t = await getTranslations({ locale, namespace: "pages.contact" });
 
   return (
-    <main style={{ maxWidth: 860, margin: "28px auto", padding: "0 16px" }}>
-      <h1>{t("title")}</h1>
-      <p>{t("desc")}</p>
+    <SectionScaffold
+      h1={t("title", { default: "Contact" })}
+      intro={t("intro", { default: "We’ll be glad to hear from you." })}
+      breadcrumbs={[
+        { name: t("home", { default: "Home" }), url: `/${locale}` },
+        { name: t("title", { default: "Contact" }), url: `/${locale}/contact` },
+      ]}
+    >
       <ul>
-        <li>
-          {t("email")}:{" "}
-          <a href={`mailto:${CONTACT_EMAIL}`} rel="noopener noreferrer">
-            {CONTACT_EMAIL}
-          </a>
-        </li>
-        <li>
-          {t("address")}: {t("addressText")}
-        </li>
+        <li>{t("email", { default: "E-mail" })}: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
+        <li>{t("address", { default: "Address" })}: {t("addressText", { default: "Istanbul, Türkiye" })}</li>
       </ul>
-    </main>
+    </SectionScaffold>
   );
 }

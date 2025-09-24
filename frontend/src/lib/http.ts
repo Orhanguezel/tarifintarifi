@@ -1,44 +1,32 @@
-// src/lib/http.ts
-// ⚠️ Bu dosya client bundle'a girer.
+import { ensureLeadingSlash, stripTrailingSlash, Locale } from "./strings";
+import { getEnvTenant } from "./config";
 
-const ensureLeadingSlash = (s: string) => (s.startsWith("/") ? s : `/${s}`);
-const stripTrailingSlash = (s: string) => s.replace(/\/+$/, "");
-
-/**
- * Public fetch'lerde kullanılacak path-base.
- * RTK Query veya fetch ile aynı origin'e istek atıyorsan /api yeterli.
- * (Axios zaten NEXT_PUBLIC_API_URL ile absolute kullanıyor.)
- */
+/** /api tabanı (same-origin default) */
 export function getApiBase(): string {
   const raw = process.env.NEXT_PUBLIC_API_BASE || "/api";
   const base = ensureLeadingSlash(raw);
   return stripTrailingSlash(base) || "/api";
 }
 
-export function getLangHeaders(locale: string) {
-  return { "Accept-Language": locale, "x-lang": locale };
+/** Ortak başlık üretimi – TEK NOKTA
+ *  - locale: 'de' gibi
+ *  - tenant: verilmezse env’den alınır
+ */
+export function buildCommonHeaders(locale: string | Locale, tenant?: string) {
+  const l = String(locale || "de").split("-")[0].toLowerCase();
+  const t = (tenant || getEnvTenant()).toLowerCase();
+  return { "Accept-Language": l, "x-lang": l, "X-Tenant": t };
 }
 
-export function getPublicApiKey() {
-  return String(process.env.NEXT_PUBLIC_API_KEY || "");
-}
-
-/** SSR/RSC için relative URL üret (cookie korumak için same-origin iyi olur). */
-export function getServerApiUrl(path = ""): string {
-  const base = (process.env.NEXT_PUBLIC_API_BASE || "/api").replace(/\/+$/, "");
-  const p = String(path || "").replace(/^\/+/, "");
-  return p ? `${ensureLeadingSlash(base)}/${p}` : ensureLeadingSlash(base);
-}
-
-/* ===== CSRF (client only) ===== */
-
+/** Client’ta CSRF cookie oku */
 function readCookie(name: string): string {
   if (typeof document === "undefined") return "";
-  const m = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
-  return m ? decodeURIComponent(m[2]) : "";
+  const re = new RegExp(`(?:^|;\\s*)${name}=([^;]*)`);
+  const m = document.cookie.match(re);
+  return m ? decodeURIComponent(m[1]) : "";
 }
 
-/** Cookie veya meta'dan olası CSRF token'ı getirir. */
+/** Client CSRF token (meta > cookie) */
 export function getClientCsrfToken():
   | { token: string; source: "meta" | "cookie" | "none" }
   | undefined {
@@ -53,7 +41,13 @@ export function getClientCsrfToken():
     "tt_csrf";
 
   const v = readCookie(cookieName);
-  if (v) return { token: v.split("|")[0] || v, source: "cookie" };
-
+  if (v) return { token: (v.split("|")[0] || v), source: "cookie" };
   return { token: "", source: "none" };
+}
+
+/** RSC/SSR için same-origin relative URL */
+export function getServerApiUrl(path = ""): string {
+  const base = (process.env.NEXT_PUBLIC_API_BASE || "/api").replace(/\/+$/, "");
+  const p = String(path || "").replace(/^\/+/, "");
+  return p ? `${ensureLeadingSlash(base)}/${p}` : ensureLeadingSlash(base);
 }

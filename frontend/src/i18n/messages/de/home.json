@@ -1,24 +1,31 @@
 {
-    "title": "Startseite",
-    "search": { "placeholder": "Rezepte suchen…", "button": "Suchen" },
-    "hint": { "label": "Tipp:", "text": "Wähle eine Kategorie oder nutze die Suche." },
-    "results": { "title": "Ergebnisse" },
-    "loading": "Wird geladen…",
-    "empty": "Keine Ergebnisse gefunden.",
-    "pagination": { "aria": "Seitennavigation", "prev": "Zurück", "next": "Weiter" },
-    "popular": { "title": "Beliebte Rezepte" },
-    "all": { "title": "Alle Rezepte" },
-    "quick": { "title": "Schnellkategorien" }, "clear": "Leeren",
-    "hero": {
-        "h1": "Finde tausende Rezepte"
+  "hero": {
+    "h1": "Ensotek — industrielle Lösungen",
+    "lead": "Brandschutz, Industrieanlagen und Ersatzteillösungen."
+  },
+  "sections": {
+    "services": { "title": "Unsere Leistungen" },
+    "news": {
+      "title": "Aktuelle Nachrichten",
+      "placeholder": "Neuigkeiten und Ankündigungen erscheinen hier in Kürze."
+    }
+  },
+  "cards": {
+    "services": {
+      "title": "Engineering & Projekte",
+      "desc": "Brandmeldung, Löschung und Wartungsleistungen."
     },
-    "sort.options.date_desc":"📅 Neu → Alt",
-    "sort.options.date_asc":"📅 Alt → Neu",
-    "sort.options.name_asc":"🔤 A → Z",
-    "sort.options.name_desc":"🔤 Z → A",
-    "sort.options.likes_desc":"❤️ Gefällt mir",
-    "sort.options.comments_desc":"💬 Kommentare",
-    "sort.options.rating_desc":"⭐ Bewertung",
-    "sort.label":"Sortieren nach",
-    "quick.selectPlaceholder":"Kategorie auswählen"
+    "products": {
+      "title": "Produkte",
+      "desc": "Industrielle Ausrüstung und Komponenten."
+    },
+    "spareparts": {
+      "title": "Ersatzteile",
+      "desc": "Lieferung von Original- und kompatiblen Ersatzteilen."
+    },
+    "references": {
+      "title": "Referenzen",
+      "desc": "Beispiele aus unseren abgeschlossenen Projekten."
+    }
   }
+}

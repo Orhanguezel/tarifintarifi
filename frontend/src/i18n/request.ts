@@ -1,6 +1,5 @@
-// src/i18n/request.ts
-import {getRequestConfig} from "next-intl/server";
-import {SUPPORTED_LOCALES, type SupportedLocale} from "@/types/common";
+import { getRequestConfig } from "next-intl/server";
+import { SUPPORTED_LOCALES, type SupportedLocale } from "@/types/common";
 
 // ==== Lokal konfig (routing import ETME) ====
 const LOCALES = SUPPORTED_LOCALES as readonly SupportedLocale[];
@@ -14,27 +13,48 @@ const DEFAULT_LOCALE: SupportedLocale = (() => {
   return isSupported(env) ? (env as SupportedLocale) : "tr";
 })();
 
-// Kullanacağın namespace listesi (dosya adlarıyla birebir)
+/**
+ * Ensotek modüllerine göre i18n namespace listesi:
+ * - common + layout (nav/footer/seo)
+ * - kurumsal: about/contact
+ * - içerik: library, references, products, spareParts, news
+ * - (geçici) recipes alanı
+ */
 const NAMESPACES = [
   "common",
   "nav",
   "navbar",
   "footer",
-  "home",
-  "recipes",
-  "comments",
-  "difficulty",
-  "notFound",
-  "category",
-  "categoryPage",
-  "tagPage",
-  "recipeDetail",
-  "categories",
-  "aiGen",
-  "submitRecipe",
-  "legal",
   "seo",
-  "tagLabels"
+
+  "home",
+  "about",
+  "contact",
+
+  "library",
+  "libraryDetail",
+
+  "references",
+  "referenceDetail",
+
+  "products",
+  "productDetail",
+
+  "spareParts",
+  "sparePartDetail",
+
+  "news",
+  "newsDetail",
+
+  "search",
+
+  // mevcut içerikler için
+  "comments",
+  "legal",
+  "notFound",
+  "tagPage",
+  "categories",
+  "tagLabels",
 ] as const;
 
 // --- Helpers ---
@@ -79,10 +99,7 @@ function mergeDeep<T extends Record<string, any>>(target: T, src: T): T {
  * - O da yoksa boş döner
  * Düz obje geldiyse `{[ns]: ...}` ile sarar; noktalı anahtarları undot eder.
  */
-async function loadNamespace(
-  locale: SupportedLocale,
-  ns: string
-): Promise<Record<string, any>> {
+async function loadNamespace(locale: SupportedLocale, ns: string): Promise<Record<string, any>> {
   const tryImport = async (loc: SupportedLocale) => {
     try {
       const mod = (await import(`@/i18n/messages/${loc}/${ns}.json`)) as any;
@@ -106,7 +123,7 @@ async function loadNamespace(
   return { [ns]: {} };
 }
 
-export default getRequestConfig(async ({requestLocale}) => {
+export default getRequestConfig(async ({ requestLocale }) => {
   const req = await requestLocale;
   const locale: SupportedLocale = isSupported(req) ? (req as SupportedLocale) : DEFAULT_LOCALE;
 

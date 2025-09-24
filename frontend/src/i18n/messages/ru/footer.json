@@ -1,7 +1,16 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "Простые и надёжные рецепты", "logoAlt": "Логотип tarifintarifi.com" },
-    "sections": { "categories": "Категории", "help": "Помощь" },
-    "links": { "about": "О нас", "contact": "Контакты", "privacy": "Конфиденциальность", "terms": "Условия использования" },
-    "copyright": "© {year} {brand}. Все права защищены.",
-    "design": { "label": "Дизайн — GuezelWebDesign", "aria": "Дизайн от GuezelWebDesign (открывается в новой вкладке)" }
-  }
+  "brand": { "name": "ensotek.de", "logoAlt": "Логотип Ensotek", "tagline": "Промышленные решения и сервис" },
+  "sections": { "site": "Сайт", "help": "Помощь", "legal": "Юридическая информация" },
+  "links": {
+    "about": "О нас",
+    "contact": "Контакты",
+    "privacy": "Конфиденциальность",
+    "terms": "Условия",
+    "products": "Продукция",
+    "references": "Референсы",
+    "library": "Библиотека",
+    "news": "Новости"
+  },
+  "copyright": "© {year} {brand}. Все права защищены.",
+  "design": { "aria": "Открыто на guezelwebdesign.com", "label": "Дизайн: GUEZEL Webdesign" }
+}

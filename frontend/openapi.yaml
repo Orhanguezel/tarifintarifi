@@ -1,0 +1,499 @@
+openapi: 3.1.0
+info:
+  title: Ensotek Headless API
+  version: 1.0.0
+  description: >
+    Çoklu-tenant, çoklu dil içerik/tema/navigasyon API'sı.
+    Tüm isteklerde **X-Tenant** zorunlu; dile göre içerik **Accept-Language**.
+
+servers:
+  - url: https://www.ensotek.de/api
+    description: Prod
+  - url: http://localhost:5035/api
+    description: Local
+
+tags:
+  - name: Tenants
+  - name: Settings
+  - name: Navigation
+  - name: Theme
+  - name: Pages
+  - name: Users
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: tt_session        # örnek cookie adı
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    XTenant:
+      name: X-Tenant
+      in: header
+      required: true
+      schema: { type: string, example: ensotek }
+      description: Aktif tenant slug'ı.
+    AcceptLanguage:
+      name: Accept-Language
+      in: header
+      required: false
+      schema: { type: string, example: de }
+      description: İçerik dili (ör. de, tr, en). Yoksa tenant defaultLocale.
+    IfNoneMatch:
+      name: If-None-Match
+      in: header
+      required: false
+      schema: { type: string }
+      description: ETag ile koşullu istek.
+    IfModifiedSince:
+      name: If-Modified-Since
+      in: header
+      required: false
+      schema: { type: string, format: date-time }
+      description: Last-Modified ile koşullu istek.
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 24 }
+    Q:
+      name: q
+      in: query
+      schema: { type: string }
+      description: Basit arama sorgusu (title, keywords, tags).
+    Type:
+      name: type
+      in: query
+      schema:
+        type: string
+        enum: [product, service, part, article, page]
+  headers:
+    ETag:
+      schema: { type: string }
+      description: Response checksum.
+    Last-Modified:
+      schema: { type: string, format: date-time }
+      description: Kaynağın son değişim zamanı.
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, example: FORBIDDEN }
+            message: { type: string }
+            details: { type: object, additionalProperties: true }
+            traceId: { type: string, format: uuid }
+    TenantSelf:
+      type: object
+      required: [id, slug, defaultLocale]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        defaultLocale: { type: string, example: de }
+        locales:
+          type: array
+          items: { type: string }
+        domainMap:
+          type: array
+          items:
+            type: object
+            properties:
+              domain: { type: string }
+              locale: { type: string }
+    ThemeTokens:
+      type: object
+      description: BE tarafında özgür şema; FE mapping yapacak.
+      additionalProperties: true
+    NavItem:
+      type: object
+      required: [id, label]
+      properties:
+        id: { type: string }
+        label: { type: string }
+        href: { type: string, nullable: true }
+        order: { type: integer, nullable: true }
+        children:
+          type: array
+          items: { $ref: '#/components/schemas/NavItem' }
+    Navigation:
+      type: object
+      properties:
+        primary:
+          type: array
+          items: { $ref: '#/components/schemas/NavItem' }
+        footer:
+          type: array
+          items: { $ref: '#/components/schemas/NavItem' }
+        legal:
+          type: array
+          items: { $ref: '#/components/schemas/NavItem' }
+    PageListItem:
+      type: object
+      required: [id, slug, type, title, updatedAt]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        type: { type: string, enum: [product, service, part, article, page] }
+        title: { type: string }
+        excerpt: { type: string, nullable: true }
+        cover: { type: string, nullable: true }       # image url
+        updatedAt: { type: string, format: date-time }
+        locale: { type: string }
+        seo:
+          type: object
+          properties:
+            title: { type: string }
+            description: { type: string }
+            keywords:
+              type: array
+              items: { type: string }
+    PageDetail:
+      allOf:
+        - $ref: '#/components/schemas/PageListItem'
+        - type: object
+          properties:
+            content:
+              type: array
+              description: Blok bazlı içerik, tip/props özgür.
+              items:
+                type: object
+                properties:
+                  type: { type: string }
+                  data: { type: object, additionalProperties: true }
+            gallery:
+              type: array
+              items: { type: string }
+    ListResponse:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/PageListItem' }
+        page: { type: integer, example: 1 }
+        limit: { type: integer, example: 24 }
+        total: { type: integer, example: 123 }
+        next: { type: string, nullable: true, description: Cursor/URL }
+    Me:
+      type: object
+      required: [_id, email, role]
+      properties:
+        _id: { type: string }
+        email: { type: string, format: email }
+        role: { type: string, enum: [admin, editor, viewer] }
+    LoginPayload:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 6 }
+    LoginResult:
+      type: object
+      required: [email, role]
+      properties:
+        email: { type: string, format: email }
+        role: { type: string, enum: [admin, editor, viewer] }
+        at: { type: string, description: Opsiyonel access token }
+        csrf: { type: string }
+    RegisterPayload:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 6 }
+        role: { type: string, enum: [admin, editor, viewer], default: admin }
+    ChangePasswordPayload:
+      type: object
+      required: [currentPassword, newPassword, confirmNewPassword]
+      properties:
+        currentPassword: { type: string }
+        newPassword: { type: string, minLength: 6 }
+        confirmNewPassword: { type: string, minLength: 6 }
+
+paths:
+
+  /v1/tenants/self:
+    get:
+      tags: [Tenants]
+      summary: Aktif tenant bilgisini getir
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/IfNoneMatch'
+        - $ref: '#/components/parameters/IfModifiedSince'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Last-Modified: { $ref: '#/components/headers/Last-Modified' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TenantSelf' }
+        '304': { description: Not Modified }
+        '4XX':
+          description: Error
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/locales:
+    get:
+      tags: [Settings]
+      summary: Desteklenen diller
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string, example: de }
+        '4XX':
+          description: Error
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/theme:
+    get:
+      tags: [Theme]
+      summary: Design tokens (styled-components için)
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/IfNoneMatch'
+        - $ref: '#/components/parameters/IfModifiedSince'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Last-Modified: { $ref: '#/components/headers/Last-Modified' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ThemeTokens' }
+        '304': { description: Not Modified }
+        '4XX':
+          description: Error
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/navigation:
+    get:
+      tags: [Navigation]
+      summary: Navigasyon ağaçları (primary/footer/legal)
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Navigation' }
+        '4XX':
+          description: Error
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/pages:
+    get:
+      tags: [Pages]
+      summary: Sayfa/İçerik listesi (deterministik)
+      description: |
+        Sıralama garantisi: **updatedAt DESC, id ASC**.
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Q'
+        - $ref: '#/components/parameters/Type'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ListResponse' }
+        '4XX':
+          description: Error
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/pages/{slugOrId}:
+    get:
+      tags: [Pages]
+      summary: Sayfa/İçerik detayı
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - name: slugOrId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Last-Modified: { $ref: '#/components/headers/Last-Modified' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PageDetail' }
+        '404':
+          description: Not Found
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+        '4XX':
+          description: Error
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/search:
+    get:
+      tags: [Pages]
+      summary: Basit arama
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/Q'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ListResponse' }
+        '4XX':
+          description: Error
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/users/me:
+    get:
+      tags: [Users]
+      summary: Oturum sahibi kullanıcı
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Me' }
+        '401':
+          description: Unauthorized
+        '4XX':
+          description: Error
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/users/login:
+    post:
+      tags: [Users]
+      summary: Email+şifre ile giriş
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginPayload' }
+      responses:
+        '200':
+          description: OK
+          headers:
+            Set-Cookie:
+              schema: { type: string }
+              description: Oturum cookie’si
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LoginResult' }
+        '401':
+          description: Unauthorized
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/users/register:
+    post:
+      tags: [Users]
+      summary: Yeni kullanıcı kaydı
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterPayload' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  email: { type: string }
+                  role: { type: string }
+
+  /v1/users/change-password:
+    post:
+      tags: [Users]
+      summary: Şifre değiştirme
+      security: [{ cookieAuth: [] }, { bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ChangePasswordPayload' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { type: object, properties: { ok: { type: boolean, example: true } } }
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden (CSRF/bearer yok)
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/users/refresh:
+    post:
+      tags: [Users]
+      summary: Oturum yenileme
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: object, properties: { ok: { type: boolean } } } } }
+
+  /v1/users/logout:
+    post:
+      tags: [Users]
+      summary: Çıkış
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/XTenant'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: No Content

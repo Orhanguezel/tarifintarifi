@@ -32,7 +32,7 @@ const isActive = (currentPath: string, linkPath: string) => {
  */
 type NextLinkProps = React.ComponentProps<typeof Link>;
 const LinkBase = (props: NextLinkProps) => <Link {...props} />;
-const NavLink = styled(LinkBase).attrs({ prefetch: false })<{ $active?: boolean }>`
+const NavLink = styled(LinkBase).attrs({ prefetch: false }) <{ $active?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacings.sm};
@@ -86,7 +86,6 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
   const LINKS = [
     { href: `/${locale}/admin`, label: "Dashboard", Icon: MdHome },
     { href: `/${locale}/admin/users`, label: "Kullanıcı", Icon: MdPerson },
-    { href: `/${locale}/admin/recipes`, label: "Tarifler", Icon: MdFastfood },
     { href: `/${locale}/admin/comments`, label: "Yorumlar", Icon: MdRateReview },
     { href: `/${locale}/admin/reactions`, label: "Reaksiyonlar", Icon: MdFavoriteBorder },
     { href: `/${locale}/admin/settings`, label: "Ayarlar", Icon: MdSettings },
@@ -99,7 +98,7 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
           <BrandLink href={`/${locale}`} onClick={onClose}>
             <BrandIcon>🍳</BrandIcon>
             <div>
-              <BrandTitle>tarifintarifi</BrandTitle>
+              <BrandTitle>ensotek</BrandTitle>
               <BrandSub>Admin</BrandSub>
             </div>
           </BrandLink>
@@ -125,7 +124,7 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
             type="button"
             disabled={loggingOut}
             onClick={async () => {
-              try { await logout().unwrap(); } catch {}
+              try { await logout().unwrap(); } catch { }
               onClose();
               router.replace(`/${locale}/login?tab=login`);
             }}

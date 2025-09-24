@@ -1,10 +1,10 @@
 {
-  "nav": { "home": "Home" },
-
+  "nav": {
+    "home": "Home"
+  },
   "recipes": {
     "latest": "Newest Recipes"
   },
-
   "comments": {
     "title": "Comments",
     "add": "Add a comment",
@@ -16,13 +16,11 @@
     "guest": "Guest",
     "emptyPrompt": "Be the first to comment!"
   },
-
   "difficulty": {
     "easy": "Easy",
     "medium": "Medium",
     "hard": "Hard"
   },
-
   "common": {
     "actions": {
       "view": "View →"
@@ -33,7 +31,7 @@
       "servings": "servings"
     }
   },
-   "notFound": {
+  "notFound": {
     "title": "Page not found",
     "desc": "The page you’re looking for doesn’t exist.",
     "actions": {
@@ -42,7 +40,6 @@
     },
     "note": "If you entered a URL, check the spelling and try again."
   },
-
   "home": {
     "search": {
       "placeholder": "Breakfast",
@@ -55,7 +52,9 @@
     "quick": {
       "title": "Quick Categories"
     },
-    "results": { "title": "Results" },
+    "results": {
+      "title": "Results"
+    },
     "clear": "Clear",
     "popular": {
       "title": "Popular Recipes"
@@ -74,7 +73,6 @@
       "fetch": "Could not load the list."
     }
   },
-
   "category": {
     "count": "{count} recipes",
     "empty": "There are no recipes in this category yet.",
@@ -82,7 +80,6 @@
       "aria": "Pagination"
     }
   },
-
   "categoryPage": {
     "notFound": {
       "title": "Category not found",
@@ -93,7 +90,6 @@
       "desc": "Failed to load recipes."
     }
   },
-
   "navbar": {
     "brand": {
       "subtitle": "The Largest Recipe Site"
@@ -118,10 +114,9 @@
       "text": "Type an ingredient (e.g. corn) or a cuisine (e.g. Italian) for quick search."
     }
   },
-
   "footer": {
     "brand": {
-      "name": "tarifintarifi.com",
+      "name": "ensotek.com",
       "tagline": "The right place for delicious and practical recipes."
     },
     "sections": {
@@ -136,7 +131,6 @@
     },
     "copyright": "© {year} {brand} • All Rights Reserved"
   },
-
   "recipeDetail": {
     "print": "Print",
     "meta": {
@@ -178,7 +172,6 @@
       "sodium": "Sodium"
     }
   },
-
   "categories": {
     "soup": "Soup",
     "breakfast": "Breakfast",
@@ -189,9 +182,10 @@
     "snack": "Snack",
     "drink": "Drink"
   },
-
   "aiGen": {
-    "head": { "title": "🤖 Create Recipe with AI" },
+    "head": {
+      "title": "🤖 Create Recipe with AI"
+    },
     "fields": {
       "lang": "Output language",
       "cuisine": {
@@ -240,13 +234,14 @@
         "default": "Generate"
       }
     },
-    "error": { "generic": "An error occurred during generation." },
+    "error": {
+      "generic": "An error occurred during generation."
+    },
     "success": {
       "created": "Recipe created: {title}",
       "viewLink": "view recipe"
     }
   },
-
   "submitRecipe": {
     "head": {
       "title": "🍽️ Submit a Recipe",
@@ -258,11 +253,26 @@
         "placeholder": "e.g. Easy No-Oven Bulgur with Vegetables",
         "help": "Must be at least 3 characters."
       },
-      "category": { "label": "Category", "optional": "(Optional)" },
-      "servings": { "label": "Servings (people)", "placeholder": "4" },
-      "totalMinutes": { "label": "Total Time (min)", "placeholder": "30" },
-      "calories": { "label": "Calories (kcal)", "placeholder": "350" },
-      "description": { "label": "Description", "placeholder": "A short description of the recipe…" },
+      "category": {
+        "label": "Category",
+        "optional": "(Optional)"
+      },
+      "servings": {
+        "label": "Servings (people)",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "Total Time (min)",
+        "placeholder": "30"
+      },
+      "calories": {
+        "label": "Calories (kcal)",
+        "placeholder": "350"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "A short description of the recipe…"
+      },
       "ingredients": {
         "label": "Ingredients * (one per line)",
         "placeholder": "e.g.\n2 tomatoes\n1 green pepper\n1 tbsp olive oil",
@@ -278,7 +288,10 @@
         "placeholder": "turkish, italian… (add with Enter/comma)",
         "help": "Add one by one. E.g. turkish"
       },
-      "tags": { "label": "Tags", "placeholder": "vegan, quick, no-oven…" }
+      "tags": {
+        "label": "Tags",
+        "placeholder": "vegan, quick, no-oven…"
+      }
     },
     "images": {
       "title": "Images (Optional)",
@@ -291,7 +304,10 @@
     },
     "buttons": {
       "fillExample": "⚙ Fill example",
-      "submit": { "loading": "Submitting…", "default": "Submit" }
+      "submit": {
+        "loading": "Submitting…",
+        "default": "Submit"
+      }
     },
     "notes": {
       "error": "An error occurred during submission.",
@@ -300,12 +316,20 @@
     }
   },
   "legal": {
-    "common": { "lastUpdated": "Last updated: {date}" },
+    "common": {
+      "lastUpdated": "Last updated: {date}"
+    },
     "about": {
       "title": "About Us",
-      "intro": "tarifintarifi.com is a cooking platform offering practical, trustworthy recipes in multiple languages.",
-      "mission": { "title": "Our Mission", "text": "Make recipes clear for all levels with smart search and curation." },
-      "team": { "title": "Team", "text": "A small, passionate team of food lovers and developers." },
+      "intro": "ensotek.com is a cooking platform offering practical, trustworthy recipes in multiple languages.",
+      "mission": {
+        "title": "Our Mission",
+        "text": "Make recipes clear for all levels with smart search and curation."
+      },
+      "team": {
+        "title": "Team",
+        "text": "A small, passionate team of food lovers and developers."
+      },
       "lastUpdated": "Last updated: {date}"
     },
     "contact": {
@@ -327,8 +351,14 @@
             "optional": "Voluntary info you submit (contact forms, etc.)."
           }
         },
-        "howWeUse": { "title": "How We Use Data", "text": "To improve the service, ensure security, and personalize content." },
-        "rights": { "title": "Your Rights", "text": "You may request access, correction, and deletion of your data." }
+        "howWeUse": {
+          "title": "How We Use Data",
+          "text": "To improve the service, ensure security, and personalize content."
+        },
+        "rights": {
+          "title": "Your Rights",
+          "text": "You may request access, correction, and deletion of your data."
+        }
       },
       "lastUpdated": "Last updated: {date}"
     },
@@ -336,15 +366,24 @@
       "title": "Terms of Use",
       "intro": "By using our site, you agree to the terms below.",
       "sections": {
-        "use": { "title": "Use of Service", "text": "Use the service lawfully and without abuse." },
-        "content": { "title": "Content & Copyright", "text": "Content is for information; copyrights are respected." },
-        "limitation": { "title": "Limitation of Liability", "text": "Service is provided “as is”; we’re not liable for indirect damages." }
+        "use": {
+          "title": "Use of Service",
+          "text": "Use the service lawfully and without abuse."
+        },
+        "content": {
+          "title": "Content & Copyright",
+          "text": "Content is for information; copyrights are respected."
+        },
+        "limitation": {
+          "title": "Limitation of Liability",
+          "text": "Service is provided “as is”; we’re not liable for indirect damages."
+        }
       },
       "lastUpdated": "Last updated: {date}"
     }
   },
   "seo": {
-    "homeTitle": "TarifinTarifi – Practical and reliable recipes",
+    "homeTitle": "ensotek – Practical and reliable recipes",
     "homeDesc": "Practical, reliable recipes in multiple languages. Browse by category or search by ingredient.",
     "ogAlt": "{site} - Cover image"
   }

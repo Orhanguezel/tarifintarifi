@@ -1,16 +1,28 @@
 {
-    "brand": { "subtitle": "Des recettes faciles et fiables" },
-    "aria": { "mainMenu": "Menu principal", "categories": "Catégories" },
-    "actions": {
-      "ai": "Recette IA",
-      "submit": "Proposer une recette",
-      "aiShort": "IA",
-      "submitShort": "Envoyer"
-    },
-    "search": {
-      "placeholder": "Rechercher des recettes...",
-      "aria": "Recherche sur le site",
-      "button": "Rechercher"
-    },
-    "tip": { "label": "Astuce :", "text": "Utilisez les raccourcis de catégories pour naviguer plus vite." }
+  "brand": {
+    "subtitle": "Solutions industrielles",
+    "logoAlt": "Logo Ensotek"
+  },
+  "links": {
+    "about": "À propos",
+    "products": "Produits",
+    "spareparts": "Pièces de rechange",
+    "references": "Références",
+    "library": "Bibliothèque",
+    "news": "Actualités",
+    "contact": "Contact"
+  },
+  "aria": {
+    "mainMenu": "Menu principal",
+    "secondaryMenu": "Menu mobile"
+  },
+  "search": {
+    "placeholder": "Rechercher…",
+    "aria": "Recherche sur le site",
+    "button": "Rechercher"
+  },
+  "tip": {
+    "label": "Astuce :",
+    "text": "Essayez des mots-clés liés aux produits ou services."
   }
+}

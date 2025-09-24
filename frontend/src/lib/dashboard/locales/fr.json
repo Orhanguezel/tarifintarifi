@@ -1,0 +1,53 @@
+{
+  "tabs": {
+    "modules": "Modules",
+    "stats": "Statistiques",
+    "users": "Utilisateurs",
+    "revenue": "Revenu",
+    "feedbacks": "Commentaires",
+    "analytics": "Analyses"
+  },
+  "noData": "Aucune donnée trouvée.",
+  "loading": "Chargement...",
+  "reset": "Effacer les filtres",
+  "selectProject": "Sélectionner un projet",
+  "chooseProject": "Choisissez un projet...",
+  "selectModule": "Sélectionner un module",
+  "allModules": "Tous",
+  "eventType": "Type d'événement",
+  "allEvents": "Tous",
+  "analytics": {
+    "title": "Analyse des logs & tendances des activités",
+    "dailyTrends": "Tendances des événements quotidiens",
+    "moduleDistribution": "Distribution par module",
+    "geoMap": "Répartition géographique",
+    "logTable": "Détails des logs",
+    "noGeoData": "Aucune entrée avec des données de localisation.",
+    "events": "Nombre d'événements",
+    "module": "Module",
+    "date": "Date",
+    "total": "Total",
+    "dateRange": "Plage de dates",
+    "datePlaceholder": "Sélectionnez la plage de dates",
+    "moduleFilter": "Module",
+    "eventTypeFilter": "Type d'événement",
+    "all": "Tous"
+  },
+  "table": {
+    "timestamp": "Horodatage",
+    "module": "Module",
+    "eventType": "Type d'événement",
+    "user": "Utilisateur",
+    "location": "Emplacement"
+  },
+  "users": "Nombre total d'utilisateurs",
+  "revenue": "Revenu total",
+  "feedbacks": "Commentaires",
+  "stats": {
+    "users": "Utilisateurs",
+    "products": "Produits",
+    "orders": "Commandes",
+    "revenue": "Revenu total",
+    "analytics": "Analyses"
+  }
+}

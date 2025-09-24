@@ -1,24 +1,31 @@
 {
-    "title": "Accueil",
-    "search": { "placeholder": "Rechercher des recettes…", "button": "Rechercher" },
-    "hint": { "label": "Astuce :", "text": "Choisissez une catégorie ou utilisez la barre de recherche." },
-    "results": { "title": "Résultats" },
-    "loading": "Chargement…",
-    "empty": "Aucun résultat.",
-    "pagination": { "aria": "Pagination", "prev": "Précédent", "next": "Suivant" },
-    "popular": { "title": "Recettes populaires" },
-    "all": { "title": "Toutes les recettes" },
-    "quick": { "title": "Catégories rapides" }, "clear": "Effacer",
-    "hero": {
-        "h1": "Trouvez des milliers de recettes"
+  "hero": {
+    "h1": "Ensotek — solutions industrielles",
+    "lead": "Sécurité incendie, installations industrielles et pièces de rechange."
+  },
+  "sections": {
+    "services": { "title": "Nos Services" },
+    "news": {
+      "title": "Actualités",
+      "placeholder": "Les actualités et annonces seront bientôt disponibles ici."
+    }
+  },
+  "cards": {
+    "services": {
+      "title": "Ingénierie & Projets",
+      "desc": "Détection incendie, extinction et maintenance."
     },
-    "sort.options.date_desc":"📅 Récentes → Anciennes",
-    "sort.options.date_asc":"📅 Anciennes → Récentes",
-    "sort.options.name_asc":"🔤 A → Z",
-    "sort.options.name_desc":"🔤 Z → A",
-    "sort.options.likes_desc":"❤️ J'aime",
-    "sort.options.comments_desc":"💬 Commentaires",
-    "sort.options.rating_desc":"⭐ Évaluation",
-    "sort.label":"Trier par",
-    "quick.selectPlaceholder":"Sélectionnez une catégorie"
+    "products": {
+      "title": "Produits",
+      "desc": "Équipements et composants industriels."
+    },
+    "spareparts": {
+      "title": "Pièces de rechange",
+      "desc": "Fourniture de pièces d’origine et compatibles."
+    },
+    "references": {
+      "title": "Références",
+      "desc": "Exemples de nos projets réalisés."
+    }
   }
+}

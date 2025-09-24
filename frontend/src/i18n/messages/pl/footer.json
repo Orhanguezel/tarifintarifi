@@ -1,0 +1,16 @@
+{
+  "brand": { "name": "ensotek.de", "logoAlt": "Logo Ensotek", "tagline": "Rozwiązania i usługi przemysłowe" },
+  "sections": { "site": "Strona", "help": "Pomoc", "legal": "Prawne" },
+  "links": {
+    "about": "O nas",
+    "contact": "Kontakt",
+    "privacy": "Prywatność",
+    "terms": "Warunki",
+    "products": "Produkty",
+    "references": "Referencje",
+    "library": "Biblioteka",
+    "news": "Aktualności"
+  },
+  "copyright": "© {year} {brand}. Wszelkie prawa zastrzeżone.",
+  "design": { "aria": "Otwarte przez guezelwebdesign.com", "label": "Projekt: GUEZEL Webdesign" }
+}

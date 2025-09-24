@@ -21,7 +21,7 @@ export default async function AdminLayout({
   const messages = await getMessages();
 
   return (
-    <Providers locale={loc}>
+    <Providers>
       <IntlProviderClient locale={loc} messages={messages}>
         <AdminFrame>{children}</AdminFrame>
       </IntlProviderClient>

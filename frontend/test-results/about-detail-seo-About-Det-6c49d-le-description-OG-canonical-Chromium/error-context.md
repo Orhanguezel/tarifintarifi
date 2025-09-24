@@ -1,0 +1,127 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "ensotek.com" [ref=e5] [cursor=pointer]:
+          - /url: /en
+          - img "Ensotek logo" [ref=e8] [cursor=pointer]
+          - generic [ref=e9] [cursor=pointer]:
+            - generic [ref=e10] [cursor=pointer]: ensotek.com
+            - generic [ref=e11] [cursor=pointer]: Industrial Solutions
+        - navigation "Main menu" [ref=e12]:
+          - link "About" [ref=e13] [cursor=pointer]:
+            - /url: /en/about
+          - link "Products" [ref=e14] [cursor=pointer]:
+            - /url: /en/products
+          - link "Spare Parts" [ref=e15] [cursor=pointer]:
+            - /url: /en/spareparts
+          - link "References" [ref=e16] [cursor=pointer]:
+            - /url: /en/references
+          - link "Library" [ref=e17] [cursor=pointer]:
+            - /url: /en/library
+          - link "News" [ref=e18] [cursor=pointer]:
+            - /url: /en/news
+          - link "Contact" [ref=e19] [cursor=pointer]:
+            - /url: /en/contact
+        - generic [ref=e20]:
+          - link "Contact" [ref=e21] [cursor=pointer]:
+            - /url: /en/contact
+          - link "Learn More" [ref=e22] [cursor=pointer]:
+            - /url: /en/about
+    - search "Site search" [ref=e24]:
+      - textbox "Site search" [ref=e25]
+      - button "Search" [ref=e26] [cursor=pointer]
+    - generic [ref=e27]:
+      - strong [ref=e28]: "Tip:"
+      - text: Try keywords related to products or services.
+    - main [ref=e29]:
+      - generic [ref=e30]:
+        - heading "pages.about.title" [level=1] [ref=e31]
+        - paragraph [ref=e32]: pages.about.intro
+      - paragraph [ref=e33]: pages.about.body
+    - contentinfo [ref=e34]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - link "ensotek.de" [ref=e39] [cursor=pointer]:
+              - /url: /en
+              - img "Ensotek logo" [ref=e41] [cursor=pointer]
+            - heading "ensotek.de" [level=4] [ref=e42]
+            - paragraph [ref=e43]: Industrial Solutions & Services
+          - navigation "Site" [ref=e44]:
+            - heading "Site" [level=4] [ref=e45]
+            - list [ref=e46]:
+              - listitem [ref=e47]:
+                - link "About" [ref=e48] [cursor=pointer]:
+                  - /url: /en/about
+              - listitem [ref=e49]:
+                - link "Products" [ref=e50] [cursor=pointer]:
+                  - /url: /en/products
+              - listitem [ref=e51]:
+                - link "References" [ref=e52] [cursor=pointer]:
+                  - /url: /en/references
+              - listitem [ref=e53]:
+                - link "Library" [ref=e54] [cursor=pointer]:
+                  - /url: /en/library
+              - listitem [ref=e55]:
+                - link "News" [ref=e56] [cursor=pointer]:
+                  - /url: /en/news
+              - listitem [ref=e57]:
+                - link "Contact" [ref=e58] [cursor=pointer]:
+                  - /url: /en/contact
+          - navigation "Legal" [ref=e59]:
+            - heading "Legal" [level=4] [ref=e60]
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Privacy" [ref=e63] [cursor=pointer]:
+                  - /url: /en/privacy
+              - listitem [ref=e64]:
+                - link "Terms" [ref=e65] [cursor=pointer]:
+                  - /url: /en/terms
+            - heading "Help" [level=4] [ref=e66]
+            - list [ref=e67]:
+              - listitem [ref=e68]:
+                - link "Contact" [ref=e69] [cursor=pointer]:
+                  - /url: /en/contact
+              - listitem [ref=e70]:
+                - link "About" [ref=e71] [cursor=pointer]:
+                  - /url: /en/about
+        - navigation "Social" [ref=e72]:
+          - list [ref=e73]:
+            - listitem [ref=e74]:
+              - link "Facebook" [ref=e75] [cursor=pointer]:
+                - /url: https://facebook.com/Ensotek
+            - listitem [ref=e76]:
+              - link "Instagram" [ref=e77] [cursor=pointer]:
+                - /url: https://instagram.com/ensotek_tr
+            - listitem [ref=e78]:
+              - link "X" [ref=e79] [cursor=pointer]:
+                - /url: https://x.com/Ensotek_Cooling
+            - listitem [ref=e80]:
+              - link "LinkedIn" [ref=e81] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ensotek-su-so-utma-kuleleri-ltd-ti-
+            - listitem [ref=e82]:
+              - link "YouTube" [ref=e83] [cursor=pointer]:
+                - /url: https://youtube.com/channel/UCX22ErWzyT4wDqDRGN9zYmg
+        - generic [ref=e84]: footer.copyright
+        - link "Opened by guezelwebdesign.com" [ref=e85] [cursor=pointer]:
+          - /url: https://www.guezelwebdesign.com
+          - text: "Design: GUEZEL Webdesign"
+  - generic [ref=e90] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e91] [cursor=pointer]:
+      - img [ref=e92] [cursor=pointer]
+    - generic [ref=e95] [cursor=pointer]:
+      - button "Open issues overlay" [ref=e96] [cursor=pointer]:
+        - generic [ref=e97] [cursor=pointer]:
+          - generic [ref=e98] [cursor=pointer]: "1"
+          - generic [ref=e99] [cursor=pointer]: "2"
+        - generic [ref=e100] [cursor=pointer]:
+          - text: Issue
+          - generic [ref=e101] [cursor=pointer]: s
+      - button "Collapse issues badge" [ref=e102] [cursor=pointer]:
+        - img [ref=e103] [cursor=pointer]
+  - alert [ref=e105]
+```

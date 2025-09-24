@@ -1,48 +1,70 @@
 // src/layout/Footer.tsx
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
 import styled from "styled-components";
 import { useTranslations } from "next-intl";
 import type { SupportedLocale } from "@/types/common";
-import { useTopRecipeCategories } from "@/hooks/useTopRecipeCategories";
 import logoPng from "@/../public/logo.png";
 
-const titleCaseFromSlug = (slug: string) => {
-  const s = String(slug || "").replace(/[_-]+/g, " ").trim();
-  return s ? s[0].toUpperCase() + s.slice(1) : slug;
-};
+// Güvenli çeviri yardımcıları (fallback'li)
+function tSafe(
+  ns: ReturnType<typeof useTranslations>,
+  key: string,
+  fallback: string
+) {
+  try {
+    const v = ns(key);
+    return typeof v === "string" ? v : fallback;
+  } catch {
+    return fallback;
+  }
+}
 
-export default function Footer({ locale = "tr" as SupportedLocale }: { locale?: SupportedLocale }) {
+export default function Footer({
+  locale = "tr" as SupportedLocale,
+}: {
+  locale?: SupportedLocale;
+}) {
   const t = useTranslations("footer");
-  const tCats = useTranslations("categories");
   const base = `/${locale}`;
   const year = new Date().getFullYear();
 
-  // ilk 5, çoktan aza; hook normalize edilmiş keys döner
-  const { top, loading } = useTopRecipeCategories(locale, 300, 5);
-
-  // yeniden normalize ETME — hook’tan gelen key zaten AI_CATEGORY_KEYS formatında
-  const footerCats = (top ?? [])
-    .slice(0, 5)
-    .map(({ key }) => {
-      let label = "";
-      try {
-        const tx = tCats(`dynamic.${key}`) as string;
-        if (tx) label = tx;
-      } catch {}
-      if (!label) label = titleCaseFromSlug(key);
-      return { key, label, href: `/${locale}?cat=${encodeURIComponent(key)}` };
-    });
-
   // ---- Logo kaynakları ----
   const LOGO_PRIMARY: StaticImageData = logoPng;
-  const LOGO_FALLBACK = "/og-recipe-default.jpg";
-  const alt = (() => {
-    try { return (t("brand.logoAlt") as string) || (t("brand.name") as string); }
-    catch { return "Logo"; }
-  })();
+  const LOGO_FALLBACK = "/og.jpg"; // dilediğinde değiştir
+  const brandName =
+    (tSafe(t, "brand.name", process.env.NEXT_PUBLIC_SITE_NAME || "ensotek.de") ||
+      process.env.NEXT_PUBLIC_SITE_NAME ||
+      "ensotek.de").trim();
+  const logoAlt = tSafe(t, "brand.logoAlt", brandName);
+  const tagline = tSafe(t, "brand.tagline", "Industrial Solutions & Services");
+
+  // Bölüm başlıkları (çeviri yoksa fallback)
+  const titleSite = tSafe(t, "sections.site", "Site");
+  const titleHelp = tSafe(t, "sections.help", "Help");
+  const titleLegal = tSafe(t, "sections.legal", "Legal");
+
+  // Link etiketleri
+  const lAbout = tSafe(t, "links.about", "About");
+  const lContact = tSafe(t, "links.contact", "Contact");
+  const lPrivacy = tSafe(t, "links.privacy", "Privacy");
+  const lTerms = tSafe(t, "links.terms", "Terms");
+  const lProducts = tSafe(t, "links.products", "Products");
+  const lReferences = tSafe(t, "links.references", "References");
+  const lLibrary = tSafe(t, "links.library", "Library");
+  const lNews = tSafe(t, "links.news", "News");
+
+  // Telif & tasarım
+  const copyright = tSafe(
+    t,
+    "copyright",
+    `© ${year} ${brandName}. All rights reserved.`
+  ).replace("{year}", String(year)).replace("{brand}", brandName);
+  const designAria = tSafe(t, "design.aria", "Opened by guezelwebdesign.com");
+  const designLabel = tSafe(t, "design.label", "Design: GUEZEL Webdesign");
 
   const [broken, setBroken] = React.useState(false);
 
@@ -50,67 +72,79 @@ export default function Footer({ locale = "tr" as SupportedLocale }: { locale?: 
     <Foot>
       <Inner>
         <Grid>
+          {/* Brand sütunu */}
           <div>
             <LogoBox>
-              <Link href={base} aria-label={t("brand.name") as string}>
+              <Link href={base} aria-label={brandName}>
                 <LogoPicture>
                   <Image
                     src={broken ? LOGO_FALLBACK : LOGO_PRIMARY}
-                    alt={alt}
-                    width={140}
-                    height={40}
+                    alt={logoAlt}
+                    width={160}
+                    height={44}
                     priority
                     unoptimized
-                    sizes="140px"
+                    sizes="160px"
                     style={{ objectFit: "contain" }}
                     onError={() => setBroken(true)}
                   />
                 </LogoPicture>
               </Link>
             </LogoBox>
-            <Title>{t("brand.name")}</Title>
-            <Muted>{t("brand.tagline")}</Muted>
+            <Title>{brandName}</Title>
+            <Muted>{tagline}</Muted>
           </div>
 
-          <nav aria-label={t("sections.categories") as string}>
-            <Title>{t("sections.categories")}</Title>
+          {/* Site menüsü (deterministik) */}
+          <nav aria-label={titleSite}>
+            <Title>{titleSite}</Title>
             <List>
-              {loading && footerCats.length === 0 ? (
-                <>
-                  <li><span aria-hidden>•••</span></li>
-                  <li><span aria-hidden>•••</span></li>
-                  <li><span aria-hidden>•••</span></li>
-                </>
-              ) : (
-                footerCats.map((c) => (
-                  <li key={c.key}>
-                    <Link href={c.href}>{c.label}</Link>
-                  </li>
-                ))
-              )}
+              <li><Link href={`${base}/about`}>{lAbout}</Link></li>
+              <li><Link href={`${base}/products`}>{lProducts}</Link></li>
+              <li><Link href={`${base}/references`}>{lReferences}</Link></li>
+              <li><Link href={`${base}/library`}>{lLibrary}</Link></li>
+              <li><Link href={`${base}/news`}>{lNews}</Link></li>
+              <li><Link href={`${base}/contact`}>{lContact}</Link></li>
             </List>
           </nav>
 
-          <nav aria-label={t("sections.help") as string}>
-            <Title>{t("sections.help")}</Title>
+          {/* Legal / Yardım */}
+          <nav aria-label={titleLegal}>
+            <Title>{titleLegal}</Title>
             <List>
-              <li><Link href={`${base}/about`}>{t("links.about")}</Link></li>
-              <li><Link href={`${base}/contact`}>{t("links.contact")}</Link></li>
-              <li><Link href={`${base}/privacy`}>{t("links.privacy")}</Link></li>
-              <li><Link href={`${base}/terms`}>{t("links.terms")}</Link></li>
+              <li><Link href={`${base}/privacy`}>{lPrivacy}</Link></li>
+              <li><Link href={`${base}/terms`}>{lTerms}</Link></li>
+            </List>
+
+            <Title style={{ marginTop: 16 }}>{titleHelp}</Title>
+            <List>
+              <li><Link href={`${base}/contact`}>{lContact}</Link></li>
+              <li><Link href={`${base}/about`}>{lAbout}</Link></li>
             </List>
           </nav>
         </Grid>
 
-        <Copy>{t("copyright", { year, brand: t("brand.name") })}</Copy>
+        {/* --- Social (test beklentisi) --- */}
+<nav aria-label="Social">
+  <List>
+    <li><a href="https://facebook.com/Ensotek" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+    <li><a href="https://instagram.com/ensotek_tr" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+    <li><a href="https://x.com/Ensotek_Cooling" target="_blank" rel="noopener noreferrer">X</a></li>
+    <li><a href="https://linkedin.com/company/ensotek-su-so-utma-kuleleri-ltd-ti-" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href="https://youtube.com/channel/UCX22ErWzyT4wDqDRGN9zYmg" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+  </List>
+</nav>
+
+
+        <Copy dangerouslySetInnerHTML={{ __html: copyright }} />
 
         <DesignLink
           href="https://www.guezelwebdesign.com"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={t("design.aria") as string}
+          aria-label={designAria}
         >
-          {t("design.label")}
+          {designLabel}
         </DesignLink>
       </Inner>
     </Foot>
@@ -147,8 +181,8 @@ const Title = styled.h4`
 const LogoBox = styled.div` margin: 6px 0 10px; `;
 const LogoPicture = styled.span`
   display: inline-flex;
-  width: 140px;
-  height: 40px;
+  width: 160px;
+  height: 44px;
   align-items: center;
   justify-content: flex-start;
   img { filter: none; }

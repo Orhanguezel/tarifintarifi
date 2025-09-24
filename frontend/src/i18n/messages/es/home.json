@@ -1,0 +1,31 @@
+{
+  "hero": {
+    "h1": "Ensotek — soluciones industriales",
+    "lead": "Seguridad contra incendios, instalaciones industriales y repuestos."
+  },
+  "sections": {
+    "services": { "title": "Nuestros servicios" },
+    "news": {
+      "title": "Noticias",
+      "placeholder": "Pronto verás aquí noticias y anuncios."
+    }
+  },
+  "cards": {
+    "services": {
+      "title": "Ingeniería y Proyectos",
+      "desc": "Detección de incendios, extinción y mantenimiento."
+    },
+    "products": {
+      "title": "Productos",
+      "desc": "Equipos y componentes industriales."
+    },
+    "spareparts": {
+      "title": "Repuestos",
+      "desc": "Suministro de repuestos originales y compatibles."
+    },
+    "references": {
+      "title": "Referencias",
+      "desc": "Ejemplos de nuestros proyectos finalizados."
+    }
+  }
+}

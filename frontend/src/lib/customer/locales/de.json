@@ -1,0 +1,27 @@
+{
+  "title": "Kundenverwaltung",
+  "customerList": "Kunden",
+  "addNew": "Neu hinzufügen",
+  "editAddresses": "Adressen verwalten",
+  "delete": "Löschen",
+  "deleteConfirm": "Möchten Sie diesen Kunden wirklich löschen?",
+  "notFound": "Kundendatensatz nicht gefunden.",
+  "customerInfo": "Kundeninformation",
+  "companyName": "Firmenname",
+  "contactName": "Ansprechpartner",
+  "email": "E-Mail",
+  "phone": "Telefon",
+  "isActive": "Aktiv",
+  "active": "Aktiv",
+  "inactive": "Inaktiv",
+  "notes": "Notizen",
+  "address": "Adresse",
+  "addressPhone": "Adress-Telefon",
+  "addresses": {
+    "title": "Adressen"
+  },
+  "save": "Speichern",
+  "validation": {
+    "requiredFields": "Bitte füllen Sie alle Pflichtfelder aus."
+  }
+}

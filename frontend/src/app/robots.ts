@@ -1,8 +1,7 @@
-// app/robots.ts
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://tarifintarifi.com").replace(/\/+$/, "");
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://ensotek.de").replace(/\/+$/, "");
   return {
     rules: [
       {
@@ -12,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
           "/_next/",
           "/api/",
           "/admin/",
-          "/*/admin/",   // tr/en/... tüm locale segmentleri için
+          "/*/admin/",
           "/login/",
           "/*/login/",
           "/dashboard/",
@@ -20,7 +19,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: `${base}/api/seo/sitemap-index.xml`,
     host: base,
   };
 }

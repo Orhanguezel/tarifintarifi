@@ -1,7 +1,16 @@
 {
-    "brand": { "name": "tarifintarifi.com", "tagline": "وصفات سهلة وموثوقة", "logoAlt": "شعار tarifintarifi.com" },
-    "sections": { "categories": "الفئات", "help": "المساعدة" },
-    "links": { "about": "من نحن", "contact": "اتصل بنا", "privacy": "الخصوصية", "terms": "شروط الاستخدام" },
-    "copyright": "© {year} {brand}. جميع الحقوق محفوظة.",
-    "design": { "label": "تصميم GuezelWebDesign", "aria": "تصميم GuezelWebDesign (يفتح في نافذة جديدة)" }
-  }
+  "brand": { "name": "ensotek.de", "logoAlt": "شعار إنسوتك", "tagline": "حلول وخدمات صناعية" },
+  "sections": { "site": "الموقع", "help": "مساعدة", "legal": "قانوني" },
+  "links": {
+    "about": "من نحن",
+    "contact": "اتصل بنا",
+    "privacy": "الخصوصية",
+    "terms": "الشروط",
+    "products": "المنتجات",
+    "references": "المراجع",
+    "library": "المكتبة",
+    "news": "الأخبار"
+  },
+  "copyright": "© {year} {brand}. جميع الحقوق محفوظة.",
+  "design": { "aria": "بواسطة guezelwebdesign.com", "label": "التصميم: GUEZEL Webdesign" }
+}

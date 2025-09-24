@@ -1,0 +1,23 @@
+{
+  "title": "Gestión de notificaciones",
+  "loading": "Cargando...",
+  "type": "Tipo",
+  "type_info": "Información",
+  "type_success": "Éxito",
+  "type_warning": "Advertencia",
+  "type_error": "Error",
+  "user": "Usuario",
+  "email": "Correo electrónico",
+  "message": "Mensaje",
+  "date": "Fecha",
+  "read": "Leído",
+  "unread": "No leído",
+  "markRead": "Marcar como leído",
+  "delete": "Eliminar",
+  "actions": "Acciones",
+  "noNotifications": "Aún no hay notificaciones.",
+  "markAllRead": "Marcar todo como leído",
+  "Başlık": "Título",
+  "Okundu Yap": "Marcar como leído",
+  "Eylemler": "Acciones"
+}

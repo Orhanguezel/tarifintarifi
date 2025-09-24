@@ -1,2 +1,7 @@
-{ "unit": { "minutesShort": "मि.", "kcal": "kcal", "servings": "परोसे" },
-    "actions": { "view": "देखें" },"notFound": "नहीं मिला" }
+{
+  "cta": {
+    "learnMore": "और जानें",
+    "contact": "संपर्क करें",
+    "viewAll": "सभी देखें"
+  }
+}
