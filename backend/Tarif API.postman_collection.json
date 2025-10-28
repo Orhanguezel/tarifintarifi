@@ -1,0 +1,912 @@
+{
+	"info": {
+		"_postman_id": "cda6e5dd-cd17-488a-ba54-02a12a776b0b",
+		"name": "Tarif API",
+		"description": "Tarifin Tarifi backend test koleksiyonu — public Recipes, Categories, Comments ve Reactions modülleri + AI seed",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20528167",
+		"_collection_link": "https://www.postman.com/red-eclipse-24199/workspace/orhan/collection/20528167-cda6e5dd-cd17-488a-ba54-02a12a776b0b?action=share&source=collection_link&creator=20528167"
+	},
+	"item": [
+		{
+			"name": "0) Seed",
+			"item": [
+				{
+					"name": "AI Generate & Save (Seed Recipe)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+									"let json = {};",
+									"try { json = pm.response.json(); } catch(e) {}",
+									"const data = json && json.data ? json.data : {};",
+									"// recipeId",
+									"if (data && data._id) pm.collectionVariables.set(\"recipeId\", String(data._id));",
+									"// recipeSlug: lang->slug[lang] -> slug.en -> slugCanonical",
+									"const lang = pm.collectionVariables.get('lang') || 'tr';",
+									"let slug = (data.slug && (data.slug[lang] || data.slug.en)) || data.slugCanonical;",
+									"if (slug) pm.collectionVariables.set('recipeSlug', String(slug));",
+									"pm.test(\"Seed set recipeId\", () => pm.collectionVariables.get('recipeId'));",
+									"pm.test(\"Seed set recipeSlug\", () => pm.collectionVariables.get('recipeSlug'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prompt\": \"Kombu cayi tarifi verir misin? \"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/recipes/generate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recipes",
+								"generate"
+							]
+						},
+						"description": "LLM ile tarif oluşturur ve DB'ye kaydeder. recipeId/recipeSlug değişkenlerini test script'i set eder."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Recipes (Public)",
+			"item": [
+				{
+					"name": "List Recipes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+									"const json = pm.response.json();",
+									"pm.test(\"Has data array\", function(){ pm.expect(Array.isArray(json.data)).to.be.true; });",
+									"if (Array.isArray(json.data) && json.data.length) {",
+									"  const first = json.data[0];",
+									"  if (first._id && !pm.collectionVariables.get('recipeId')) pm.collectionVariables.set('recipeId', String(first._id));",
+									"  const lang = pm.collectionVariables.get('lang') || 'tr';",
+									"  const slug = (first.slug && (first.slug[lang] || first.slug.en)) || first.slugCanonical;",
+									"  if (slug && !pm.collectionVariables.get('recipeSlug')) pm.collectionVariables.set('recipeSlug', String(slug));",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/recipes?limit=10&q=&tag=&maxTime=50",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recipes"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "q",
+									"value": ""
+								},
+								{
+									"key": "tag",
+									"value": ""
+								},
+								{
+									"key": "maxTime",
+									"value": "50"
+								}
+							]
+						},
+						"description": "Public liste: q, tag, maxTime, limit senaryolarını test eder."
+					},
+					"response": []
+				},
+				{
+					"name": "List Recipes Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+									"const json = pm.response.json();",
+									"pm.test(\"Has data array\", function(){ pm.expect(Array.isArray(json.data)).to.be.true; });",
+									"if (Array.isArray(json.data) && json.data.length) {",
+									"  const first = json.data[0];",
+									"  if (first._id && !pm.collectionVariables.get('recipeId')) pm.collectionVariables.set('recipeId', String(first._id));",
+									"  const lang = pm.collectionVariables.get('lang') || 'tr';",
+									"  const slug = (first.slug && (first.slug[lang] || first.slug.en)) || first.slugCanonical;",
+									"  if (slug && !pm.collectionVariables.get('recipeSlug')) pm.collectionVariables.set('recipeSlug', String(slug));",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/recipes?fields=category&limit=120",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recipes"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "category"
+								},
+								{
+									"key": "limit",
+									"value": "120"
+								}
+							]
+						},
+						"description": "Public liste: q, tag, maxTime, limit senaryolarını test eder."
+					},
+					"response": []
+				},
+				{
+					"name": "List Recipes Tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+									"const json = pm.response.json();",
+									"pm.test(\"Has data array\", function(){ pm.expect(Array.isArray(json.data)).to.be.true; });",
+									"if (Array.isArray(json.data) && json.data.length) {",
+									"  const first = json.data[0];",
+									"  if (first._id && !pm.collectionVariables.get('recipeId')) pm.collectionVariables.set('recipeId', String(first._id));",
+									"  const lang = pm.collectionVariables.get('lang') || 'tr';",
+									"  const slug = (first.slug && (first.slug[lang] || first.slug.en)) || first.slugCanonical;",
+									"  if (slug && !pm.collectionVariables.get('recipeSlug')) pm.collectionVariables.set('recipeSlug', String(slug));",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/recipes?fields=tags&limit=120",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recipes"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "tags"
+								},
+								{
+									"key": "limit",
+									"value": "120"
+								}
+							]
+						},
+						"description": "Public liste: q, tag, maxTime, limit senaryolarını test eder."
+					},
+					"response": []
+				},
+				{
+					"name": "List Recipes Tags Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+									"const json = pm.response.json();",
+									"pm.test(\"Has data array\", function(){ pm.expect(Array.isArray(json.data)).to.be.true; });",
+									"if (Array.isArray(json.data) && json.data.length) {",
+									"  const first = json.data[0];",
+									"  if (first._id && !pm.collectionVariables.get('recipeId')) pm.collectionVariables.set('recipeId', String(first._id));",
+									"  const lang = pm.collectionVariables.get('lang') || 'tr';",
+									"  const slug = (first.slug && (first.slug[lang] || first.slug.en)) || first.slugCanonical;",
+									"  if (slug && !pm.collectionVariables.get('recipeSlug')) pm.collectionVariables.set('recipeSlug', String(slug));",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/recipes?tag=dinner&limit=12",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recipes"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "dinner"
+								},
+								{
+									"key": "limit",
+									"value": "12"
+								}
+							]
+						},
+						"description": "Public liste: q, tag, maxTime, limit senaryolarını test eder."
+					},
+					"response": []
+				},
+				{
+					"name": "Public: Submit Recipe (x-api-key)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set('ts', Date.now());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201\", function(){ pm.response.to.have.status(201); });",
+									"var j = pm.response.json() || {};",
+									"pm.expect(j.success).to.eql(true);",
+									"var id = j && j.data && (j.data._id || j.data.id);",
+									"if (id) pm.collectionVariables.set('recipeId', id);",
+									"var slugCan = j && j.data && j.data.slugCanonical;",
+									"if (slugCan) pm.collectionVariables.set('recipeSlug', slugCan);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Mercimek Çorbası\",\n  \"category\": \"soup\",\n  \"totalMinutes\": 35,\n  \"servings\": 6,\n  \"calories\": 220,\n  \"ingredientsText\": \"1 su bardağı kırmızı mercimek\\n1 adet soğan (yemeklik)\\n1 adet havuç (rendelenmiş)\\n1 yemek kaşığı tereyağı veya 2 yemek kaşığı zeytinyağı\\n1 yemek kaşığı un (opsiyonel)\\n6 su bardağı su veya et suyu\\n1 tatlı kaşığı kimyon (opsiyonel)\\nTuz, karabiber, pul biber\",\n  \"stepsText\": \"Soğan ve havucu yağda yumuşayana dek kavurun (un kullanacaksanız ekleyip 1 dk kavurun).\\nYıkanmış mercimek ve suyu ekleyip kaynatın.\\nKısık ateşte 20–25 dakika pişirin.\\nBlenderdan geçirip kıvamını ayarlayın.\\nTuz ve baharatları ekleyin; limonla servis edin.\",\n  \"description\": \"Klasik, pürüzsüz kıvamlı, restoran usulü mercimek çorbası.\"\n}\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/recipes/submit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recipes",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recipe by Slug",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('recipeSlug')) {",
+									"  postman.setNextRequest(null);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+									"const json = pm.response.json();",
+									"pm.test(\"Has data\", function(){ pm.expect(json.data).to.be.an('object'); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/recipes/{{recipeSlug}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recipes",
+								"{{recipeSlug}}"
+							]
+						},
+						"description": "Public detay: slug ile erişim."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments (Recipe)",
+			"item": [
+				{
+					"name": "List Comments for Recipe",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('recipeId')) {",
+									"  postman.setNextRequest(null);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"const json = pm.response.json();",
+									"pm.test(\"Has pagination\", () => pm.expect(json.pagination).to.be.an('object'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/comments/recipe/{{recipeId}}?page=1&limit=50",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments",
+								"recipe",
+								"{{recipeId}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						},
+						"description": "Bir tarifin yayınlanmış yorumları (public)."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Comment (Guest, Valid)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('recipeId')) {",
+									"  postman.setNextRequest(null);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+									"const json = pm.response.json();",
+									"pm.test(\"Has created data\", () => pm.expect(json.data && json.data._id).to.exist);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							},
+							{
+								"key": "x-dev-skip-captcha",
+								"value": "dev-bypass-123",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"text\": \"Kıvam harika oldu, limonla efsane!\",\n  \"name\": \"Ayşe\",\n  \"email\": \"ayse@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/comments/recipe/{{recipeId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments",
+								"recipe",
+								"{{recipeId}}"
+							]
+						},
+						"description": "Misafir olarak yorum oluşturur. ensureActor ile request içinde kimlik atanır."
+					},
+					"response": []
+				},
+				{
+					"name": "NEGATIVE: Create Comment (Invalid payload)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('recipeId')) {",
+									"  postman.setNextRequest(null);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400/422\", function(){",
+									"  pm.expect([400,422]).to.include(pm.response.code);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"text\": \"ok\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/comments/recipe/{{recipeId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments",
+								"recipe",
+								"{{recipeId}}"
+							]
+						},
+						"description": "Eksik/yanlış payload (2 karakter) → 400 beklenir."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reactions (Recipe)",
+			"item": [
+				{
+					"name": "Toggle LIKE (on)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get('recipeId')) { postman.setNextRequest(null); }"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"201 or 200\", () => pm.expect([200,201]).to.include(pm.response.code));",
+									"const json = pm.response.json();",
+									"pm.test(\"on field exists\", () => pm.expect(json.data && typeof json.data.on !== 'undefined').to.be.true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipeId\": \"{{recipeId}}\",\n  \"kind\": \"LIKE\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reactions/toggle",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"toggle"
+							]
+						},
+						"description": "LIKE aç/kapa — ilk çağrıda açar (on:true)."
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle LIKE (off)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipeId\": \"{{recipeId}}\",\n  \"kind\": \"LIKE\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reactions/toggle",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"toggle"
+							]
+						},
+						"description": "LIKE tekrar çağrılınca kapatır."
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle EMOJI ❤️",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipeId\": \"{{recipeId}}\",\n  \"kind\": \"EMOJI\",\n  \"emoji\": \"❤️\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reactions/toggle",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"toggle"
+							]
+						},
+						"description": "Kalp emojisi aç/kapa."
+					},
+					"response": []
+				},
+				{
+					"name": "Set EMOJI 😋 (on)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipeId\": \"{{recipeId}}\",\n  \"kind\": \"EMOJI\",\n  \"emoji\": \"😋\",\n  \"on\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reactions/set",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"set"
+							]
+						},
+						"description": "Idempotent on/off — açık hale getirir."
+					},
+					"response": []
+				},
+				{
+					"name": "Set EMOJI 😋 (off)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipeId\": \"{{recipeId}}\",\n  \"kind\": \"EMOJI\",\n  \"emoji\": \"😋\",\n  \"on\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reactions/set",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"set"
+							]
+						},
+						"description": "Idempotent on/off — kapatır."
+					},
+					"response": []
+				},
+				{
+					"name": "Rate ★★★★★ (5)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipeId\": \"{{recipeId}}\",\n  \"value\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reactions/rate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"rate"
+							]
+						},
+						"description": "Misafir de rate verebilir (ensureActor)."
+					},
+					"response": []
+				},
+				{
+					"name": "Summary (kind+emoji)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reactions/summary?recipeId={{recipeId}}&breakdown=kind+emoji",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "recipeId",
+									"value": "{{recipeId}}"
+								},
+								{
+									"key": "breakdown",
+									"value": "kind+emoji"
+								}
+							]
+						},
+						"description": "Toplamlar ve kırılım."
+					},
+					"response": []
+				},
+				{
+					"name": "My Reactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-lang",
+								"value": "{{lang}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reactions/me?recipeIds={{recipeId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"me"
+							],
+							"query": [
+								{
+									"key": "recipeIds",
+									"value": "{{recipeId}}"
+								}
+							]
+						},
+						"description": "Kullanıcının (veya misafirin) kendi reaksiyonları."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5020/api",
+			"type": "string"
+		},
+		{
+			"key": "lang",
+			"value": "tr",
+			"type": "string"
+		},
+		{
+			"key": "recipeId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "recipeSlug",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "categoryId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "categorySlug",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "ts",
+			"value": ""
+		}
+	]
+}

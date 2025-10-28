@@ -1,4 +1,0 @@
-{
-    "seoDesc": "Explore recipes in the {category} category.",
-    "error": { "title": "Couldn't load category page", "desc": "We couldn't fetch content for this category right now." }
-  }
