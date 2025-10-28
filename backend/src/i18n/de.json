@@ -1,0 +1,6 @@
+{
+  "errors": { "invalid_id": "Ungültige ID", "missing_field": "Pflichtfeld fehlt: {0}", "not_found": "Nicht gefunden" },
+  "recipes": { "created": "Rezept erstellt", "updated": "Rezept aktualisiert", "deleted": "Rezept gelöscht" },
+  "reactions": { "toggled": "Reaktion geändert", "invalid_kind": "Ungültiger Reaktionstyp" },
+  "ai": { "generated": "KI-Rezept generiert" }
+}

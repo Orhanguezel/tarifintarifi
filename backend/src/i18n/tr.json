@@ -1,0 +1,19 @@
+{
+  "errors": {
+    "invalid_id": "Geçersiz kimlik",
+    "missing_field": "Zorunlu alan eksik: {0}",
+    "not_found": "Kayıt bulunamadı"
+  },
+  "recipes": {
+    "created": "Tarif oluşturuldu",
+    "updated": "Tarif güncellendi",
+    "deleted": "Tarif silindi"
+  },
+  "reactions": {
+    "toggled": "Tepki değiştirildi",
+    "invalid_kind": "Geçersiz tepki türü"
+  },
+  "ai": {
+    "generated": "Yapay zekâ tarifi üretildi"
+  }
+}

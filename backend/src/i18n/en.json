@@ -1,0 +1,19 @@
+{
+  "errors": {
+    "invalid_id": "Invalid id",
+    "missing_field": "Missing required field: {0}",
+    "not_found": "Resource not found"
+  },
+  "recipes": {
+    "created": "Recipe created",
+    "updated": "Recipe updated",
+    "deleted": "Recipe deleted"
+  },
+  "reactions": {
+    "toggled": "Reaction toggled",
+    "invalid_kind": "Invalid reaction kind"
+  },
+  "ai": {
+    "generated": "AI recipe generated"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "errors": { "invalid_id": "无效的ID", "missing_field": "缺少必填字段：{0}", "not_found": "未找到" },
+  "recipes": { "created": "已创建食谱", "updated": "已更新食谱", "deleted": "已删除食谱" },
+  "reactions": { "toggled": "已切换反应", "invalid_kind": "无效的反应类型" },
+  "ai": { "generated": "AI 食谱已生成" }
+}
