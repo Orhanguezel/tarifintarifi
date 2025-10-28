@@ -1,0 +1,44 @@
+{
+    "common": { "lastUpdated": "Last updated: {date}" },
+    "about": {
+      "title": "About Us",
+      "intro": "tarifintarifi.com is a cooking platform offering practical, trustworthy recipes in multiple languages.",
+      "mission": { "title": "Our Mission", "text": "Make recipes clear for all levels with smart search and curation." },
+      "team": { "title": "Team", "text": "A small, passionate team of food lovers and developers." },
+      "lastUpdated": "Last updated: {date}"
+    },
+    "contact": {
+      "title": "Contact",
+      "desc": "For questions and partnerships, drop us a line.",
+      "email": "Email",
+      "address": "Address",
+      "addressText": "Istanbul, Türkiye"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "We care about your privacy. This page explains what we collect and how we use it.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Data We Collect",
+          "items": {
+            "usage": "Usage data (page views, search terms).",
+            "cookies": "Cookies and similar technologies.",
+            "optional": "Voluntary info you submit (contact forms, etc.)."
+          }
+        },
+        "howWeUse": { "title": "How We Use Data", "text": "To improve the service, ensure security, and personalize content." },
+        "rights": { "title": "Your Rights", "text": "You may request access, correction, and deletion of your data." }
+      },
+      "lastUpdated": "Last updated: {date}"
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "intro": "By using our site, you agree to the terms below.",
+      "sections": {
+        "use": { "title": "Use of Service", "text": "Use the service lawfully and without abuse." },
+        "content": { "title": "Content & Copyright", "text": "Content is for information; copyrights are respected." },
+        "limitation": { "title": "Limitation of Liability", "text": "Service is provided “as is”; we’re not liable for indirect damages." }
+      },
+      "lastUpdated": "Last updated: {date}"
+    }
+  }

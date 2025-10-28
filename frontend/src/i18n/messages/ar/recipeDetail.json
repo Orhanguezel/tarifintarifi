@@ -1,0 +1,60 @@
+{
+  "recipeDetail": {
+    "print": "طباعة",
+    "meta": {
+      "minutes": "{value} دقيقة",
+      "servings": "{value} حصص",
+      "kcal": "{value} سعرات/حصة"
+    },
+    "sections": {
+      "ingredients": "المكونات",
+      "steps": "الخطوات",
+      "tags": "وسوم",
+      "nutrition": "القيم الغذائية (لكل حصة)",
+      "allergenDiet": "معلومات الحساسية والنظام الغذائي",
+      "allergens": "المُسبّبات",
+      "diet": "النظام الغذائي",
+      "note": "ملاحظة: يمكن استبدال المكونات لعمل بدائل خالية من الغلوتين/نباتية (فيغان).",
+      "tips": "نصائح",
+      "related": "وصفات متشابهة"
+    },
+    "table": {
+      "calories": "سعرات حرارية",
+      "protein": "بروتين",
+      "carbs": "كربوهيدرات",
+      "fat": "دهون",
+      "fiber": "ألياف",
+      "sodium": "صوديوم"
+    },
+    "allergens": {
+      "glutenContains": "يحتوي على الغلوتين",
+      "dairyContains": "يحتوي على منتجات الألبان",
+      "eggContains": "يحتوي على البيض",
+      "nutsContains": "يحتوي على المكسرات",
+      "peanutContains": "يحتوي على الفول السوداني",
+      "soyContains": "يحتوي على الصويا",
+      "sesameContains": "يحتوي على السمسم",
+      "fishContains": "يحتوي على السمك",
+      "shellfishContains": "يحتوي على المحار"
+    },
+    "diet": {
+      "vegetarianOk": "نباتي",
+      "vegetarianNo": "غير نباتي",
+      "veganOk": "فيغان",
+      "veganNo": "غير فيغان",
+      "glutenFreeOk": "خالٍ من الغلوتين",
+      "glutenFreeNo": "يحتوي على الغلوتين",
+      "lactoseFreeOk": "خالٍ من اللاكتوز",
+      "lactoseFreeNo": "يحتوي على اللاكتوز"
+    },
+    "reactions": {
+      "like": "أعجبني",
+      "love": "أحبه",
+      "yum": "لذيذ!",
+      "wow": "واو",
+      "rateAria": "قيّم هذه الوصفة",
+      "starTitle": "امنح {n}★",
+      "average": "متوسط التقييم"
+    }
+  }
+}

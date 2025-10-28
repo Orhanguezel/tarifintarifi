@@ -1,0 +1,351 @@
+{
+  "nav": { "home": "Home" },
+
+  "recipes": {
+    "latest": "Newest Recipes"
+  },
+
+  "comments": {
+    "title": "Comments",
+    "add": "Add a comment",
+    "name": "Name",
+    "email": "Email",
+    "text": "Your comment",
+    "submit": "Send",
+    "sending": "Sending…",
+    "guest": "Guest",
+    "emptyPrompt": "Be the first to comment!"
+  },
+
+  "difficulty": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard"
+  },
+
+  "common": {
+    "actions": {
+      "view": "View →"
+    },
+    "unit": {
+      "minutesShort": "min",
+      "kcal": "kcal",
+      "servings": "servings"
+    }
+  },
+   "notFound": {
+    "title": "Page not found",
+    "desc": "The page you’re looking for doesn’t exist.",
+    "actions": {
+      "home": "Go home",
+      "browse": "Browse recipes"
+    },
+    "note": "If you entered a URL, check the spelling and try again."
+  },
+
+  "home": {
+    "search": {
+      "placeholder": "Breakfast",
+      "button": "Search"
+    },
+    "hint": {
+      "label": "TIP",
+      "text": "With the 🔍 above, type an ingredient (e.g. corn, eggplant) or a cuisine (e.g. Italian) to generate a Groq-powered personalized recipe."
+    },
+    "quick": {
+      "title": "Quick Categories"
+    },
+    "results": { "title": "Results" },
+    "clear": "Clear",
+    "popular": {
+      "title": "Popular Recipes"
+    },
+    "all": {
+      "title": "All Recipes"
+    },
+    "loading": "Loading…",
+    "empty": "No records found.",
+    "pagination": {
+      "aria": "Pagination",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "errors": {
+      "fetch": "Could not load the list."
+    }
+  },
+
+  "category": {
+    "count": "{count} recipes",
+    "empty": "There are no recipes in this category yet.",
+    "pagination": {
+      "aria": "Pagination"
+    }
+  },
+
+  "categoryPage": {
+    "notFound": {
+      "title": "Category not found",
+      "desc": "Invalid category: {slug}"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "desc": "Failed to load recipes."
+    }
+  },
+
+  "navbar": {
+    "brand": {
+      "subtitle": "The Largest Recipe Site"
+    },
+    "aria": {
+      "mainMenu": "Main menu",
+      "categories": "Categories"
+    },
+    "actions": {
+      "ai": "🧠 Create Recipe with AI",
+      "submit": "🍽️ Submit a Recipe",
+      "aiShort": "AI Recipe",
+      "submitShort": "Submit"
+    },
+    "search": {
+      "placeholder": "Search recipe, ingredient or cuisine…",
+      "button": "Search",
+      "aria": "Search"
+    },
+    "tip": {
+      "label": "Tip:",
+      "text": "Type an ingredient (e.g. corn) or a cuisine (e.g. Italian) for quick search."
+    }
+  },
+
+  "footer": {
+    "brand": {
+      "name": "tarifintarifi.com",
+      "tagline": "The right place for delicious and practical recipes."
+    },
+    "sections": {
+      "categories": "Categories",
+      "help": "Help"
+    },
+    "links": {
+      "about": "About",
+      "contact": "Contact",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Use"
+    },
+    "copyright": "© {year} {brand} • All Rights Reserved"
+  },
+
+  "recipeDetail": {
+    "print": "Print",
+    "meta": {
+      "minutes": "{value} min",
+      "servings": "{value} servings",
+      "kcal": "{value} kcal/serving"
+    },
+    "stats": {
+      "prep": "Prep",
+      "cook": "Cook",
+      "category": "Category",
+      "cuisine": "Cuisine"
+    },
+    "sections": {
+      "ingredients": "Ingredients",
+      "steps": "Directions",
+      "tags": "Tags",
+      "nutrition": "Nutrition (per serving)",
+      "allergenDiet": "Allergen & Diet Info",
+      "allergens": "Allergens",
+      "diet": "Diet",
+      "note": "Note: You can make gluten-free/vegan alternatives by adjusting ingredients."
+    },
+    "reactions": {
+      "like": "Like",
+      "love": "Love",
+      "yum": "Yummy",
+      "wow": "Wow!",
+      "rateAria": "Rate",
+      "starTitle": "{n} star",
+      "average": "Average"
+    },
+    "table": {
+      "calories": "Calories",
+      "protein": "Protein",
+      "carbs": "Carbs",
+      "fat": "Fat",
+      "fiber": "Fiber",
+      "sodium": "Sodium"
+    }
+  },
+
+  "categories": {
+    "soup": "Soup",
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "dessert": "Dessert",
+    "detox": "Detox",
+    "snack": "Snack",
+    "drink": "Drink"
+  },
+
+  "aiGen": {
+    "head": { "title": "🤖 Create Recipe with AI" },
+    "fields": {
+      "lang": "Output language",
+      "cuisine": {
+        "label": "Cuisine",
+        "placeholder": "turkish, italian…",
+        "help": "Just one cuisine is enough."
+      },
+      "category": "Category",
+      "categoryOptional": "(Optional)",
+      "servings": "Servings (people)",
+      "maxMinutes": "Max. Time (min)"
+    },
+    "checks": {
+      "aria": "Diet labels",
+      "vegetarian": "Vegetarian",
+      "vegan": "Vegan",
+      "glutenFree": "Gluten-free",
+      "lactoseFree": "Lactose-free"
+    },
+    "include": {
+      "label": "Ingredients to include",
+      "placeholder": "type ingredient and press Enter",
+      "help": "You can add with Enter or comma. E.g. tomato, pepper"
+    },
+    "exclude": {
+      "label": "Ingredients to exclude",
+      "placeholder": "to exclude…",
+      "help": "E.g. spicy, peanuts"
+    },
+    "prompt": {
+      "label": "Extra note / prompt",
+      "placeholder": "e.g. \"Turkish cuisine, 4 servings, 25 min, no oven; short steps; use gram/piece measures.\""
+    },
+    "chips": {
+      "notSpicy": "not spicy",
+      "fewIngredients": "few ingredients",
+      "noOven": "no oven",
+      "pot": "in pot",
+      "pan": "in pan",
+      "quick15": "ready in 15 min"
+    },
+    "buttons": {
+      "fillExample": "⚙ Fill example",
+      "generate": {
+        "loading": "Generating…",
+        "default": "Generate"
+      }
+    },
+    "error": { "generic": "An error occurred during generation." },
+    "success": {
+      "created": "Recipe created: {title}",
+      "viewLink": "view recipe"
+    }
+  },
+
+  "submitRecipe": {
+    "head": {
+      "title": "🍽️ Submit a Recipe",
+      "subtitle": "Share your recipe — just write ingredients and steps line by line."
+    },
+    "fields": {
+      "title": {
+        "label": "Title *",
+        "placeholder": "e.g. Easy No-Oven Bulgur with Vegetables",
+        "help": "Must be at least 3 characters."
+      },
+      "category": { "label": "Category", "optional": "(Optional)" },
+      "servings": { "label": "Servings (people)", "placeholder": "4" },
+      "totalMinutes": { "label": "Total Time (min)", "placeholder": "30" },
+      "calories": { "label": "Calories (kcal)", "placeholder": "350" },
+      "description": { "label": "Description", "placeholder": "A short description of the recipe…" },
+      "ingredients": {
+        "label": "Ingredients * (one per line)",
+        "placeholder": "e.g.\n2 tomatoes\n1 green pepper\n1 tbsp olive oil",
+        "help": "Use units (g/piece/tbsp etc.)."
+      },
+      "steps": {
+        "label": "Steps * (one per line)",
+        "placeholder": "e.g.\nDice the onion and sauté.\nAdd tomatoes, cook 5 min.\nServe hot.",
+        "help": "Keep sentences short. The last step can be a serving tip."
+      },
+      "cuisines": {
+        "label": "Cuisines",
+        "placeholder": "turkish, italian… (add with Enter/comma)",
+        "help": "Add one by one. E.g. turkish"
+      },
+      "tags": { "label": "Tags", "placeholder": "vegan, quick, no-oven…" }
+    },
+    "images": {
+      "title": "Images (Optional)",
+      "add": "+ Add Image",
+      "url": "URL *",
+      "thumbnail": "Thumbnail *",
+      "altLabel": "Alt (only {locale})",
+      "altPlaceholder": "Image description",
+      "remove": "Remove"
+    },
+    "buttons": {
+      "fillExample": "⚙ Fill example",
+      "submit": { "loading": "Submitting…", "default": "Submit" }
+    },
+    "notes": {
+      "error": "An error occurred during submission.",
+      "success": "Recipe saved: {title}",
+      "viewRecipe": "view recipe"
+    }
+  },
+  "legal": {
+    "common": { "lastUpdated": "Last updated: {date}" },
+    "about": {
+      "title": "About Us",
+      "intro": "tarifintarifi.com is a cooking platform offering practical, trustworthy recipes in multiple languages.",
+      "mission": { "title": "Our Mission", "text": "Make recipes clear for all levels with smart search and curation." },
+      "team": { "title": "Team", "text": "A small, passionate team of food lovers and developers." },
+      "lastUpdated": "Last updated: {date}"
+    },
+    "contact": {
+      "title": "Contact",
+      "desc": "For questions and partnerships, drop us a line.",
+      "email": "Email",
+      "address": "Address",
+      "addressText": "Istanbul, Türkiye"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "We care about your privacy. This page explains what we collect and how we use it.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Data We Collect",
+          "items": {
+            "usage": "Usage data (page views, search terms).",
+            "cookies": "Cookies and similar technologies.",
+            "optional": "Voluntary info you submit (contact forms, etc.)."
+          }
+        },
+        "howWeUse": { "title": "How We Use Data", "text": "To improve the service, ensure security, and personalize content." },
+        "rights": { "title": "Your Rights", "text": "You may request access, correction, and deletion of your data." }
+      },
+      "lastUpdated": "Last updated: {date}"
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "intro": "By using our site, you agree to the terms below.",
+      "sections": {
+        "use": { "title": "Use of Service", "text": "Use the service lawfully and without abuse." },
+        "content": { "title": "Content & Copyright", "text": "Content is for information; copyrights are respected." },
+        "limitation": { "title": "Limitation of Liability", "text": "Service is provided “as is”; we’re not liable for indirect damages." }
+      },
+      "lastUpdated": "Last updated: {date}"
+    }
+  },
+  "seo": {
+    "homeTitle": "TarifinTarifi – Practical and reliable recipes",
+    "homeDesc": "Practical, reliable recipes in multiple languages. Browse by category or search by ingredient.",
+    "ogAlt": "{site} - Cover image"
+  }
+}

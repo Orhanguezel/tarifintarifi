@@ -1,0 +1,7 @@
+{
+    "count": "{count} 道菜谱",
+    "empty": "没有找到该标签的菜谱。",
+    "pagination": { "aria": "分页" },
+    "seoDesc": "带有“{tag}”标签的菜谱。",
+    "error": { "title": "无法加载标签页", "desc": "当前无法获取该标签的内容。" }
+  }

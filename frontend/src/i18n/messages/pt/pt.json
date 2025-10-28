@@ -1,0 +1,351 @@
+{
+  "nav": { "home": "Início" },
+
+  "recipes": {
+    "latest": "Receitas adicionadas recentemente"
+  },
+
+  "comments": {
+    "title": "Comentários",
+    "add": "Adicionar comentário",
+    "name": "Nome",
+    "email": "E-mail",
+    "text": "Seu comentário",
+    "submit": "Enviar",
+    "sending": "Enviando…",
+    "guest": "Convidado",
+    "emptyPrompt": "Seja o primeiro a comentar!"
+  },
+
+  "difficulty": {
+    "easy": "Fácil",
+    "medium": "Médio",
+    "hard": "Difícil"
+  },
+
+  "common": {
+    "actions": {
+      "view": "Ver →"
+    },
+    "unit": {
+      "minutesShort": "min",
+      "kcal": "kcal",
+      "servings": "porções"
+    }
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "desc": "A página que você procura não existe.",
+    "actions": {
+      "home": "Ir para a página inicial",
+      "browse": "Explorar receitas"
+    },
+    "note": "Se digitou um URL, verifique a ortografia e tente novamente."
+  },
+
+  "home": {
+    "search": {
+      "placeholder": "Café da manhã",
+      "button": "Buscar"
+    },
+    "hint": {
+      "label": "DICA",
+      "text": "Com a 🔍 acima, digite um ingrediente (ex.: milho, berinjela) ou uma culinária (ex.: italiana) para gerar uma receita personalizada com Groq."
+    },
+    "quick": {
+      "title": "Categorias rápidas"
+    },
+    "clear": "Limpar",
+    "popular": {
+      "title": "Receitas populares"
+    },
+    "results": { "title": "Resultados" },
+    "all": {
+      "title": "Todas as receitas"
+    },
+    "loading": "Carregando…",
+    "empty": "Nenhum registro encontrado.",
+    "pagination": {
+      "aria": "Paginação",
+      "prev": "Anterior",
+      "next": "Próxima"
+    },
+    "errors": {
+      "fetch": "Não foi possível carregar a lista."
+    }
+  },
+
+  "category": {
+    "count": "{count} receitas",
+    "empty": "Ainda não há receitas nesta categoria.",
+    "pagination": {
+      "aria": "Paginação"
+    }
+  },
+
+  "categoryPage": {
+    "notFound": {
+      "title": "Categoria não encontrada",
+      "desc": "Categoria inválida: {slug}"
+    },
+    "error": {
+      "title": "Algo deu errado",
+      "desc": "Falha ao carregar as receitas."
+    }
+  },
+
+  "navbar": {
+    "brand": {
+      "subtitle": "O maior site de receitas"
+    },
+    "aria": {
+      "mainMenu": "Menu principal",
+      "categories": "Categorias"
+    },
+    "actions": {
+      "ai": "🧠 Criar receita com IA",
+      "submit": "🍽️ Enviar receita",
+      "aiShort": "Receita IA",
+      "submitShort": "Enviar"
+    },
+    "search": {
+      "placeholder": "Buscar receita, ingrediente ou culinária…",
+      "button": "Buscar",
+      "aria": "Busca"
+    },
+    "tip": {
+      "label": "Dica:",
+      "text": "Digite um ingrediente (ex.: milho) ou uma culinária (ex.: italiana) para uma busca rápida."
+    }
+  },
+
+  "footer": {
+    "brand": {
+      "name": "tarifintarifi.com",
+      "tagline": "O lugar certo para receitas deliciosas e práticas."
+    },
+    "sections": {
+      "categories": "Categorias",
+      "help": "Ajuda"
+    },
+    "links": {
+      "about": "Sobre",
+      "contact": "Contato",
+      "privacy": "Política de Privacidade",
+      "terms": "Termos de Uso"
+    },
+    "copyright": "© {year} {brand} • Todos os direitos reservados"
+  },
+
+  "recipeDetail": {
+    "print": "Imprimir",
+    "meta": {
+      "minutes": "{value} min",
+      "servings": "{value} porções",
+      "kcal": "{value} kcal/porção"
+    },
+    "stats": {
+      "prep": "Preparo",
+      "cook": "Cozimento",
+      "category": "Categoria",
+      "cuisine": "Culinária"
+    },
+    "sections": {
+      "ingredients": "Ingredientes",
+      "steps": "Modo de preparo",
+      "tags": "Tags",
+      "nutrition": "Informação nutricional (por porção)",
+      "allergenDiet": "Alergênicos & Dieta",
+      "allergens": "Alergênicos",
+      "diet": "Dieta",
+      "note": "Observação: é possível obter alternativas sem glúten/veganas ajustando os ingredientes."
+    },
+    "reactions": {
+      "like": "Curtir",
+      "love": "Amei",
+      "yum": "Delícia",
+      "wow": "Uau!",
+      "rateAria": "Avaliar",
+      "starTitle": "{n} estrela",
+      "average": "Média"
+    },
+    "table": {
+      "calories": "Calorias",
+      "protein": "Proteínas",
+      "carbs": "Carboidratos",
+      "fat": "Gorduras",
+      "fiber": "Fibras",
+      "sodium": "Sódio"
+    }
+  },
+
+  "categories": {
+    "soup": "Sopa",
+    "breakfast": "Café da manhã",
+    "lunch": "Almoço",
+    "dinner": "Jantar",
+    "dessert": "Sobremesa",
+    "detox": "Detox",
+    "snack": "Lanche",
+    "drink": "Bebida"
+  },
+
+  "aiGen": {
+    "head": { "title": "🤖 Criar receita com IA" },
+    "fields": {
+      "lang": "Idioma de saída",
+      "cuisine": {
+        "label": "Culinária",
+        "placeholder": "turkish, italian…",
+        "help": "Apenas uma culinária é suficiente."
+      },
+      "category": "Categoria",
+      "categoryOptional": "(Opcional)",
+      "servings": "Porções (pessoas)",
+      "maxMinutes": "Tempo máx. (min)"
+    },
+    "checks": {
+      "aria": "Rótulos de dieta",
+      "vegetarian": "Vegetariano",
+      "vegan": "Vegano",
+      "glutenFree": "Sem glúten",
+      "lactoseFree": "Sem lactose"
+    },
+    "include": {
+      "label": "Ingredientes a incluir",
+      "placeholder": "digite o ingrediente e pressione Enter",
+      "help": "Adicione com Enter ou vírgula. Ex.: tomate, pimentão"
+    },
+    "exclude": {
+      "label": "Ingredientes a excluir",
+      "placeholder": "para excluir…",
+      "help": "Ex.: apimentado, amendoim"
+    },
+    "prompt": {
+      "label": "Observação / prompt",
+      "placeholder": "ex.: \"Culinária turca, 4 porções, 25 min, sem forno; passos curtos; use medidas em gramas/peças.\""
+    },
+    "chips": {
+      "notSpicy": "sem pimenta",
+      "fewIngredients": "poucos ingredientes",
+      "noOven": "sem forno",
+      "pot": "na panela",
+      "pan": "na frigideira",
+      "quick15": "pronto em 15 min"
+    },
+    "buttons": {
+      "fillExample": "⚙ Preencher exemplo",
+      "generate": {
+        "loading": "Gerando…",
+        "default": "Gerar"
+      }
+    },
+    "error": { "generic": "Ocorreu um erro durante a geração." },
+    "success": {
+      "created": "Receita criada: {title}",
+      "viewLink": "ver receita"
+    }
+  },
+
+  "submitRecipe": {
+    "head": {
+      "title": "🍽️ Enviar receita",
+      "subtitle": "Compartilhe sua receita — escreva ingredientes e passos linha por linha."
+    },
+    "fields": {
+      "title": {
+        "label": "Título *",
+        "placeholder": "Ex.: Bulgur com legumes sem forno",
+        "help": "Pelo menos 3 caracteres."
+      },
+      "category": { "label": "Categoria", "optional": "(Opcional)" },
+      "servings": { "label": "Porções (pessoas)", "placeholder": "4" },
+      "totalMinutes": { "label": "Tempo total (min)", "placeholder": "30" },
+      "calories": { "label": "Calorias (kcal)", "placeholder": "350" },
+      "description": { "label": "Descrição", "placeholder": "Uma breve descrição da receita…" },
+      "ingredients": {
+        "label": "Ingredientes * (um por linha)",
+        "placeholder": "Ex.:\n2 tomates\n1 pimentão verde\n1 colher (sopa) de azeite",
+        "help": "Use unidades (g/peça/colher etc.)."
+      },
+      "steps": {
+        "label": "Passos * (um por linha)",
+        "placeholder": "Ex.:\nPique a cebola e refogue.\nAdicione os tomates e cozinhe por 5 min.\nSirva quente.",
+        "help": "Frases curtas e claras. O último passo pode ser uma dica de serviço."
+      },
+      "cuisines": {
+        "label": "Culinárias",
+        "placeholder": "turkish, italian… (adicionar com Enter/vírgula)",
+        "help": "Adicione uma por vez. Ex.: turkish"
+      },
+      "tags": { "label": "Tags", "placeholder": "vegano, rápido, sem forno…" }
+    },
+    "images": {
+      "title": "Imagens (Opcional)",
+      "add": "+ Adicionar imagem",
+      "url": "URL *",
+      "thumbnail": "Miniatura *",
+      "altLabel": "Alt (apenas {locale})",
+      "altPlaceholder": "Descrição da imagem",
+      "remove": "Remover"
+    },
+    "buttons": {
+      "fillExample": "⚙ Preencher exemplo",
+      "submit": { "loading": "Enviando…", "default": "Enviar" }
+    },
+    "notes": {
+      "error": "Ocorreu um erro no envio.",
+      "success": "Receita salva: {title}",
+      "viewRecipe": "ver receita"
+    }
+  },
+  "legal": {
+    "common": { "lastUpdated": "Última atualização: {date}" },
+    "about": {
+      "title": "Sobre nós",
+      "intro": "tarifintarifi.com é uma plataforma de culinária que oferece receitas práticas e confiáveis em vários idiomas.",
+      "mission": { "title": "Nossa missão", "text": "Tornar as receitas claras para todos os níveis com busca inteligente e curadoria." },
+      "team": { "title": "Equipe", "text": "Uma pequena equipe apaixonada de amantes da gastronomia e desenvolvedores." },
+      "lastUpdated": "Última atualização: {date}"
+    },
+    "contact": {
+      "title": "Contato",
+      "desc": "Para dúvidas e parcerias, entre em contato.",
+      "email": "E-mail",
+      "address": "Endereço",
+      "addressText": "Istambul, Turquia"
+    },
+    "privacy": {
+      "title": "Política de Privacidade",
+      "intro": "Valorizamos sua privacidade. Esta página explica o que coletamos e como usamos os dados.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Dados que coletamos",
+          "items": {
+            "usage": "Dados de uso (visualizações de páginas, termos de pesquisa).",
+            "cookies": "Cookies e tecnologias semelhantes.",
+            "optional": "Informações fornecidas voluntariamente (formulários de contato etc.)."
+          }
+        },
+        "howWeUse": { "title": "Como usamos os dados", "text": "Para melhorar o serviço, garantir a segurança e personalizar o conteúdo." },
+        "rights": { "title": "Seus direitos", "text": "Você pode solicitar acesso, correção e exclusão de seus dados." }
+      },
+      "lastUpdated": "Última atualização: {date}"
+    },
+    "terms": {
+      "title": "Termos de Uso",
+      "intro": "Ao usar nosso site, você concorda com os termos abaixo.",
+      "sections": {
+        "use": { "title": "Uso do serviço", "text": "Use o serviço legalmente e sem abusos." },
+        "content": { "title": "Conteúdo e direitos autorais", "text": "O conteúdo é informativo; os direitos autorais são respeitados." },
+        "limitation": { "title": "Limitação de responsabilidade", "text": "O serviço é fornecido “no estado em que se encontra”; não nos responsabilizamos por danos indiretos." }
+      },
+      "lastUpdated": "Última atualização: {date}"
+    }
+  },
+  "seo": {
+    "homeTitle": "TarifinTarifi – Receitas práticas e confiáveis",
+    "homeDesc": "Receitas práticas e confiáveis em vários idiomas. Navegue por categoria ou pesquise por ingrediente.",
+    "ogAlt": "{site} - Imagem de capa"
+  }
+}

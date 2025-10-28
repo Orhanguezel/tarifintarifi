@@ -1,0 +1,44 @@
+{
+    "common": { "lastUpdated": "Zuletzt aktualisiert: {date}" },
+    "about": {
+      "title": "Über uns",
+      "intro": "tarifintarifi.com ist eine Kochplattform mit praktischen und verlässlichen Rezepten in mehreren Sprachen.",
+      "mission": { "title": "Unsere Mission", "text": "Rezepte für alle Erfahrungsstufen verständlich machen – mit smarter Suche und sorgfältiger Auswahl." },
+      "team": { "title": "Team", "text": "Ein kleines, leidenschaftliches Team aus Food-Liebhabern und Entwickler:innen." },
+      "lastUpdated": "Zuletzt aktualisiert: {date}"
+    },
+    "contact": {
+      "title": "Kontakt",
+      "desc": "Für Fragen und Partnerschaften schreiben Sie uns gern.",
+      "email": "E-Mail",
+      "address": "Adresse",
+      "addressText": "Istanbul, Türkei"
+    },
+    "privacy": {
+      "title": "Datenschutzrichtlinie",
+      "intro": "Ihre Privatsphäre ist uns wichtig. Hier erklären wir, was wir erfassen und wie wir es nutzen.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Welche Daten wir erfassen",
+          "items": {
+            "usage": "Nutzungsdaten (Seitenaufrufe, Suchbegriffe).",
+            "cookies": "Cookies und ähnliche Technologien.",
+            "optional": "Freiwillig übermittelte Angaben (Kontaktformulare usw.)."
+          }
+        },
+        "howWeUse": { "title": "Wie wir Daten verwenden", "text": "Zur Verbesserung des Dienstes, für Sicherheit und zur Personalisierung." },
+        "rights": { "title": "Ihre Rechte", "text": "Sie können Zugriff, Berichtigung und Löschung Ihrer Daten anfordern." }
+      },
+      "lastUpdated": "Zuletzt aktualisiert: {date}"
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen",
+      "intro": "Mit der Nutzung unserer Website stimmen Sie den folgenden Bedingungen zu.",
+      "sections": {
+        "use": { "title": "Nutzung des Dienstes", "text": "Nutzen Sie den Dienst rechtmäßig und ohne Missbrauch." },
+        "content": { "title": "Inhalte & Urheberrecht", "text": "Inhalte dienen der Information; Urheberrechte werden respektiert." },
+        "limitation": { "title": "Haftungsbeschränkung", "text": "Der Dienst wird „wie besehen“ bereitgestellt; für indirekte Schäden haften wir nicht." }
+      },
+      "lastUpdated": "Zuletzt aktualisiert: {date}"
+    }
+  }

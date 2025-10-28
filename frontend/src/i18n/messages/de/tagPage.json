@@ -1,0 +1,7 @@
+{
+    "count": "{count} Rezepte",
+    "empty": "Keine Rezepte für dieses Tag gefunden.",
+    "pagination": { "aria": "Seitennavigation" },
+    "seoDesc": "Rezepte mit dem Tag „{tag}“.",
+    "error": { "title": "Tag-Seite konnte nicht geladen werden", "desc": "Inhalte für dieses Tag sind derzeit nicht abrufbar." }
+  }

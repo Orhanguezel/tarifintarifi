@@ -1,0 +1,60 @@
+{
+  "recipeDetail": {
+    "print": "प्रिंट",
+    "meta": {
+      "minutes": "{value} मिनट",
+      "servings": "{value} सर्विंग्स",
+      "kcal": "{value} कैलोरी/सर्विंग"
+    },
+    "sections": {
+      "ingredients": "सामग्री",
+      "steps": "विधि",
+      "tags": "टैग",
+      "nutrition": "पोषण जानकारी (प्रति सर्विंग)",
+      "allergenDiet": "एलर्जेन व आहार जानकारी",
+      "allergens": "एलर्जेन",
+      "diet": "आहार",
+      "note": "नोट: सामग्री बदलकर ग्लूटेन-फ्री/वीगन विकल्प बनाए जा सकते हैं।",
+      "tips": "टिप्स",
+      "related": "संबंधित रेसिपीज़"
+    },
+    "table": {
+      "calories": "कैलोरी",
+      "protein": "प्रोटीन",
+      "carbs": "कार्बोहाइड्रेट",
+      "fat": "वसा",
+      "fiber": "फाइबर",
+      "sodium": "सोडियम"
+    },
+    "allergens": {
+      "glutenContains": "ग्लूटेन शामिल है",
+      "dairyContains": "डेयरी शामिल है",
+      "eggContains": "अंडा शामिल है",
+      "nutsContains": "मेवे शामिल हैं",
+      "peanutContains": "मूंगफली शामिल है",
+      "soyContains": "सोया शामिल है",
+      "sesameContains": "तिल शामिल है",
+      "fishContains": "मछली शामिल है",
+      "shellfishContains": "शैलफ़िश शामिल है"
+    },
+    "diet": {
+      "vegetarianOk": "शाकाहारी",
+      "vegetarianNo": "अशाकाहारी",
+      "veganOk": "वीगन",
+      "veganNo": "वीगन नहीं",
+      "glutenFreeOk": "ग्लूटेन-रहित",
+      "glutenFreeNo": "ग्लूटेन शामिल है",
+      "lactoseFreeOk": "लैक्टोज-रहित",
+      "lactoseFreeNo": "लैक्टोज शामिल है"
+    },
+    "reactions": {
+      "like": "पसंद",
+      "love": "बहुत पसंद",
+      "yum": "स्वादिष्ट!",
+      "wow": "वाह",
+      "rateAria": "इस रेसिपी को रेट करें",
+      "starTitle": "{n}★ दें",
+      "average": "औसत रेटिंग"
+    }
+  }
+}

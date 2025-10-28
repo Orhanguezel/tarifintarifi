@@ -1,0 +1,7 @@
+{
+    "count": "{count} recipes",
+    "empty": "No recipes found for this tag.",
+    "pagination": { "aria": "Pagination" },
+    "seoDesc": "Recipes tagged '{tag}'.",
+    "error": { "title": "Couldn't load tag page", "desc": "We weren't able to fetch content for this tag right now." }
+  }

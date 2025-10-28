@@ -1,0 +1,75 @@
+{
+  "submitRecipe": {
+    "head": {
+      "title": "提交菜谱",
+      "subtitle": "分享你的菜谱，启发更多人。"
+    },
+    "fields": {
+      "title": {
+        "label": "菜谱标题",
+        "placeholder": "例如：番茄青椒粗麦粉（免烤）",
+        "help": "至少 3 个字符。"
+      },
+      "servings": {
+        "label": "份量",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "总时长（分钟）",
+        "placeholder": "25"
+      },
+      "calories": {
+        "label": "热量（kcal）",
+        "placeholder": "380"
+      },
+      "description": {
+        "label": "简介",
+        "placeholder": "简要介绍一下这道菜。"
+      },
+      "ingredients": {
+        "label": "食材（每行一条）",
+        "placeholder": "每种食材单独一行。",
+        "help": "例如：1 杯粗麦粉"
+      },
+      "steps": {
+        "label": "步骤（每行一条）",
+        "placeholder": "每个步骤单独一行。",
+        "help": "建议 8–12 步。"
+      },
+      "cuisines": {
+        "label": "菜系",
+        "placeholder": "例如：Turkish, Italian",
+        "help": "用逗号/回车添加为标签。"
+      },
+      "tags": {
+        "label": "标签",
+        "placeholder": "例如：免烤、少食材"
+      }
+    },
+    "buttons": {
+      "fillExample": "填入示例",
+      "submit": {
+        "loading": "正在提交…",
+        "default": "提交菜谱"
+      }
+    },
+    "notes": {
+      "error": "出了点问题，请重试。",
+      "success": "已保存：{title}",
+      "viewRecipe": "查看菜谱"
+    },
+    "tips": {
+      "title": "小窍门（每行一条）",
+      "placeholder": "例如：稍微加热酸奶以防止结块。\n薄荷油请在最后再加入。"
+    },
+    "nutrition": {
+      "title": "营养信息（每份）",
+      "calories": "热量（kcal）",
+      "protein": "蛋白质（g）",
+      "carbs": "碳水化合物（g）",
+      "fat": "脂肪（g）",
+      "fiber": "膳食纤维（g）",
+      "sodium": "钠（mg）"
+    }
+  }
+}

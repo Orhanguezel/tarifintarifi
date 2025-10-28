@@ -1,0 +1,44 @@
+{
+    "common": { "lastUpdated": "Dernière mise à jour : {date}" },
+    "about": {
+      "title": "À propos de nous",
+      "intro": "tarifintarifi.com est une plateforme culinaire proposant des recettes pratiques et fiables en plusieurs langues.",
+      "mission": { "title": "Notre mission", "text": "Rendre les recettes claires pour tous les niveaux grâce à une recherche intelligente et une curation soignée." },
+      "team": { "title": "Équipe", "text": "Une petite équipe passionnée composée d’amoureux de la cuisine et de développeurs." },
+      "lastUpdated": "Dernière mise à jour : {date}"
+    },
+    "contact": {
+      "title": "Contact",
+      "desc": "Pour toute question ou partenariat, écrivez-nous.",
+      "email": "E-mail",
+      "address": "Adresse",
+      "addressText": "Istanbul, Turquie"
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "intro": "Nous accordons de l’importance à votre vie privée. Cette page explique ce que nous collectons et comment nous l’utilisons.",
+      "sections": {
+        "dataWeCollect": {
+          "title": "Données que nous collectons",
+          "items": {
+            "usage": "Données d’utilisation (vues de pages, termes de recherche).",
+            "cookies": "Cookies et technologies similaires.",
+            "optional": "Informations fournies volontairement (formulaires de contact, etc.)."
+          }
+        },
+        "howWeUse": { "title": "Comment nous utilisons les données", "text": "Pour améliorer le service, assurer la sécurité et personnaliser le contenu." },
+        "rights": { "title": "Vos droits", "text": "Vous pouvez demander l’accès, la rectification et la suppression de vos données." }
+      },
+      "lastUpdated": "Dernière mise à jour : {date}"
+    },
+    "terms": {
+      "title": "Conditions d’utilisation",
+      "intro": "En utilisant notre site, vous acceptez les conditions ci-dessous.",
+      "sections": {
+        "use": { "title": "Utilisation du service", "text": "Utilisez le service légalement et sans abus." },
+        "content": { "title": "Contenu et droits d’auteur", "text": "Le contenu est informatif ; les droits d’auteur sont respectés." },
+        "limitation": { "title": "Limitation de responsabilité", "text": "Le service est fourni « tel quel » ; nous ne sommes pas responsables des dommages indirects." }
+      },
+      "lastUpdated": "Dernière mise à jour : {date}"
+    }
+  }

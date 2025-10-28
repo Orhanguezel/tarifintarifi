@@ -1,0 +1,57 @@
+{
+  "aiGen": {
+    "head": { "title": "Rezept per KI erstellen" },
+    "prompt": {
+      "label": "Eingabe (Prompt)",
+      "placeholder": "Beschreibe kurz und klar: „Für 4 Personen, türkische Küche; ohne Ofen; 25 Min.; kein Huhn; 8–12 detaillierte Schritte.“"
+    },
+    "samples": {
+      "s1": "Abendessen für 4, türkische Küche; fleischfrei aber proteinreich; ohne Ofen; unter 30 Min.; 8–12 detaillierte Schritte.",
+      "s2": "Glutenfreier Snack; ohne Ofen; günstig; 20 Min.; mit Kichererbsen; klare Schritte.",
+      "s3": "Zum Frühstück; vegetarisch; in der Pfanne; wenige Zutaten; 15 Min.; mit Käse-Option; 8–12 Schritte."
+    },
+    "chips": {
+      "detail812": "8–12 detaillierte Schritte",
+      "quick15": "in 15 Min. fertig",
+      "noOven": "ohne Ofen",
+      "onePot": "One-Pot",
+      "fewIngredients": "wenige Zutaten",
+      "notSpicy": "nicht scharf",
+      "budget": "preiswert",
+      "glutenFree": "glutenfrei"
+    },
+    "advanced": { "title": "Erweiterte Optionen" },
+    "fields": {
+      "cuisine": {
+        "label": "Küche",
+        "placeholder": "z. B. Türkisch, Italienisch",
+        "help": "Optional; kann leer bleiben."
+      },
+      "servings": { "label": "Portionen", "placeholder": "4" },
+      "maxMinutes": { "label": "Max. Zeit (Min.)", "placeholder": "25" }
+    },
+    "checks": {
+      "aria": "Diät-Einschränkungen",
+      "vegetarian": "Vegetarisch",
+      "vegan": "Vegan",
+      "glutenFree": "Glutenfrei",
+      "lactoseFree": "Laktosefrei"
+    },
+    "include": {
+      "labelSimple": "Soll enthalten",
+      "placeholderSimple": "z. B. Kichererbsen, Joghurt",
+      "helpSimple": "Mit Komma/Eingabe hinzufügen."
+    },
+    "exclude": {
+      "labelSimple": "Soll vermeiden",
+      "placeholderSimple": "z. B. Huhn, Pilze",
+      "helpSimple": "Mit Komma/Eingabe hinzufügen."
+    },
+    "buttons": {
+      "fillExample": "Mit Beispiel ausfüllen",
+      "generate": { "loading": "Wird erstellt…", "default": "Rezept erstellen" }
+    },
+    "error": { "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen." },
+    "success": { "created": "Erstellt: {title}", "viewLink": "Zum Rezept" }
+  }
+}

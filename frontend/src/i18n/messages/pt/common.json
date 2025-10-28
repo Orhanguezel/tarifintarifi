@@ -1,0 +1,3 @@
+ {
+    "unit": { "minutesShort": "min", "kcal": "kcal", "servings": "porções" },
+    "actions": { "view": "Ver" },"notFound": "Não encontrado" }

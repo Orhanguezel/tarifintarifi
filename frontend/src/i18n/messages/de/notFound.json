@@ -1,0 +1,9 @@
+{
+    "title": "Seite nicht gefunden",
+    "desc": "Die gesuchte Seite wurde möglicherweise verschoben, gelöscht oder hat nie existiert.",
+    "actions": {
+      "home": "Startseite",
+      "browse": "Rezepte durchsuchen"
+    },
+    "note": "Du wirst in Kürze zur Startseite weitergeleitet."
+  }

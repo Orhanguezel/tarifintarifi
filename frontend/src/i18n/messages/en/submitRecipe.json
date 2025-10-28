@@ -1,0 +1,75 @@
+{
+  "submitRecipe": {
+    "head": {
+      "title": "Submit Recipe",
+      "subtitle": "Share your recipe and inspire thousands."
+    },
+    "fields": {
+      "title": {
+        "label": "Recipe Title",
+        "placeholder": "e.g., No-Bake Tomato & Pepper Bulgur",
+        "help": "Must be at least 3 characters."
+      },
+      "servings": {
+        "label": "Servings",
+        "placeholder": "4"
+      },
+      "totalMinutes": {
+        "label": "Total Time (min)",
+        "placeholder": "25"
+      },
+      "calories": {
+        "label": "Calories (kcal)",
+        "placeholder": "380"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Write a short description of the recipe."
+      },
+      "ingredients": {
+        "label": "Ingredients (one per line)",
+        "placeholder": "Write each ingredient on a new line.",
+        "help": "e.g., 1 cup bulgur"
+      },
+      "steps": {
+        "label": "Steps (one per line)",
+        "placeholder": "Write each step on a new line.",
+        "help": "8–12 steps recommended."
+      },
+      "cuisines": {
+        "label": "Cuisine",
+        "placeholder": "e.g., Turkish, Italian",
+        "help": "Add with comma/Enter to create chips."
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "e.g., no oven, minimal ingredients"
+      }
+    },
+    "buttons": {
+      "fillExample": "Fill with Example",
+      "submit": {
+        "loading": "Submitting…",
+        "default": "Submit Recipe"
+      }
+    },
+    "notes": {
+      "error": "Something went wrong. Please try again.",
+      "success": "Saved: {title}",
+      "viewRecipe": "View recipe"
+    },
+    "tips": {
+      "title": "Tips (one per line)",
+      "placeholder": "e.g., Warm the yogurt to prevent curdling.\nAdd mint oil at the very end."
+    },
+    "nutrition": {
+      "title": "Nutrition Facts (per serving)",
+      "calories": "Calories (kcal)",
+      "protein": "Protein (g)",
+      "carbs": "Carbs (g)",
+      "fat": "Fat (g)",
+      "fiber": "Fiber (g)",
+      "sodium": "Sodium (mg)"
+    }
+  }
+}

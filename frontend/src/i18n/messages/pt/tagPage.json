@@ -1,0 +1,7 @@
+{
+    "count": "{count} receitas",
+    "empty": "Nenhuma receita encontrada para esta tag.",
+    "pagination": { "aria": "Paginação" },
+    "seoDesc": "Receitas marcadas com \"{tag}\".",
+    "error": { "title": "Não foi possível carregar a página da tag", "desc": "Não foi possível obter conteúdo para esta tag agora." }
+  }

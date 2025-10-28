@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "dynamic": {
+      "breakfast": "早餐",
+      "soup": "汤",
+      "salad": "沙拉",
+      "appetizer": "前菜",
+      "snack": "小吃",
+      "sandwich-wrap": "三明治与卷饼",
+      "main-course": "主菜",
+      "side-dish": "配菜",
+      "pasta": "意面",
+      "rice-pilaf": "米饭与抓饭",
+      "legumes": "豆类",
+      "stew": "炖菜",
+      "grill-bbq": "烧烤",
+      "roast-bake": "烤制",
+      "seafood": "海鲜",
+      "meat": "肉类",
+      "chicken": "鸡肉",
+      "pastry": "点心/酥皮类",
+      "bread": "面包",
+      "pizza": "披萨",
+      "dessert": "甜品",
+      "cake": "蛋糕",
+      "cookies": "曲奇/饼干",
+      "pudding": "布丁",
+      "sauce-dip": "酱汁与蘸料",
+      "drink": "饮品",
+      "hot-drink": "热饮",
+      "cold-drink": "冷饮",
+      "tea": "茶",
+      "coffee": "咖啡",
+      "smoothie": "思慕雪",
+      "juice": "果汁"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+    "brand": { "subtitle": "Easy, reliable recipes" },
+    "aria": { "mainMenu": "Main menu", "categories": "Categories" },
+    "actions": {
+      "ai": "AI Recipe",
+      "submit": "Submit Recipe",
+      "aiShort": "AI",
+      "submitShort": "Submit"
+    },
+    "search": {
+      "placeholder": "Search recipes...",
+      "aria": "Site search",
+      "button": "Search"
+    },
+    "tip": { "label": "Tip:", "text": "Use category shortcuts to browse faster." }
+  }

@@ -1,0 +1,25 @@
+{
+    "title": "Home",
+    "search": { "placeholder": "Search recipes…", "button": "Search" },
+    "hint": { "label": "Hint:", "text": "Pick a category or use the search box." },
+    "results": { "title": "Results" },
+    "loading": "Loading…",
+    "empty": "No results found.",
+    "pagination": { "aria": "Pagination", "prev": "Previous", "next": "Next" },
+    "popular": { "title": "Popular Recipes" },
+    "all": { "title": "All Recipes" },
+     "quick": { "title": "Quick Categories" }, "clear": "Clear",
+    "hero": {
+        "h1": "Find thousands of recipes"
+
+  },
+    "sort.options.date_desc":"📅 New → Old",
+    "sort.options.date_asc":"📅 Old → New",
+    "sort.options.name_asc":"🔤 A → Z",
+    "sort.options.name_desc":"🔤 Z → A",
+    "sort.options.likes_desc":"❤️ Likes",
+    "sort.options.comments_desc":"💬 Comments",
+    "sort.options.rating_desc":"⭐ Rating",
+    "sort.label":"Sort by",
+    "quick.selectPlaceholder":"Select a category"
+}
